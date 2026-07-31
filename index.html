@@ -648,13 +648,15 @@
                 muatDataAntrian(true);
             });
         }
-        function aksiUtamaCustomer() {
+       function aksiUtamaCustomer() {
             const namaSales = getAkunAktif();
             if(!namaSales) return;
 
             if (statusSayaGlobal === "Standby") {
                 tampilkanModalKonfirmasi("Konfirmasi", "Sudah membawa customer?", function() {
                     sedangProsesAksi = true; 
+                    
+                    // Update UI lokal seketika jadi Melayani
                     statusSayaGlobal = "Melayani";
                     renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
 
@@ -662,7 +664,12 @@
                     .then(res => res.json())
                     .then(res => {
                         sedangProsesAksi = false; 
-                        muatDataAntrian(true);
+                        if(res.status === "sukses") {
+                            muatDataAntrian(true);
+                        } else {
+                            tampilkanModal("Perhatian", res.pesan);
+                            muatDataAntrian(true);
+                        }
                     }).catch(() => {
                         sedangProsesAksi = false;
                         muatDataAntrian(true);
