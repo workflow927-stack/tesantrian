@@ -23,6 +23,49 @@
             --text-main: #0f172a;
             --text-muted: #475569;
             --border: #cbd5e1;
+            --card-giliran-bg: #eff6ff;
+            --card-giliran-border: #93c5fd;
+        }
+
+        /* TEMA MODE GELAP */
+        body.dark-mode {
+            --bg-color: #090d16;
+            --card-bg: #131c2e;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #293548;
+            --card-giliran-bg: #1a2744;
+            --card-giliran-border: #3b82f6;
+        }
+        body.dark-mode select, body.dark-mode input[type="text"] {
+            background: #1a2744 !important;
+            color: #f1f5f9 !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode select:disabled {
+            background-color: #111827 !important;
+            color: #64748b !important;
+        }
+        body.dark-mode .user-badge {
+            background: #1a2744 !important;
+            border-color: #293548 !important;
+        }
+        body.dark-mode .list-antrian li {
+            background: #1a2744 !important;
+            border-color: #293548 !important;
+            color: #f1f5f9 !important;
+        }
+        body.dark-mode .modal-box {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+        body.dark-mode .modal-desc {
+            color: #94a3b8 !important;
+        }
+        body.dark-mode .btn-cancel {
+            background: #334155 !important;
+            color: #f8fafc !important;
         }
 
         *, body, button, select, input {
@@ -35,6 +78,7 @@
             color: var(--text-main);
             margin: 0; padding: 16px;
             display: flex; justify-content: center; min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .app-container {
@@ -44,15 +88,26 @@
             border: 2px solid var(--border);
             box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1);
             text-align: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .gradient-header {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             border-radius: 18px; padding: 22px; color: white; margin-bottom: 18px;
             box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.3);
+            position: relative;
         }
         .gradient-header h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
         .gradient-header p { margin: 6px 0 0 0; opacity: 0.9; font-size: 13px; font-weight: 600; }
+
+        .dark-mode-btn {
+            position: absolute; top: 16px; right: 16px;
+            background: rgba(255, 255, 255, 0.2); border: none; color: white;
+            padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+            text-transform: none; width: auto; box-shadow: none; transition: background 0.2s;
+        }
+        .dark-mode-btn:hover { background: rgba(255, 255, 255, 0.35); }
 
         .status-badge-sistem {
             display: inline-block; padding: 8px 16px; border-radius: 20px;
@@ -66,11 +121,13 @@
             display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;
         }
         .card-giliran-utama {
-            background: #eff6ff; border: 2px solid #93c5fd;
+            background: var(--card-giliran-bg); border: 2px solid var(--card-giliran-border);
             border-radius: 16px; padding: 16px 12px; text-align: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .label-giliran { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px; }
         .nama-giliran-aktif { font-size: 20px; font-weight: 800; color: #1e3a8a; margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        body.dark-mode .nama-giliran-aktif { color: #60a5fa !important; }
         
         .timer-mundur { 
             font-size: 18px; font-weight: 800; margin-top: 4px; display: block; 
@@ -88,7 +145,6 @@
             transition: all 0.2s ease;
         }
         select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
-        select:disabled { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
         /* ANIMASI EFEK MENYALA (GLOWING PULSE) PADA TOMBOL */
         @keyframes glowSuccess {
@@ -141,6 +197,7 @@
         
         .btn-cancel { background: #e2e8f0; color: var(--text-main); }
         .btn-disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; animation: none !important; }
+        body.dark-mode .btn-disabled { background: #334155 !important; color: #64748b !important; }
 
         .spinner {
             width: 16px; height: 16px; border: 3px solid rgba(255, 255, 255, 0.3);
@@ -157,6 +214,7 @@
         .list-antrian li {
             padding: 12px 14px; background: #ffffff; border-radius: 10px; margin-bottom: 8px;
             display: flex; justify-content: space-between; align-items: center; border: 2px solid var(--border); font-size: 14px; font-weight: 700;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .badge-status-item { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
@@ -197,6 +255,7 @@
 
     <div class="app-container">
         <div class="gradient-header">
+            <button type="button" class="dark-mode-btn" id="btn-toggle-dark" onclick="toggleDarkMode()">🌙 Gelap</button>
             <h2>Antrian Walk-In Promotor</h2>
             <p>UFO Kebonsari</p>
         </div>
@@ -212,7 +271,7 @@
                 <div id="nama-aktif-ha" class="nama-giliran-aktif">-</div>
                 <span id="timer-mundur-ha" class="timer-mundur" style="color: var(--primary);">00:00</span>
             </div>
-            <div class="card-giliran-utama" style="background: #fdf4ff; border-color: #f5d0fe;">
+            <div class="card-giliran-utama" style="background: var(--card-giliran-bg); border-color: var(--card-giliran-border);">
                 <div class="label-giliran" style="color: #9333ea;">Giliran AV Saat Ini</div>
                 <div id="nama-aktif-av" class="nama-giliran-aktif" style="color: #6b21a8;">-</div>
                 <span id="timer-mundur-av" class="timer-mundur" style="color: #9333ea;">00:00</span>
@@ -308,12 +367,35 @@
         let lockStatusLokalExpiry = 0;
 
         window.onload = function() {
+            initDarkMode();
             muatMasterSalesInstant();
             cekAkunKeServer();
             muatMasterSales();
             setInterval(muatDataAntrian, 3000); 
             setInterval(hitungMundurLokal, 1000); 
         };
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('ufo_dark_mode', isDark ? 'true' : 'false');
+            updateDarkButtonText(isDark);
+        }
+
+        function initDarkMode() {
+            const savedDark = localStorage.getItem('ufo_dark_mode');
+            if (savedDark === 'true') {
+                document.body.classList.add('dark-mode');
+                updateDarkButtonText(true);
+            }
+        }
+
+        function updateDarkButtonText(isDark) {
+            const btn = document.getElementById('btn-toggle-dark');
+            if (btn) {
+                btn.innerHTML = isDark ? '☀️ Terang' : '🌙 Gelap';
+            }
+        }
 
         function getDeviceId() {
             let localSalt = localStorage.getItem('ufo_device_salt');
