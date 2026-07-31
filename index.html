@@ -557,7 +557,6 @@
                 btnClosing.disabled = false;
                 btnClosing.className = "btn-danger";
 
-                // TOMBOL CS DAN KELUAR DISEMBUNYIKAN KETIKA MELAYANI
                 btnCS.style.display = "none";
                 btnKeluar.style.display = "none";
 
@@ -636,6 +635,14 @@
             const btnAntri = document.getElementById('btn-utama-antri');
             btnAntri.disabled = true;
             btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+            // LOGIKA KODE ASLI: Update UI langsung (Optimistic UI) sebelum server merespons
+            statusSayaGlobal = "Standby";
+            const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
+            if (!adaAkun) {
+                daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
+            }
+            renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
 
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
