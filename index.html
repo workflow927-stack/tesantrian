@@ -636,7 +636,7 @@
             btnAntri.disabled = true;
             btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-            // LOGIKA KODE ASLI: Update UI langsung (Optimistic UI) sebelum server merespons
+            // Update UI instan agar cepat
             statusSayaGlobal = "Standby";
             const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
             if (!adaAkun) {
@@ -647,11 +647,16 @@
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
-                sedangProsesAksi = false; 
-                muatDataAntrian(true);
+                // Beri jeda 1.5 detik agar Google Spreadsheet stabil menyimpan sebelum tarik data resmi
+                setTimeout(() => {
+                    sedangProsesAksi = false; 
+                    muatDataAntrian(true);
+                }, 1500);
             }).catch(() => {
-                sedangProsesAksi = false;
-                muatDataAntrian(true);
+                setTimeout(() => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                }, 1500);
             });
         }
 
