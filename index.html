@@ -20,45 +20,49 @@
             --purple-cs: #7c3aed;
             --teal-cs: #0d9488;
             --amber-rest: #d97706;
-            --bg-color: #f1f5f9;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #475569;
-            --border: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
             --card-giliran-bg: #eff6ff;
-            --card-giliran-border: #93c5fd;
+            --card-giliran-border: #bfdbfe;
+            --shadow-subtle: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+            --shadow-card: 0 20px 35px -10px rgba(15, 23, 42, 0.08);
         }
 
-        /* TEMA MODE GELAP */
+        /* TEMA MODE GELAP (Gaya Modern Elegan) */
         body.dark-mode {
-            --bg-color: #090d16;
-            --card-bg: #131c2e;
-            --text-main: #f1f5f9;
+            --bg-color: #030712;
+            --card-bg: #0f172a;
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: #293548;
-            --card-giliran-bg: #1a2744;
-            --card-giliran-border: #3b82f6;
+            --border: #1e293b;
+            --card-giliran-bg: #1e293b;
+            --card-giliran-border: #334155;
+            --shadow-subtle: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --shadow-card: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
         }
         body.dark-mode select, body.dark-mode input[type="text"] {
-            background: #1a2744 !important;
-            color: #f1f5f9 !important;
+            background: #1e293b !important;
+            color: #f8fafc !important;
             border-color: #334155 !important;
         }
         body.dark-mode select:disabled {
-            background-color: #111827 !important;
-            color: #64748b !important;
+            background-color: #0b0f19 !important;
+            color: #475569 !important;
         }
         body.dark-mode .user-badge {
-            background: #1a2744 !important;
-            border-color: #293548 !important;
+            background: #1e293b !important;
+            border-color: #334155 !important;
         }
         body.dark-mode .list-antrian li {
-            background: #1a2744 !important;
-            border-color: #293548 !important;
-            color: #f1f5f9 !important;
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
         }
         body.dark-mode .modal-box {
-            background: #1e293b !important;
+            background: #0f172a !important;
             border-color: #334155 !important;
             color: #f8fafc !important;
         }
@@ -66,8 +70,9 @@
             color: #94a3b8 !important;
         }
         body.dark-mode .btn-cancel {
-            background: #334155 !important;
+            background: #1e293b !important;
             color: #f8fafc !important;
+            border: 1px solid #334155;
         }
         body.dark-mode .dark-mode-btn {
             background: #1e293b !important;
@@ -76,10 +81,7 @@
         }
         body.dark-mode .announcement-box {
             background: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        body.dark-mode .announcement-text {
-            color: #f8fafc !important;
+            border-color: #451a03 !important;
         }
 
         *, body, button, select, input {
@@ -90,85 +92,86 @@
         body { 
             background: var(--bg-color); 
             color: var(--text-main);
-            margin: 0; padding: 16px;
+            margin: 0; padding: 20px 16px;
             display: flex; justify-content: center; min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
         }
 
         .app-container {
-            width: 100%; max-width: 500px;
+            width: 100%; max-width: 480px;
             background: var(--card-bg);
-            border-radius: 24px; padding: 24px;
-            border: 2px solid var(--border);
-            box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1);
+            border-radius: 28px; padding: 26px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-card);
             text-align: center;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         /* KONTROL ATAS (TOMBOL TEMA DI LUAR HEADER) */
         .top-controls {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .dark-mode-btn {
-            background: #ffffff;
-            border: 2px solid var(--border);
+            background: var(--card-bg);
+            border: 1.5px solid var(--border);
             color: var(--text-main);
             padding: 8px 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.25s ease;
         }
-        .dark-mode-btn:hover { transform: translateY(-1px); }
+        .dark-mode-btn:hover { transform: translateY(-2px); border-color: var(--primary); }
 
         .gradient-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            border-radius: 18px; padding: 22px; color: white; margin-bottom: 18px;
-            box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 20px; padding: 24px; color: white; margin-bottom: 16px;
+            box-shadow: 0 12px 25px -6px rgba(37, 99, 235, 0.35);
         }
         .gradient-header h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
         .gradient-header p { margin: 6px 0 0 0; opacity: 0.9; font-size: 13px; font-weight: 600; }
 
         .status-badge-sistem {
-            display: inline-block; padding: 8px 16px; border-radius: 20px;
-            font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 18px;
-            letter-spacing: 0.5px;
+            display: inline-block; padding: 8px 18px; border-radius: 24px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 18px;
+            letter-spacing: 0.8px; box-shadow: var(--shadow-subtle);
         }
-        .status-open { background: #dcfce7; color: #15803d; border: 2px solid #86efac; }
-        .status-closed { background: #fee2e2; color: #b91c1c; border: 2px solid #fca5a5; }
+        .status-open { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+        .status-closed { background: #fee2e2; color: #b91c1c; border: 1.5px solid #fca5a5; }
 
-        /* KOTAK PENGUMUMAN SPV */
+        /* KOTAK PENGUMUMAN SPV (Gaya Modern Halus) */
         .announcement-box {
-            background: #fffbeb; border: 2px solid #fde68a;
-            border-radius: 16px; padding: 14px 16px; margin-bottom: 18px;
-            text-align: left; display: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+            background: #fffbeb; border: 1.5px solid #fde68a;
+            border-radius: 18px; padding: 16px; margin-bottom: 18px;
+            text-align: left; display: none; box-shadow: var(--shadow-subtle);
         }
         .announcement-title {
             font-size: 11px; font-weight: 800; color: #d97706;
-            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+            text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
             display: flex; align-items: center; gap: 6px;
         }
         .announcement-text {
-            font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.4;
+            font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.45;
         }
 
         .card-giliran-wrapper {
-            display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;
+            display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;
         }
         .card-giliran-utama {
-            background: var(--card-giliran-bg); border: 2px solid var(--card-giliran-border);
-            border-radius: 16px; padding: 16px 12px; text-align: center;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            background: var(--card-giliran-bg); border: 1.5px solid var(--card-giliran-border);
+            border-radius: 20px; padding: 18px 14px; text-align: center;
+            box-shadow: var(--shadow-subtle);
+            transition: background 0.4s ease, border-color 0.4s ease;
         }
-        .label-giliran { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px; }
-        .nama-giliran-aktif { font-size: 20px; font-weight: 800; color: #1e3a8a; margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .label-giliran { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.8px; }
+        .nama-giliran-aktif { font-size: 21px; font-weight: 800; color: #1e3a8a; margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         body.dark-mode .nama-giliran-aktif { color: #60a5fa !important; }
         
         .timer-mundur { 
@@ -179,55 +182,55 @@
         @keyframes blinkAlert { 50% { opacity: 0.3; } }
 
         .input-group { margin-bottom: 16px; text-align: left; }
-        .input-group label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .input-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.6px; }
 
         select, input[type="text"] { 
-            width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid var(--border);
-            background: #ffffff; font-size: 15px; font-weight: 600; color: var(--text-main); outline: none;
-            transition: all 0.2s ease;
+            width: 100%; padding: 14px 16px; border-radius: 14px; border: 1.5px solid var(--border);
+            background: var(--card-bg); font-size: 14px; font-weight: 600; color: var(--text-main); outline: none;
+            transition: all 0.25s ease; box-shadow: var(--shadow-subtle);
         }
         select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
 
         /* ANIMASI EFEK MENYALA (GLOWING PULSE) PADA TOMBOL */
         @keyframes glowSuccess {
-            0% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(5, 150, 105, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(5, 150, 105, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
         @keyframes glowCustomer {
-            0% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(37, 99, 235, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(37, 99, 235, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
         @keyframes glowClosing {
-            0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(220, 38, 38, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(220, 38, 38, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
         @keyframes glowPurple {
-            0% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(124, 58, 237, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(124, 58, 237, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
         @keyframes glowTeal {
-            0% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(13, 148, 136, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(13, 148, 136, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
         @keyframes glowAmber {
-            0% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 0 16px rgba(217, 119, 6, 0.9), 0 4px 12px rgba(0,0,0,0.08); }
-            100% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.4), 0 4px 12px rgba(0,0,0,0.08); }
+            0% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
+            50% { box-shadow: 0 0 18px rgba(217, 119, 6, 0.85), 0 4px 12px rgba(0,0,0,0.06); }
+            100% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.4), 0 4px 12px rgba(0,0,0,0.06); }
         }
 
         button { 
-            width: 100%; padding: 14px 12px; border-radius: 14px; 
+            width: 100%; padding: 15px 14px; border-radius: 16px; 
             font-size: 13px; font-weight: 800; cursor: pointer; border: none;
-            text-transform: uppercase; transition: all 0.2s ease;
+            text-transform: uppercase; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-            letter-spacing: 0.3px; line-height: 1.3; text-align: center; white-space: normal; word-break: break-word;
+            letter-spacing: 0.4px; line-height: 1.3; text-align: center; white-space: normal; word-break: break-word;
         }
-        button:active { transform: scale(0.98); }
+        button:active { transform: scale(0.97); }
 
         /* KELAS WARNA & EFEK MENYALA BERBEDA-BEDA */
         .btn-success { background: var(--success); color: white; animation: glowSuccess 2.5s infinite ease-in-out; }
@@ -239,7 +242,7 @@
         
         .btn-cancel { background: #e2e8f0; color: var(--text-main); }
         .btn-disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; animation: none !important; }
-        body.dark-mode .btn-disabled { background: #334155 !important; color: #64748b !important; }
+        body.dark-mode .btn-disabled { background: #1e293b !important; color: #475569 !important; }
 
         .spinner {
             width: 16px; height: 16px; border: 3px solid rgba(255, 255, 255, 0.3);
@@ -248,49 +251,56 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .user-badge {
-            background: #f8fafc; border: 2px solid var(--border); border-radius: 14px;
-            padding: 14px; margin-bottom: 18px; text-align: left; font-size: 14px; font-weight: 600;
+            background: #f8fafc; border: 1.5px solid var(--border); border-radius: 16px;
+            padding: 16px; margin-bottom: 18px; text-align: left; font-size: 14px; font-weight: 600;
+            box-shadow: var(--shadow-subtle);
         }
 
-        .list-antrian { list-style: none; padding: 0; margin: 8px 0 0 0; text-align: left; }
+        .list-antrian { list-style: none; padding: 0; margin: 10px 0 0 0; text-align: left; }
         .list-antrian li {
-            padding: 12px 14px; background: #ffffff; border-radius: 10px; margin-bottom: 8px;
-            display: flex; justify-content: space-between; align-items: center; border: 2px solid var(--border); font-size: 14px; font-weight: 700;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            padding: 14px 16px; background: var(--card-bg); border-radius: 14px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; border: 1.5px solid var(--border); font-size: 14px; font-weight: 700;
+            box-shadow: var(--shadow-subtle);
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
         }
 
-        .badge-status-item { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
-        .badge-standby { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        .badge-status-item { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+        .badge-standby { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
         .badge-melayani { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-        .badge-cs { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+        .badge-cs { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
 
         /* ANIMASI BERKEDIP PADA TOMBOL WHATSAPP */
         @keyframes blinkWhatsApp {
             0% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px rgba(37, 211, 102, 0.4); }
-            50% { opacity: 0.7; transform: scale(0.97); box-shadow: 0 0 16px rgba(37, 211, 102, 0.9); }
+            50% { opacity: 0.75; transform: scale(0.98); box-shadow: 0 0 16px rgba(37, 211, 102, 0.85); }
             100% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px rgba(37, 211, 102, 0.4); }
         }
 
         .wa-report-btn {
-            margin-top: 12px; background: #25d366; border: 2px solid #1ebe57; color: white;
-            font-size: 13px; padding: 14px; border-radius: 12px; text-decoration: none; 
+            margin-top: 16px; background: #25d366; border: 1.5px solid #1ebe57; color: white;
+            font-size: 13px; padding: 15px; border-radius: 16px; text-decoration: none; 
             display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800;
-            letter-spacing: 0.5px; animation: blinkWhatsApp 2s infinite ease-in-out;
+            letter-spacing: 0.5px; box-shadow: 0 10px 20px -5px rgba(37, 211, 102, 0.4);
+            animation: blinkWhatsApp 2.5s infinite ease-in-out;
         }
-        .wa-report-btn:hover { background: #20ba5a; animation: none; }
+        .wa-report-btn:hover { background: #20ba5a; animation: none; transform: translateY(-1px); }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
+            background: rgba(3, 7, 18, 0.65); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center;
-            z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.2s; padding: 16px;
+            z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.25s ease; padding: 16px;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-box { background: white; width: 100%; max-width: 360px; padding: 24px; border-radius: 20px; text-align: center; border: 2px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-box { 
+            background: var(--card-bg); width: 100%; max-width: 360px; padding: 26px; 
+            border-radius: 24px; text-align: center; border: 1.5px solid var(--border); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+        }
         .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
-        .modal-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; font-weight: 600; }
+        .modal-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; line-height: 1.5; font-weight: 600; }
         .modal-actions { display: flex; gap: 10px; }
-        .modal-actions button { flex: 1; padding: 12px; font-size: 13px; }
+        .modal-actions button { flex: 1; padding: 13px; font-size: 13px; border-radius: 14px; }
     </style>
 </head>
 <body>
@@ -312,7 +322,7 @@
 
         <!-- KOTAK PENGUMUMAN SPV -->
         <div id="box-pengumuman-spv" class="announcement-box">
-            <div class="announcement-title">📢 Pengumuman </div>
+            <div class="announcement-title">📢 Pengumuman SPV</div>
             <div id="teks-pengumuman-spv" class="announcement-text">-</div>
         </div>
 
@@ -342,7 +352,7 @@
         <!-- MENU PROMOTOR -->
         <div id="panel-menu-utama" style="display: none;">
             <div class="user-badge">
-                <span style="color: var(--text-muted);">Promotor:</span> <strong id="label-user-aktif" style="color:var(--primary-dark); font-size: 15px;">-</strong>
+                <span style="color: var(--text-muted);">Akun HP Ini:</span> <strong id="label-user-aktif" style="color:var(--primary-dark); font-size: 15px;">-</strong>
             </div>
 
             <div class="input-group">
@@ -371,15 +381,15 @@
 
         <!-- LIVE LIST DIPISAH HA DAN AV -->
         <div style="margin-top: 24px; text-align: left;">
-            <div style="margin-bottom: 20px;">
-                <span style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Live Urutan HA</span>
+            <div style="margin-bottom: 22px;">
+                <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">Live Urutan HA</span>
                 <ul id="item-antrian-list-ha" class="list-antrian">
                     <li><span>Memuat data...</span></li>
                 </ul>
             </div>
 
             <div>
-                <span style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Live Urutan AV</span>
+                <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">Live Urutan AV</span>
                 <ul id="item-antrian-list-av" class="list-antrian">
                     <li><span>Memuat data...</span></li>
                 </ul>
@@ -659,7 +669,6 @@
             badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS ANTRIAN: OPEN" : "STATUS ANTRIAN: CLOSED";
             badge.className = statusSistemGlobal === "BUKA" ? "status-badge-sistem status-open" : "status-badge-sistem status-closed";
 
-            // MENAMPILKAN / MENYEMBUNYIKAN KOTAK PENGUMUMAN SPV
             const boxPengumuman = document.getElementById('box-pengumuman-spv');
             const teksPengumuman = document.getElementById('teks-pengumuman-spv');
             if (pengumumanSPV && pengumumanSPV.trim() !== "") {
@@ -722,8 +731,8 @@
                 statusSayaGlobal = "Standby";
             }
 
-            if(!listHtmlHA) listHtmlHA = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian HA</span></li>";
-            if(!listHtmlAV) listHtmlAV = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian AV</span></li>";
+            if(!listHtmlHA) listHtmlHA = "<li><span style='color:var(--text-muted); font-style:italic;'>Belum ada antrian HA</span></li>";
+            if(!listHtmlAV) listHtmlAV = "<li><span style='color:var(--text-muted); font-style:italic;'>Belum ada antrian AV</span></li>";
 
             const btnAntri = document.getElementById('btn-utama-antri');
             const btnCustomer = document.getElementById('btn-utama-customer');
