@@ -67,6 +67,11 @@
             background: #334155 !important;
             color: #f8fafc !important;
         }
+        body.dark-mode .dark-mode-btn {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
 
         *, body, button, select, input {
             font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -91,23 +96,36 @@
             transition: background 0.3s ease, border-color 0.3s ease;
         }
 
+        /* KONTROL ATAS (TOMBOL TEMA DI LUAR HEADER) */
+        .top-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+        .dark-mode-btn {
+            background: #ffffff;
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .dark-mode-btn:hover { transform: translateY(-1px); }
+
         .gradient-header {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             border-radius: 18px; padding: 22px; color: white; margin-bottom: 18px;
             box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.3);
-            position: relative;
         }
         .gradient-header h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
         .gradient-header p { margin: 6px 0 0 0; opacity: 0.9; font-size: 13px; font-weight: 600; }
-
-        .dark-mode-btn {
-            position: absolute; top: 16px; right: 16px;
-            background: rgba(255, 255, 255, 0.2); border: none; color: white;
-            padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
-            text-transform: none; width: auto; box-shadow: none; transition: background 0.2s;
-        }
-        .dark-mode-btn:hover { background: rgba(255, 255, 255, 0.35); }
 
         .status-badge-sistem {
             display: inline-block; padding: 8px 16px; border-radius: 20px;
@@ -254,8 +272,12 @@
 <body>
 
     <div class="app-container">
-        <div class="gradient-header">
+        <!-- TOMBOL TEMA DI LUAR HEADER (POSISI SEBELAH KANAN ATAS) -->
+        <div class="top-controls">
             <button type="button" class="dark-mode-btn" id="btn-toggle-dark" onclick="toggleDarkMode()">🌙 Gelap</button>
+        </div>
+
+        <div class="gradient-header">
             <h2>Antrian Walk-In Promotor</h2>
             <p>UFO Kebonsari</p>
         </div>
