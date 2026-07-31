@@ -630,7 +630,7 @@
             }).catch(() => {});
         }
 
-        // --- TOMBOL DAFTAR ANTRIAN: NON-BLOCKING & SUPER INSTAN ---
+        // --- TOMBOL DAFTAR ANTRIAN: NON-BLOCKING & SUPER INSTAN TANPA JEDA ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
@@ -644,23 +644,12 @@
                 daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
             }
 
-            // Langsung perbarui UI lokal seketika
+            // Eksekusi UI lokal seketika tanpa jeda milidetik
             renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
             sedangProsesAksi = false;
 
-            // Proses jaringan dijalankan di latar belakang secara terpisah tanpa jeda klik
-            setTimeout(() => {
-                fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status !== "sukses") {
-                        tampilkanModal("Perhatian", res.pesan);
-                    }
-                    muatDataAntrian(true);
-                }).catch(() => {
-                    muatDataAntrian(true);
-                });
-            }, 10);
+            // Kirim data secara background tanpa menahan thread utama browser
+            navigator.sendBeacon(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`);
         }
 
         function aksiUtamaCustomer() {
