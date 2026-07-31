@@ -630,7 +630,7 @@
             }).catch(() => {});
         }
 
-        // --- TOMBOL DAFTAR ANTRIAN: SUPER CEPAT & INSTAN SEPERTI DI AWAL ---
+        // --- TOMBOL DAFTAR ANTRIAN: INSTAN DENGAN MUNCULNYA TOMBOL LAINNYA ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
@@ -639,29 +639,26 @@
             sedangProsesAksi = true; 
             statusSayaGlobal = "Standby";
 
-            // Langsung ubah UI secara instan (Optimistic UI)
-            const btn = document.getElementById('btn-utama-antri');
-            btn.innerText = "Anda Sudah Di Antrian";
-            btn.className = "btn-success btn-disabled";
-            btn.disabled = true;
-            document.getElementById('pilih-kategori').disabled = true;
-
             const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
             if (!adaAkun) {
                 daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
             }
 
+            // Langsung perbarui UI lokal secara total agar tombol pendukung langsung muncul
+            renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+
+            // Buka kembali izin background setelah UI instan selesai digambar
+            sedangProsesAksi = false;
+
             // Kirim ke server di balik layar
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
-                sedangProsesAksi = false; 
                 if (res.status !== "sukses") {
                     tampilkanModal("Perhatian", res.pesan);
                 }
                 muatDataAntrian(true);
             }).catch(() => {
-                sedangProsesAksi = false;
                 muatDataAntrian(true);
             });
         }
