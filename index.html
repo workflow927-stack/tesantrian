@@ -4,30 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antrian Walk-In Promotor - UFO Kebonsari</title>
-    <!-- Favicon Fix -->
+    <!-- Menghilangkan Peringatan Favicon 404 -->
     <link rel="shortcut icon" href="#">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #e0e7ff;
-            --success: #059669;
-            --success-light: #d1fae5;
-            --warning: #d97706;
-            --warning-light: #fef3c7;
-            --danger: #dc2626;
-            --danger-light: #fee2e2;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
             --purple-cs: #7c3aed;
-            --purple-light: #f3e8ff;
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+            --text-muted: #475569;
+            --border: #cbd5e1;
         }
 
         *, body, button, select, input {
@@ -37,7 +30,7 @@
         }
 
         body { 
-            background: var(--bg-gradient); 
+            background: var(--bg-color); 
             color: var(--text-main);
             margin: 0; padding: 12px;
             display: flex; justify-content: center; min-height: 100vh;
@@ -46,69 +39,63 @@
         .app-container {
             width: 100%; max-width: 480px;
             background: var(--card-bg);
-            border-radius: 24px; padding: 18px;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: var(--shadow-md);
+            border-radius: 20px; padding: 16px;
+            border: 2px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
             text-align: center;
             height: fit-content;
         }
 
         .gradient-header {
-            background: linear-gradient(135deg, #312e81 0%, #4f46e5 100%);
-            border-radius: 18px; padding: 20px 16px; color: white; margin-bottom: 16px;
-            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);
-            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 14px; padding: 16px; color: white; margin-bottom: 14px;
+            box-shadow: 0 4px 15px -2px rgba(37, 99, 235, 0.3);
         }
         .gradient-header h2 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .gradient-header p { margin: 4px 0 0 0; opacity: 0.9; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; }
+        .gradient-header p { margin: 4px 0 0 0; opacity: 0.9; font-size: 12px; font-weight: 600; }
 
         .status-badge-sistem {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 6px 16px; border-radius: 30px;
-            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px;
-            letter-spacing: 0.8px; box-shadow: var(--shadow-sm);
+            display: inline-block; padding: 6px 14px; border-radius: 16px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 14px;
+            letter-spacing: 0.5px;
         }
-        .status-open { background: var(--success-light); color: var(--success); border: 1px solid #6ee7b7; }
-        .status-closed { background: var(--danger-light); color: var(--danger); border: 1px solid #fca5a5; }
+        .status-open { background: #dcfce7; color: #15803d; border: 2px solid #86efac; }
+        .status-closed { background: #fee2e2; color: #b91c1c; border: 2px solid #fca5a5; }
 
         .card-giliran-wrapper {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;
+            display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;
         }
         .card-giliran-utama {
-            background: #f8fafc; border: 1px solid var(--border);
-            border-radius: 16px; padding: 12px 8px; text-align: center;
-            box-shadow: var(--shadow-sm);
+            background: #eff6ff; border: 2px solid #93c5fd;
+            border-radius: 14px; padding: 12px 10px; text-align: center;
         }
-        .label-giliran { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
-        .nama-giliran-aktif { 
-            font-size: 15px; font-weight: 800; color: var(--primary); margin: 6px 0 4px 0; 
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-        }
+        .label-giliran { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px; }
+        .nama-giliran-aktif { font-size: 18px; font-weight: 800; color: #1e3a8a; margin: 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         .timer-mundur { 
-            font-size: 13px; font-weight: 800; display: block; 
-            font-variant-numeric: tabular-nums; color: var(--text-muted);
+            font-size: 15px; font-weight: 800; margin-top: 2px; display: block; 
+            font-variant-numeric: tabular-nums; transition: color 0.3s ease;
         }
         .timer-warning-merah { color: var(--danger) !important; animation: blinkAlert 1s infinite; }
         @keyframes blinkAlert { 50% { opacity: 0.3; } }
 
-        .input-group { margin-bottom: 14px; text-align: left; }
+        .input-group { margin-bottom: 12px; text-align: left; }
         .input-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
 
         select, input[type="text"] { 
-            width: 100%; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--border);
-            background: #f8fafc; font-size: 14px; font-weight: 700; color: var(--text-main); outline: none;
-            transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+            width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid var(--border);
+            background: #ffffff; font-size: 14px; font-weight: 600; color: var(--text-main); outline: none;
+            transition: all 0.2s ease;
         }
-        select:focus, input[type="text"]:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        select:disabled { background-color: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+        select:disabled { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
         button { 
             width: 100%; padding: 14px; border-radius: 12px; 
-            font-size: 13px; font-weight: 800; cursor: pointer; border: none;
-            text-transform: uppercase; transition: all 0.2s ease;
+            font-size: 14px; font-weight: 800; cursor: pointer; border: none;
+            text-transform: uppercase; transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease;
             display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-            letter-spacing: 0.6px; box-shadow: var(--shadow-sm);
+            letter-spacing: 0.5px; box-shadow: 0 3px 10px rgba(0,0,0,0.06);
         }
         button:active { transform: scale(0.98); }
 
@@ -117,8 +104,8 @@
         .btn-warning { background: var(--warning); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-purple { background: var(--purple-cs); color: white; }
-        .btn-cancel { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); }
-        .btn-disabled { background: #e2e8f0 !important; color: #94a3b8 !important; cursor: not-allowed !important; box-shadow: none !important; }
+        .btn-cancel { background: #e2e8f0; color: var(--text-main); }
+        .btn-disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; }
 
         .spinner {
             width: 16px; height: 16px; border: 3px solid rgba(255, 255, 255, 0.3);
@@ -127,55 +114,53 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .user-badge {
-            background: #f8fafc; border: 1px solid var(--border); border-radius: 14px;
-            padding: 12px 14px; margin-bottom: 14px; text-align: left; font-size: 13px; font-weight: 600;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
+            background: #f8fafc; border: 2px solid var(--border); border-radius: 12px;
+            padding: 12px; margin-bottom: 14px; text-align: left; font-size: 13px; font-weight: 600;
         }
 
         .list-container-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; text-align: left; }
-        .list-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 10px; box-shadow: var(--shadow-sm); }
-        .list-box-title { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; display: block; text-align: center; }
-        
+        .list-box { background: #f8fafc; border: 2px solid var(--border); border-radius: 12px; padding: 10px; }
+        .list-box-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; display: block; text-align: center; }
+
         .list-antrian { list-style: none; padding: 0; margin: 0; max-height: 180px; overflow-y: auto; }
         .list-antrian::-webkit-scrollbar { width: 3px; }
         .list-antrian::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        
+
         .list-antrian li {
-            padding: 8px 10px; background: #ffffff; border-radius: 8px; margin-bottom: 5px;
-            display: flex; flex-direction: column; gap: 3px; border: 1px solid var(--border); font-size: 12px; font-weight: 700;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            padding: 10px 8px; background: #ffffff; border-radius: 8px; margin-bottom: 6px;
+            display: flex; flex-direction: column; gap: 4px; border: 2px solid var(--border); font-size: 12px; font-weight: 700;
         }
         .list-item-top { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 4px; }
         .list-item-top b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .badge-status-item { font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 4px; white-space: nowrap; text-transform: uppercase; }
-        .badge-standby { background: var(--primary-light); color: var(--primary); border: 1px solid #c7d2fe; }
-        .badge-melayani { background: var(--warning-light); color: var(--warning); border: 1px solid #fde68a; }
-        .badge-cs { background: var(--purple-light); color: var(--purple-cs); border: 1px solid #d8b4fe; }
+        .badge-status-item { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+        .badge-standby { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        .badge-melayani { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-cs { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
 
         .wa-report-btn {
-            margin-top: 16px; background: #10b981; border: none; color: white;
-            font-size: 12px; padding: 12px; border-radius: 12px; text-decoration: none; 
+            margin-top: 14px; background: #25d366; border: 2px solid #1ebe57; color: white;
+            font-size: 12px; padding: 12px; border-radius: 10px; text-decoration: none; 
             display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 800;
-            letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); transition: background 0.2s;
+            letter-spacing: 0.5px; box-shadow: 0 3px 10px rgba(37, 211, 102, 0.2);
         }
+        .wa-report-btn:hover { background: #20ba5a; }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
             display: flex; justify-content: center; align-items: center;
-            z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.2s ease; padding: 12px;
+            z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.2s; padding: 12px;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-box { background: white; width: 100%; max-width: 320px; padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
-        .modal-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: var(--text-main); }
-        .modal-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; font-weight: 600; }
+        .modal-box { background: white; width: 100%; max-width: 340px; padding: 20px; border-radius: 16px; text-align: center; border: 2px solid var(--border); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .modal-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: var(--text-main); }
+        .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; font-weight: 600; }
         .modal-actions { display: flex; gap: 8px; }
         .modal-actions button { flex: 1; padding: 10px; font-size: 12px; }
 
-        /* Responsif Ekstra untuk layar HP sangat kecil (< 360px) */
         @media (max-width: 360px) {
-            .app-container { padding: 12px; }
+            .app-container { padding: 10px; }
             .card-giliran-wrapper { grid-template-columns: 1fr; }
             .list-container-grid { grid-template-columns: 1fr; }
         }
@@ -185,25 +170,25 @@
 
     <div class="app-container">
         <div class="gradient-header">
-            <h2>Antrian Walk-In</h2>
-            <p>UFO Kebonsari Promotor</p>
+            <h2>Antrian Walk-In Promotor</h2>
+            <p>UFO Kebonsari</p>
         </div>
 
         <div id="badge-status-sistem" class="status-badge-sistem status-open">
-            STATUS: OPEN
+            STATUS ANTRIAN: OPEN
         </div>
 
         <!-- KARTU GILIRAN UTAMA HA & AV -->
         <div class="card-giliran-wrapper">
             <div class="card-giliran-utama">
-                <div class="label-giliran">Giliran HA</div>
+                <div class="label-giliran">Giliran HA Saat Ini</div>
                 <div id="nama-aktif-ha" class="nama-giliran-aktif">-</div>
-                <span id="timer-mundur-ha" class="timer-mundur">00:00</span>
+                <span id="timer-mundur-ha" class="timer-mundur" style="color: var(--primary);">00:00</span>
             </div>
-            <div class="card-giliran-utama" style="border-color: #ddd6fe;">
-                <div class="label-giliran" style="color: var(--purple-cs);">Giliran AV</div>
-                <div id="nama-aktif-av" class="nama-giliran-aktif" style="color: var(--purple-cs);">-</div>
-                <span id="timer-mundur-av" class="timer-mundur">00:00</span>
+            <div class="card-giliran-utama" style="background: #fdf4ff; border-color: #f5d0fe;">
+                <div class="label-giliran" style="color: #9333ea;">Giliran AV Saat Ini</div>
+                <div id="nama-aktif-av" class="nama-giliran-aktif" style="color: #6b21a8;">-</div>
+                <span id="timer-mundur-av" class="timer-mundur" style="color: #9333ea;">00:00</span>
             </div>
         </div>
 
@@ -213,18 +198,17 @@
                 <label>Pilih Nama Anda (Kunci Perangkat)</label>
                 <select id="pilih-sales"><option value="">-- Pilih Nama Anda --</option></select>
             </div>
-            <button type="button" class="btn-primary" onclick="simpanAkunHP()">Simpan & Kunci Perangkat</button>
+            <button type="button" class="btn-primary" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
         </div>
 
         <!-- MENU PROMOTOR -->
         <div id="panel-menu-utama" style="display: none;">
             <div class="user-badge">
-                <span style="color: var(--text-muted); font-size: 11px;">Akun Terikat:</span> 
-                <strong id="label-user-aktif" style="color:var(--primary); font-size: 13px;">-</strong>
+                <span style="color: var(--text-muted);">Akun HP Ini:</span> <strong id="label-user-aktif" style="color:var(--primary-dark); font-size: 14px;">-</strong>
             </div>
 
             <div class="input-group">
-                <label>Kategori Antrian Anda</label>
+                <label>Pilih Kategori Antrian</label>
                 <select id="pilih-kategori">
                     <option value="HA">HA (Home Appliance)</option>
                     <option value="AV">AV (Audio Video)</option>
@@ -241,32 +225,32 @@
             </button>
 
             <!-- TOMBOL DIPANGGIL CS/GUDANG & SELESAI CS -->
-            <button type="button" id="btn-utama-cs" class="btn-purple" onclick="aksiToggleCS()" style="display: none; margin-top: 10px;">DIPANGGIL CS/GUDANG</button>
+            <button type="button" id="btn-utama-cs" class="btn-purple" onclick="aksiToggleCS()" style="display: none; margin-top: 10px;">DIPANGGIL CS/GUDANG (KUNCI POSISI)</button>
 
             <!-- TOMBOL TAMBAHAN: KELUAR ANTRIAN (ISTIRAHAT) -->
-            <button type="button" id="btn-keluar-istirahat" class="btn-cancel" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 10px; color: var(--danger); border-color: #fca5a5;">KELUAR ANTRIAN (ISTIRAHAT)</button>
+            <button type="button" id="btn-keluar-istirahat" class="btn-danger" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 10px;">KELUAR ANTRIAN (ISTIRAHAT)</button>
         </div>
 
-        <!-- LIVE LIST GRID (HA & AV BERDAMPINGAN/MODERN) -->
+        <!-- LIVE LIST DIPISAH HA DAN AV -->
         <div class="list-container-grid">
             <div class="list-box">
-                <span class="list-box-title">Urutan HA</span>
+                <span class="list-box-title">Live Urutan HA</span>
                 <ul id="item-antrian-list-ha" class="list-antrian">
-                    <li><span style='color:#94a3b8; font-style:italic; font-size:11px;'>Memuat...</span></li>
+                    <li><span style='color:#64748b; font-style:italic;'>Memuat...</span></li>
                 </ul>
             </div>
 
             <div class="list-box">
-                <span class="list-box-title" style="color: var(--purple-cs);">Urutan AV</span>
+                <span class="list-box-title">Live Urutan AV</span>
                 <ul id="item-antrian-list-av" class="list-antrian">
-                    <li><span style='color:#94a3b8; font-style:italic; font-size:11px;'>Memuat...</span></li>
+                    <li><span style='color:#64748b; font-style:italic;'>Memuat...</span></li>
                 </ul>
             </div>
         </div>
 
         <!-- TOMBOL LAPOR KECURANGAN VIA WHATSAPP -->
         <a href="https://wa.me/6289524391002" target="_blank" class="wa-report-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
             Laporkan via WhatsApp
         </a>
     </div>
@@ -430,8 +414,10 @@
                         labelTimerHA.innerText = `${menit}:${detik < 10 ? '0' : ''}${detik}`;
                         if (totalDetik <= 60) {
                             labelTimerHA.classList.add('timer-warning-merah');
+                            labelTimerHA.style.color = "#ef4444";
                         } else {
                             labelTimerHA.classList.remove('timer-warning-merah');
+                            labelTimerHA.style.color = "#2563eb";
                         }
                     } else {
                         labelTimerHA.innerText = `Habis!`;
@@ -441,6 +427,7 @@
             } else {
                 labelTimerHA.innerText = "00:00";
                 labelTimerHA.classList.remove('timer-warning-merah');
+                labelTimerHA.style.color = "#2563eb";
             }
 
             if (waktuStandbyAVGlobal) {
@@ -455,8 +442,10 @@
                         labelTimerAV.innerText = `${menit}:${detik < 10 ? '0' : ''}${detik}`;
                         if (totalDetik <= 60) {
                             labelTimerAV.classList.add('timer-warning-merah');
+                            labelTimerAV.style.color = "#ef4444";
                         } else {
                             labelTimerAV.classList.remove('timer-warning-merah');
+                            labelTimerAV.style.color = "#9333ea";
                         }
                     } else {
                         labelTimerAV.innerText = `Habis!`;
@@ -466,6 +455,7 @@
             } else {
                 labelTimerAV.innerText = "00:00";
                 labelTimerAV.classList.remove('timer-warning-merah');
+                labelTimerAV.style.color = "#9333ea";
             }
         }
 
@@ -506,7 +496,7 @@
             const akunSaya = getAkunAktif().trim();
 
             const badge = document.getElementById('badge-status-sistem');
-            badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS: OPEN" : "STATUS: CLOSED";
+            badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS ANTRIAN: OPEN" : "STATUS ANTRIAN: CLOSED";
             badge.className = statusSistemGlobal === "BUKA" ? "status-badge-sistem status-open" : "status-badge-sistem status-closed";
 
             let listHtmlHA = "";
@@ -564,8 +554,8 @@
                 });
             }
 
-            if(!listHtmlHA) listHtmlHA = "<li><span style='color:#94a3b8; font-style:italic; font-size:11px;'>Kosong</span></li>";
-            if(!listHtmlAV) listHtmlAV = "<li><span style='color:#94a3b8; font-style:italic; font-size:11px;'>Kosong</span></li>";
+            if(!listHtmlHA) listHtmlHA = "<li><span style='color:#64748b; font-style:italic;'>Kosong</span></li>";
+            if(!listHtmlAV) listHtmlAV = "<li><span style='color:#64748b; font-style:italic;'>Kosong</span></li>";
 
             const btnAntri = document.getElementById('btn-utama-antri');
             const btnCustomer = document.getElementById('btn-utama-customer');
@@ -587,12 +577,12 @@
             btnClosing.className = "btn-danger";
             btnClosing.disabled = false;
             
-            btnCS.innerHTML = (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") ? "SELESAI CS (KEMBALI ANTRI)" : "DIPANGGIL CS/GUDANG";
+            btnCS.innerHTML = (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") ? "SELESAI CS/GUDANG (KEMBALI ANTRI)" : "DIPANGGIL CS/GUDANG (KUNCI POSISI)";
             btnCS.className = (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") ? "btn-success" : "btn-purple";
             btnCS.disabled = false;
             
             btnKeluar.innerHTML = "KELUAR ANTRIAN (ISTIRAHAT)";
-            btnKeluar.className = "btn-cancel";
+            btnKeluar.className = "btn-danger";
             btnKeluar.disabled = false;
 
             if (statusSayaGlobal === "Melayani") {
@@ -624,7 +614,7 @@
                 btnKeluar.style.display = "block";
                 selectKategori.disabled = true;
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
-                btnAntri.innerText = "Posisi Antrian Dikunci (Di CS)";
+                btnAntri.innerText = "Posisi Antrian Dikunci (Di CS/GUDANG)";
                 btnAntri.className = "btn-purple btn-disabled";
                 btnAntri.disabled = true;
 
@@ -634,7 +624,7 @@
                 btnKeluar.style.display = "none";
                 selectKategori.disabled = true;
             } else { 
-                btnAntri.innerText = statusSistemGlobal === "TUTUP" ? "Antrian Ditutup SPV" : "Daftar Antrian";
+                btnAntri.innerText = statusSistemGlobal === "TUTUP" ? "Antrian Ditutup Oleh SPV" : "Daftar Antrian";
                 btnAntri.className = statusSistemGlobal === "TUTUP" ? "btn-danger btn-disabled" : "btn-success";
                 btnAntri.disabled = (statusSistemGlobal === "TUTUP");
                 btnCustomer.style.display = "none";
@@ -760,8 +750,8 @@
 
                 const btn = document.getElementById('btn-keluar-istirahat');
                 btn.disabled = true;
-                btn.className = "btn-cancel btn-disabled";
-                btn.innerHTML = `<span class="spinner" style="border-top-color: #64748b;"></span> Memproses...`;
+                btn.className = "btn-danger btn-disabled";
+                btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
                 const url = `${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`;
                 eksekusiCepatKeServer(url, btn, "belum_ada");
@@ -779,7 +769,7 @@
             document.getElementById('modal-title').innerText = judul;
             document.getElementById('modal-desc').innerText = desc;
             document.getElementById('modal-actions').innerHTML = `
-                <button type="button" class="btn-cancel" onclick="tutupModal()" style="border: 1px solid var(--border);">Batal</button>
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
                 <button type="button" class="btn-primary" id="btn-modal-ya">Ya</button>
             `;
             document.getElementById('custom-modal').classList.add('active');
