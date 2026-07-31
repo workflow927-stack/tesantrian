@@ -612,7 +612,7 @@
             }).catch(() => {});
         }
 
-   function aksiUtamaAntri() {
+  function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
             if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
@@ -623,14 +623,22 @@
             btnAntri.disabled = true;
             btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-            // Kirim data ke server terlebih dahulu, ubah UI secara lokal setelah server sukses merespons
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
                 sedangProsesAksi = false; 
                 if (res.status === "sukses") {
+                    // Update status secara lokal seketika tanpa menunggu fetch berikutnya
                     statusSayaGlobal = "Standby";
-                    muatDataAntrian(true); // Tarik data terbaru setelah server sukses mencatat
+                    
+                    // Masukkan ke array lokal jika belum ada agar UI langsung berubah mulus
+                    const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
+                    if (!adaAkun) {
+                        daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
+                    }
+                    
+                    // Render UI baru secara instan
+                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
                 } else {
                     tampilkanModal("Perhatian", res.pesan);
                     muatDataAntrian(true);
