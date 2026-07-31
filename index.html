@@ -630,35 +630,28 @@
             }).catch(() => {});
         }
 
-        // --- TOMBOL DAFTAR ANTRIAN: OPTIMISTIC UI DENGAN RENDER KILAT ---
+        // --- TOMBOL DAFTAR ANTRIAN DENGAN SPINNER AMAN & KONSISTEN ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
             if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
             
             sedangProsesAksi = true; 
-            statusSayaGlobal = "Standby";
+            const btn = document.getElementById('btn-utama-antri');
+            btn.disabled = true;
+            btn.className = "btn-success btn-disabled";
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-            const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
-            if (!adaAkun) {
-                daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
-            }
-
-            // Eksekusi perbaruan UI lokal secara prioritas
-            requestAnimationFrame(() => {
-                renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
-                sedangProsesAksi = false;
-            });
-
-            // Kirim ke server via fetch di latar belakang secara asinkron murni
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
+                sedangProsesAksi = false; 
                 if (res.status !== "sukses") {
                     tampilkanModal("Perhatian", res.pesan);
                 }
                 muatDataAntrian(true);
             }).catch(() => {
+                sedangProsesAksi = false;
                 muatDataAntrian(true);
             });
         }
