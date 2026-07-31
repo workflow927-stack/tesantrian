@@ -90,7 +90,7 @@
         select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
         select:disabled { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
-        /* PENGATURAN TOMBOL AGAR RAPI & TIDAK PANJANG KEBAWAH */
+        /* PENGATURAN TOMBOL RAPI DAN TIDAK PANJANG KEBAWAH */
         button { 
             width: 100%; padding: 14px 12px; border-radius: 14px; 
             font-size: 13px; font-weight: 800; cursor: pointer; border: none;
@@ -101,10 +101,7 @@
         }
         button:active { transform: scale(0.98); }
 
-        /* MENCEGAH TOMBOL MUNCUL SEBELUM DATA SELESAI DIMUAT */
-        .menu-loading button { visibility: hidden !important; }
-
-        /* WARNA TOMBOL YANG BERBEDA-BEDA */
+        /* WARNA TOMBOL BERBEDA SATU SAMA LAIN */
         .btn-success { background: var(--success); color: white; }
         .btn-customer { background: var(--customer-blue); color: white; }
         .btn-closing { background: var(--closing-red); color: white; }
@@ -194,8 +191,8 @@
             <button type="button" class="btn-customer" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
         </div>
 
-        <!-- MENU PROMOTOR (Diberi class menu-loading agar tombol tersembunyi rapi saat awal muat) -->
-        <div id="panel-menu-utama" class="menu-loading" style="display: none;">
+        <!-- MENU PROMOTOR -->
+        <div id="panel-menu-utama" style="display: none;">
             <div class="user-badge">
                 <span style="color: var(--text-muted);">Akun HP Ini:</span> <strong id="label-user-aktif" style="color:var(--primary-dark); font-size: 15px;">-</strong>
             </div>
@@ -271,6 +268,7 @@
         let namaSalesAktifGlobal = "";
         const BATAS_MENIT = 60;
         let sedangProsesAksi = false;
+        let lockStatusLokalExpiry = 0; // Mengatasi jeda sinkronisasi Google Sheets
 
         window.onload = function() {
             muatMasterSalesInstant();
@@ -539,6 +537,11 @@
                 });
             }
 
+            // MENCEGAH REVERT (Bouncing) KARENA GOOGLE SHEETS LATENCY
+            if (Date.now() < lockStatusLokalExpiry && statusSayaGlobal === "belum_ada") {
+                statusSayaGlobal = "Standby";
+            }
+
             if(!listHtmlHA) listHtmlHA = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian HA</span></li>";
             if(!listHtmlAV) listHtmlAV = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian AV</span></li>";
 
@@ -632,9 +635,6 @@
             document.getElementById('nama-aktif-av').innerText = namaAVNow;
             document.getElementById('item-antrian-list-ha').innerHTML = listHtmlHA;
             document.getElementById('item-antrian-list-av').innerHTML = listHtmlAV;
-
-            // Hapus status loading agar tombol langsung tampil rapi tanpa berkedip
-            document.getElementById('panel-menu-utama').classList.remove('menu-loading');
         }
 
         function muatDataAntrian(paksaTarik = false) {
@@ -645,10 +645,7 @@
                 if(res && res.status === "sukses") {
                     renderUIRental(res.data, res.statusAntrian, res.waktuStandbyHA, res.waktuStandbyAV);
                 }
-            }).catch(() => {
-                // Jika error pun buka loading agar tidak macet
-                document.getElementById('panel-menu-utama').classList.remove('menu-loading');
-            });
+            }).catch(() => {});
         }
 
         function aksiUtamaAntri() {
@@ -657,10 +654,13 @@
             if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
             
             sedangProsesAksi = true; 
+            lockStatusLokalExpiry = Date.now() + 6000; // Kunci status lokal selama 6 detik untuk cegah balik ke awal akibat sheet lemot
+
             const btnAntri = document.getElementById('btn-utama-antri');
             btnAntri.disabled = true;
             btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
 
+            // Update UI instan tanpa menunggu server
             statusSayaGlobal = "Standby";
             const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
             if (!adaAkun) {
@@ -671,15 +671,11 @@
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
-                setTimeout(() => {
-                    sedangProsesAksi = false; 
-                    muatDataAntrian(true);
-                }, 1500);
+                sedangProsesAksi = false; 
+                muatDataAntrian(true);
             }).catch(() => {
-                setTimeout(() => {
-                    sedangProsesAksi = false;
-                    muatDataAntrian(true);
-                }, 1500);
+                sedangProsesAksi = false;
+                muatDataAntrian(true);
             });
         }
 
