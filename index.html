@@ -678,12 +678,14 @@
             }
         }
 
-        function aksiSelesaiClosing() {
+       function aksiSelesaiClosing() {
             const namaSales = getAkunAktif();
             if(!namaSales) return;
 
             tampilkanModalKonfirmasi("Konfirmasi Selesai", "Selesai melayani customer? Anda akan dikeluarkan dari antrian.", function() {
                 sedangProsesAksi = true; 
+                
+                // Hapus data secara lokal seketika
                 daftarAntrianGlobal = daftarAntrianGlobal.filter(item => item.nama.trim().toLowerCase() !== namaSales.trim().toLowerCase());
                 statusSayaGlobal = "belum_ada";
                 renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
@@ -701,7 +703,7 @@
         }
 
         // AKSI TOMBOL DIPANGGIL CS / GUDANG DENGAN SPINNER AKTIF
-        function aksiToggleCS() {
+       function aksiToggleCS() {
             const namaSales = getAkunAktif();
             if(!namaSales) return;
 
@@ -717,7 +719,9 @@
                         btnCS.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
+                    // Update UI lokal seketika
                     statusSayaGlobal = "Dipanggil CS/GUDANG";
+                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
 
                     fetch(`${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
                     .then(res => res.json())
@@ -739,7 +743,9 @@
                         btnCS.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
+                    // Update UI lokal seketika kembali Standby
                     statusSayaGlobal = "Standby";
+                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
 
                     fetch(`${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
                     .then(res => res.json())
@@ -754,7 +760,7 @@
             }
         }
 
-        function bukaModalKeluarIstirahat() {
+       function bukaModalKeluarIstirahat() {
             tampilkanModalKonfirmasi("Keluar Antrian", "Apakah Anda yakin ingin keluar dari antrian untuk istirahat / ada keperluan?", function() {
                 const namaSales = getAkunAktif();
                 if (!namaSales) return;
@@ -767,26 +773,28 @@
                     btnKeluar.innerHTML = `<span class="spinner"></span> Memproses...`;
                 }
 
+                // Hapus lokal seketika
+                daftarAntrianGlobal = daftarAntrianGlobal.filter(item => item.nama.trim().toLowerCase() !== namaSales.trim().toLowerCase());
+                statusSayaGlobal = "belum_ada";
+                renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+
                 fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
                 .then(res => res.json())
                 .then(res => {
-                    daftarAntrianGlobal = daftarAntrianGlobal.filter(item => item.nama.trim().toLowerCase() !== namaSales.trim().toLowerCase());
-                    statusSayaGlobal = "belum_ada";
-
-                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+                    sedangProsesAksi = false;
                     tampilkanModal("Berhasil Keluar", "Anda telah keluar dari antrian untuk istirahat.");
-                    
-                    setTimeout(() => { 
-                        sedangProsesAksi = false; 
-                        muatDataAntrian(true);
-                        if (btnKeluar) {
-                            btnKeluar.disabled = false;
-                            btnKeluar.innerHTML = `☕ KELUAR ANTRIAN (ISTIRAHAT)`;
-                        }
-                    }, 200);
+                    muatDataAntrian(true);
+                    if (btnKeluar) {
+                        btnKeluar.disabled = false;
+                        btnKeluar.innerHTML = `KELUAR ANTRIAN (ISTIRAHAT)`;
+                    }
                 }).catch(() => {
                     sedangProsesAksi = false;
                     muatDataAntrian(true);
+                    if (btnKeluar) {
+                        btnKeluar.disabled = false;
+                        btnKeluar.innerHTML = `KELUAR ANTRIAN (ISTIRAHAT)`;
+                    }
                 });
             });
         }
