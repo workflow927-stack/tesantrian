@@ -7,6 +7,8 @@
     <!-- Menghilangkan Peringatan Favicon 404 -->
     <link rel="shortcut icon" href="#">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Pustaka Animasi Konfeti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
@@ -850,6 +852,15 @@
             if(!namaSales) return;
 
             tampilkanModalKonfirmasi("Konfirmasi Selesai", "Selesai melayani customer? Anda akan dikeluarkan dari antrian.", function() {
+                // EFEK KONFETI SAAT CLOSING BERHASIL DIKONFIRMASI
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 90,
+                        origin: { y: 0.6 }
+                    });
+                }
+
                 sedangProsesAksi = true; 
                 const btnClosing = document.getElementById('btn-selesai-closing');
                 if (btnClosing) {
