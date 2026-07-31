@@ -74,6 +74,13 @@
             color: #f8fafc !important;
             border-color: #334155 !important;
         }
+        body.dark-mode .announcement-box {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .announcement-text {
+            color: #f8fafc !important;
+        }
 
         *, body, button, select, input {
             font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -136,6 +143,21 @@
         }
         .status-open { background: #dcfce7; color: #15803d; border: 2px solid #86efac; }
         .status-closed { background: #fee2e2; color: #b91c1c; border: 2px solid #fca5a5; }
+
+        /* KOTAK PENGUMUMAN SPV */
+        .announcement-box {
+            background: #fffbeb; border: 2px solid #fde68a;
+            border-radius: 16px; padding: 14px 16px; margin-bottom: 18px;
+            text-align: left; display: none; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+        }
+        .announcement-title {
+            font-size: 11px; font-weight: 800; color: #d97706;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .announcement-text {
+            font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.4;
+        }
 
         .card-giliran-wrapper {
             display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;
@@ -286,6 +308,12 @@
 
         <div id="badge-status-sistem" class="status-badge-sistem status-open">
             STATUS ANTRIAN: OPEN
+        </div>
+
+        <!-- KOTAK PENGUMUMAN SPV -->
+        <div id="box-pengumuman-spv" class="announcement-box">
+            <div class="announcement-title">📢 Pengumuman SPV</div>
+            <div id="teks-pengumuman-spv" class="announcement-text">-</div>
         </div>
 
         <!-- KARTU GILIRAN UTAMA HA & AV -->
@@ -620,7 +648,7 @@
             });
         }
 
-        function renderUIRental(dataAntrian, statusSistem, waktuStandbyHA, waktuStandbyAV) {
+        function renderUIRental(dataAntrian, statusSistem, waktuStandbyHA, waktuStandbyAV, pengumumanSPV) {
             daftarAntrianGlobal = dataAntrian || [];
             statusSistemGlobal = statusSistem || "BUKA";
             waktuStandbyHAGlobal = waktuStandbyHA || null;
@@ -630,6 +658,16 @@
             const badge = document.getElementById('badge-status-sistem');
             badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS ANTRIAN: OPEN" : "STATUS ANTRIAN: CLOSED";
             badge.className = statusSistemGlobal === "BUKA" ? "status-badge-sistem status-open" : "status-badge-sistem status-closed";
+
+            // MENAMPILKAN / MENYEMBUNYIKAN KOTAK PENGUMUMAN SPV
+            const boxPengumuman = document.getElementById('box-pengumuman-spv');
+            const teksPengumuman = document.getElementById('teks-pengumuman-spv');
+            if (pengumumanSPV && pengumumanSPV.trim() !== "") {
+                teksPengumuman.innerText = pengumumanSPV;
+                boxPengumuman.style.display = "block";
+            } else {
+                boxPengumuman.style.display = "none";
+            }
 
             let listHtmlHA = "";
             let listHtmlAV = "";
@@ -785,7 +823,7 @@
             .then(res => res.json())
             .then(res => {
                 if(res && res.status === "sukses") {
-                    renderUIRental(res.data, res.statusAntrian, res.waktuStandbyHA, res.waktuStandbyAV);
+                    renderUIRental(res.data, res.statusAntrian, res.waktuStandbyHA, res.waktuStandbyAV, res.pengumumanSPV);
                 }
             }).catch(() => {});
         }
@@ -852,7 +890,6 @@
             if(!namaSales) return;
 
             tampilkanModalKonfirmasi("Konfirmasi Selesai", "Selesai melayani customer? Anda akan dikeluarkan dari antrian.", function() {
-                // EFEK KONFETI SAAT CLOSING BERHASIL DIKONFIRMASI
                 if (typeof confetti === 'function') {
                     confetti({
                         particleCount: 150,
