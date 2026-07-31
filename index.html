@@ -630,7 +630,7 @@
             }).catch(() => {});
         }
 
-        // --- TOMBOL DAFTAR ANTRIAN: INSTAN DENGAN MUNCULNYA TOMBOL LAINNYA ---
+        // --- TOMBOL DAFTAR ANTRIAN: NON-BLOCKING & SUPER INSTAN ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
@@ -644,23 +644,23 @@
                 daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
             }
 
-            // Langsung perbarui UI lokal secara total agar tombol pendukung langsung muncul
+            // Langsung perbarui UI lokal seketika
             renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
-
-            // Buka kembali izin background setelah UI instan selesai digambar
             sedangProsesAksi = false;
 
-            // Kirim ke server di balik layar
-            fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status !== "sukses") {
-                    tampilkanModal("Perhatian", res.pesan);
-                }
-                muatDataAntrian(true);
-            }).catch(() => {
-                muatDataAntrian(true);
-            });
+            // Proses jaringan dijalankan di latar belakang secara terpisah tanpa jeda klik
+            setTimeout(() => {
+                fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status !== "sukses") {
+                        tampilkanModal("Perhatian", res.pesan);
+                    }
+                    muatDataAntrian(true);
+                }).catch(() => {
+                    muatDataAntrian(true);
+                });
+            }, 10);
         }
 
         function aksiUtamaCustomer() {
@@ -675,18 +675,20 @@
                     btn.className = "btn-primary btn-disabled";
                     btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-                    fetch(`${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
-                    .then(res => res.json())
-                    .then(res => {
-                        sedangProsesAksi = false; 
-                        if(res.status !== "sukses") {
-                            tampilkanModal("Perhatian", res.pesan);
-                        }
-                        muatDataAntrian(true);
-                    }).catch(() => {
-                        sedangProsesAksi = false;
-                        muatDataAntrian(true);
-                    });
+                    setTimeout(() => {
+                        fetch(`${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                        .then(res => res.json())
+                        .then(res => {
+                            sedangProsesAksi = false; 
+                            if(res.status !== "sukses") {
+                                tampilkanModal("Perhatian", res.pesan);
+                            }
+                            muatDataAntrian(true);
+                        }).catch(() => {
+                            sedangProsesAksi = false;
+                            muatDataAntrian(true);
+                        });
+                    }, 10);
                 });
             }
         }
@@ -702,15 +704,17 @@
                 btn.className = "btn-danger btn-disabled";
                 btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
-                .then(res => res.json())
-                .then(res => {
-                    sedangProsesAksi = false; 
-                    muatDataAntrian(true);
-                }).catch(() => {
-                    sedangProsesAksi = false;
-                    muatDataAntrian(true);
-                });
+                setTimeout(() => {
+                    fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
+                }, 10);
             });
         }
 
@@ -729,15 +733,17 @@
                         btn.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
-                    fetch(`${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
-                    .then(res => res.json())
-                    .then(res => {
-                        sedangProsesAksi = false; 
-                        muatDataAntrian(true);
-                    }).catch(() => {
-                        sedangProsesAksi = false;
-                        muatDataAntrian(true);
-                    });
+                    setTimeout(() => {
+                        fetch(`${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                        .then(res => res.json())
+                        .then(res => {
+                            sedangProsesAksi = false; 
+                            muatDataAntrian(true);
+                        }).catch(() => {
+                            sedangProsesAksi = false;
+                            muatDataAntrian(true);
+                        });
+                    }, 10);
                 });
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
                 tampilkanModalKonfirmasi("Selesai Urusan CS/GUDANG", "Urusan CS/GUDANG sudah selesai? Kembali aktif di antrian.", function() {
@@ -748,15 +754,17 @@
                         btn.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
-                    fetch(`${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
-                    .then(res => res.json())
-                    .then(res => {
-                        sedangProsesAksi = false; 
-                        muatDataAntrian(true);
-                    }).catch(() => {
-                        sedangProsesAksi = false;
-                        muatDataAntrian(true);
-                    });
+                    setTimeout(() => {
+                        fetch(`${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                        .then(res => res.json())
+                        .then(res => {
+                            sedangProsesAksi = false; 
+                            muatDataAntrian(true);
+                        }).catch(() => {
+                            sedangProsesAksi = false;
+                            muatDataAntrian(true);
+                        });
+                    }, 10);
                 });
             }
         }
@@ -774,15 +782,17 @@
                     btn.innerHTML = `<span class="spinner"></span> Memproses...`;
                 }
 
-                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
-                .then(res => res.json())
-                .then(res => {
-                    sedangProsesAksi = false;
-                    muatDataAntrian(true);
-                }).catch(() => {
-                    sedangProsesAksi = false;
-                    muatDataAntrian(true);
-                });
+                setTimeout(() => {
+                    fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
+                }, 10);
             });
         }
 
