@@ -26,7 +26,6 @@
         *, body, button, select, input {
             font-family: 'Plus Jakarta Sans', sans-serif !important;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body { 
@@ -43,7 +42,6 @@
             border: 2px solid var(--border);
             box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1);
             text-align: center;
-            height: fit-content;
         }
 
         .gradient-header {
@@ -93,7 +91,7 @@
         button { 
             width: 100%; padding: 16px; border-radius: 14px; 
             font-size: 15px; font-weight: 800; cursor: pointer; border: none;
-            text-transform: uppercase; transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease;
+            text-transform: uppercase; transition: all 0.2s ease;
             display: inline-flex; justify-content: center; align-items: center; gap: 10px;
             letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
@@ -118,20 +116,11 @@
             padding: 14px; margin-bottom: 18px; text-align: left; font-size: 14px; font-weight: 600;
         }
 
-        /* LIVE LIST TAMPILAN VERTIKAL KE BAWAH (RAPI & LEGA) */
-        .list-section-wrapper { margin-top: 24px; text-align: left; display: flex; flex-direction: column; gap: 18px; }
-        .list-group-box { background: #f8fafc; border: 2px solid var(--border); border-radius: 16px; padding: 14px; }
-        .list-group-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; display: block; }
-
-        .list-antrian { list-style: none; padding: 0; margin: 0; max-height: 220px; overflow-y: auto; }
-        .list-antrian::-webkit-scrollbar { width: 4px; }
-        .list-antrian::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-
+        .list-antrian { list-style: none; padding: 0; margin: 8px 0 0 0; text-align: left; }
         .list-antrian li {
             padding: 12px 14px; background: #ffffff; border-radius: 10px; margin-bottom: 8px;
             display: flex; justify-content: space-between; align-items: center; border: 2px solid var(--border); font-size: 14px; font-weight: 700;
         }
-        .list-antrian li:last-child { margin-bottom: 0; }
 
         .badge-status-item { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
         .badge-standby { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
@@ -139,7 +128,7 @@
         .badge-cs { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
 
         .wa-report-btn {
-            margin-top: 20px; background: #25d366; border: 2px solid #1ebe57; color: white;
+            margin-top: 12px; background: #25d366; border: 2px solid #1ebe57; color: white;
             font-size: 13px; padding: 14px; border-radius: 12px; text-decoration: none; 
             display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 800;
             letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
@@ -225,17 +214,17 @@
             <button type="button" id="btn-keluar-istirahat" class="btn-danger" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 12px;">KELUAR ANTRIAN (ISTIRAHAT)</button>
         </div>
 
-        <!-- LIVE LIST DIPISAH HA DAN AV (VERTIKAL KE BAWAH) -->
-        <div class="list-section-wrapper">
-            <div class="list-group-box">
-                <span class="list-group-title">Live Urutan HA</span>
+        <!-- LIVE LIST DIPISAH HA DAN AV -->
+        <div style="margin-top: 24px; text-align: left;">
+            <div style="margin-bottom: 20px;">
+                <span style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Live Urutan HA</span>
                 <ul id="item-antrian-list-ha" class="list-antrian">
                     <li><span>Memuat data...</span></li>
                 </ul>
             </div>
 
-            <div class="list-group-box">
-                <span class="list-group-title" style="color: #9333ea;">Live Urutan AV</span>
+            <div>
+                <span style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Live Urutan AV</span>
                 <ul id="item-antrian-list-av" class="list-antrian">
                     <li><span>Memuat data...</span></li>
                 </ul>
@@ -261,7 +250,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYtbXMd5BFEF3fEcNlpQUKzVTH3DHYv0zVG8qTEiGbGmNU4_LlcgcRub2z3U2CaoO3/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRAVavq87AMEX40cM3-3SsIMP89CeW6kJT_MSpxxILasQ4gohb_sMKtG50zt8kpyye/exec";
 
         let waktuStandbyHAGlobal = null;
         let waktuStandbyAVGlobal = null;
@@ -481,8 +470,6 @@
         }
 
         function renderUIRental(dataAntrian, statusSistem, waktuStandbyHA, waktuStandbyAV) {
-            if (sedangProsesAksi) return;
-
             daftarAntrianGlobal = dataAntrian || [];
             statusSistemGlobal = statusSistem || "BUKA";
             waktuStandbyHAGlobal = waktuStandbyHA || null;
@@ -552,27 +539,6 @@
             const btnKeluar = document.getElementById('btn-keluar-istirahat');
             const selectKategori = document.getElementById('pilih-kategori');
 
-            // Reset teks dan aktifkan kembali semua tombol
-            btnAntri.innerHTML = "Daftar Antrian";
-            btnAntri.className = "btn-success";
-            btnAntri.disabled = false;
-            
-            btnCustomer.innerHTML = "Sudah Membawa Customer";
-            btnCustomer.className = "btn-primary";
-            btnCustomer.disabled = false;
-            
-            btnClosing.innerHTML = "SELESAI MELAYANI (DEAL / CLOSING)";
-            btnClosing.className = "btn-danger";
-            btnClosing.disabled = false;
-            
-            btnCS.innerHTML = (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") ? "SELESAI CS/GUDANG (KEMBALI ANTRI)" : "DIPANGGIL CS/GUDANG (KUNCI POSISI)";
-            btnCS.className = (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") ? "btn-success" : "btn-purple";
-            btnCS.disabled = false;
-            
-            btnKeluar.innerHTML = "KELUAR ANTRIAN (ISTIRAHAT)";
-            btnKeluar.className = "btn-danger";
-            btnKeluar.disabled = false;
-
             if (statusSayaGlobal === "Melayani") {
                 btnAntri.innerText = "Sedang Melayani Customer";
                 btnAntri.className = "btn-warning btn-disabled";
@@ -580,8 +546,10 @@
 
                 btnCustomer.style.display = "none"; 
                 btnClosing.style.display = "block";
-                btnCS.style.display = "none";
-                btnKeluar.style.display = "none";
+                btnClosing.disabled = false;
+                btnClosing.className = "btn-danger";
+                btnClosing.innerHTML = "SELESAI MELAYANI (DEAL / CLOSING)";
+
                 selectKategori.disabled = true;
             } else if (statusSayaGlobal === "Standby") {
                 btnAntri.innerText = "Anda Sudah Di Antrian";
@@ -589,17 +557,24 @@
                 btnAntri.disabled = true;
 
                 btnCustomer.style.display = "block";
+                btnCustomer.innerText = "Sudah Membawa Customer";
                 btnClosing.style.display = "none";
                 
                 let kategoriSaya = selectKategori.value;
                 let bisaAmbil = (kategoriSaya === "AV" && apakahSayaUrutanPertamaAV) || (kategoriSaya !== "AV" && apakahSayaUrutanPertamaHA);
-                if(!bisaAmbil) {
-                    btnCustomer.className = "btn-primary btn-disabled";
-                    btnCustomer.disabled = true;
-                }
+                btnCustomer.disabled = !bisaAmbil;
+                btnCustomer.className = bisaAmbil ? "btn-primary" : "btn-primary btn-disabled";
 
                 btnCS.style.display = "block";
+                btnCS.innerText = "DIPANGGIL CS/GUDANG (KUNCI POSISI)";
+                btnCS.className = "btn-purple";
+                btnCS.disabled = false;
+
                 btnKeluar.style.display = "block";
+                btnKeluar.disabled = false;
+                btnKeluar.className = "btn-danger";
+                btnKeluar.innerHTML = "KELUAR ANTRIAN (ISTIRAHAT)";
+
                 selectKategori.disabled = true;
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
                 btnAntri.innerText = "Posisi Antrian Dikunci (Di CS/GUDANG)";
@@ -608,7 +583,12 @@
 
                 btnCustomer.style.display = "none";
                 btnClosing.style.display = "none";
+
                 btnCS.style.display = "block";
+                btnCS.innerText = "SELESAI CS/GUDANG (KEMBALI ANTRI)";
+                btnCS.className = "btn-success";
+                btnCS.disabled = false;
+
                 btnKeluar.style.display = "none";
                 selectKategori.disabled = true;
             } else { 
@@ -639,37 +619,33 @@
             }).catch(() => {});
         }
 
-        function eksekusiCepatKeServer(url, btnElement, targetStatusLokal) {
-            sedangProsesAksi = true;
-            statusSayaGlobal = targetStatusLokal;
-            renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
-
-            fetch(url, { method: 'GET', redirect: 'follow' })
-            .then(res => res.json())
-            .then(res => {
-                sedangProsesAksi = false;
-                if (res.status !== "sukses" && res.pesan) {
-                    tampilkanModal("Perhatian", res.pesan);
-                }
-                muatDataAntrian(true);
-            }).catch(() => {
-                sedangProsesAksi = false;
-                muatDataAntrian(true);
-            });
-        }
-
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
             if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
             
-            const btn = document.getElementById('btn-utama-antri');
-            btn.disabled = true;
-            btn.className = "btn-success btn-disabled";
-            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+            sedangProsesAksi = true; 
 
-            const url = `${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`;
-            eksekusiCepatKeServer(url, btn, "Standby");
+            const btnAntri = document.getElementById('btn-utama-antri');
+            btnAntri.disabled = true;
+            btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+            statusSayaGlobal = "Standby";
+            const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
+            if (!adaAkun) {
+                daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
+            }
+            renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+
+            fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
+            .then(res => res.json())
+            .then(res => {
+                sedangProsesAksi = false; 
+                muatDataAntrian(true);
+            }).catch(() => {
+                sedangProsesAksi = false;
+                muatDataAntrian(true);
+            });
         }
 
         function aksiUtamaCustomer() {
@@ -678,13 +654,26 @@
 
             if (statusSayaGlobal === "Standby") {
                 tampilkanModalKonfirmasi("Konfirmasi", "Sudah membawa customer?", function() {
-                    const btn = document.getElementById('btn-utama-customer');
-                    btn.disabled = true;
-                    btn.className = "btn-primary btn-disabled";
-                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    sedangProsesAksi = true; 
+                    const btnCustomer = document.getElementById('btn-utama-customer');
+                    if (btnCustomer) {
+                        btnCustomer.disabled = true;
+                        btnCustomer.className = "btn-primary btn-disabled";
+                        btnCustomer.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    }
 
-                    const url = `${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Melayani");
+                    statusSayaGlobal = "Melayani";
+                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+
+                    fetch(`${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             }
         }
@@ -694,13 +683,27 @@
             if(!namaSales) return;
 
             tampilkanModalKonfirmasi("Konfirmasi Selesai", "Selesai melayani customer? Anda akan dikeluarkan dari antrian.", function() {
-                const btn = document.getElementById('btn-selesai-closing');
-                btn.disabled = true;
-                btn.className = "btn-danger btn-disabled";
-                btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                sedangProsesAksi = true; 
+                const btnClosing = document.getElementById('btn-selesai-closing');
+                if (btnClosing) {
+                    btnClosing.disabled = true;
+                    btnClosing.className = "btn-danger btn-disabled";
+                    btnClosing.innerHTML = `<span class="spinner"></span> Memproses...`;
+                }
 
-                const url = `${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`;
-                eksekusiCepatKeServer(url, btn, "belum_ada");
+                daftarAntrianGlobal = daftarAntrianGlobal.filter(item => item.nama.trim().toLowerCase() !== namaSales.trim().toLowerCase());
+                statusSayaGlobal = "belum_ada";
+                renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+
+                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(res => {
+                    sedangProsesAksi = false; 
+                    muatDataAntrian(true);
+                }).catch(() => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                });
             });
         }
 
@@ -708,25 +711,51 @@
             const namaSales = getAkunAktif();
             if(!namaSales) return;
 
-            const btn = document.getElementById('btn-utama-cs');
+            const btnCS = document.getElementById('btn-utama-cs');
 
             if (statusSayaGlobal === "Standby") {
                 tampilkanModalKonfirmasi("Status Dipanggil CS/GUDANG", "Dipanggil oleh CS/GUDANG? Posisi antrian Anda akan dikunci.", function() {
-                    btn.disabled = true;
-                    btn.className = "btn-purple btn-disabled";
-                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    sedangProsesAksi = true; 
 
-                    const url = `${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Dipanggil CS/GUDANG");
+                    if (btnCS) {
+                        btnCS.disabled = true;
+                        btnCS.className = "btn-purple btn-disabled";
+                        btnCS.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    }
+
+                    statusSayaGlobal = "Dipanggil CS/GUDANG";
+
+                    fetch(`${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
                 tampilkanModalKonfirmasi("Selesai Urusan CS/GUDANG", "Urusan CS/GUDANG sudah selesai? Kembali aktif di antrian.", function() {
-                    btn.disabled = true;
-                    btn.className = "btn-success btn-disabled";
-                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    sedangProsesAksi = true; 
 
-                    const url = `${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Standby");
+                    if (btnCS) {
+                        btnCS.disabled = true;
+                        btnCS.className = "btn-success btn-disabled";
+                        btnCS.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    }
+
+                    statusSayaGlobal = "Standby";
+
+                    fetch(`${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             }
         }
@@ -736,13 +765,37 @@
                 const namaSales = getAkunAktif();
                 if (!namaSales) return;
 
-                const btn = document.getElementById('btn-keluar-istirahat');
-                btn.disabled = true;
-                btn.className = "btn-danger btn-disabled";
-                btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                sedangProsesAksi = true;
 
-                const url = `${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`;
-                eksekusiCepatKeServer(url, btn, "belum_ada");
+                const btnKeluar = document.getElementById('btn-keluar-istirahat');
+                if (btnKeluar) {
+                    btnKeluar.disabled = true;
+                    btnKeluar.className = "btn-danger btn-disabled";
+                    btnKeluar.innerHTML = `<span class="spinner"></span> Memproses...`;
+                }
+
+                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(res => {
+                    daftarAntrianGlobal = daftarAntrianGlobal.filter(item => item.nama.trim().toLowerCase() !== namaSales.trim().toLowerCase());
+                    statusSayaGlobal = "belum_ada";
+
+                    renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+                    tampilkanModal("Berhasil Keluar", "Anda telah keluar dari antrian untuk istirahat.");
+                    
+                    setTimeout(() => { 
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                        if (btnKeluar) {
+                            btnKeluar.disabled = false;
+                            btnKeluar.className = "btn-danger";
+                            btnKeluar.innerHTML = `KELUAR ANTRIAN (ISTIRAHAT)`;
+                        }
+                    }, 200);
+                }).catch(() => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                });
             });
         }
 
