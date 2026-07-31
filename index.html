@@ -470,7 +470,6 @@
         }
 
         function renderUIRental(dataAntrian, statusSistem, waktuStandbyHA, waktuStandbyAV) {
-            // JANGAN TIMPA TAMPILAN JIKA SEDANG DALAM PROSES AKSI (MENCEGAH SPINNER HILANG KARENA TIMER BACKGROUND)
             if (sedangProsesAksi) return;
 
             daftarAntrianGlobal = dataAntrian || [];
@@ -631,18 +630,28 @@
             }).catch(() => {});
         }
 
-        // --- SEMUA TOMBOL AKSI DENGAN KUNCI AKSI YANG STABIL ---
+        // --- TOMBOL DAFTAR ANTRIAN: SUPER CEPAT & INSTAN SEPERTI DI AWAL ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
             if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
             
             sedangProsesAksi = true; 
-            const btn = document.getElementById('btn-utama-antri');
-            btn.disabled = true;
-            btn.className = "btn-success btn-disabled";
-            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+            statusSayaGlobal = "Standby";
 
+            // Langsung ubah UI secara instan (Optimistic UI)
+            const btn = document.getElementById('btn-utama-antri');
+            btn.innerText = "Anda Sudah Di Antrian";
+            btn.className = "btn-success btn-disabled";
+            btn.disabled = true;
+            document.getElementById('pilih-kategori').disabled = true;
+
+            const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
+            if (!adaAkun) {
+                daftarAntrianGlobal.push({ nama: namaSales, status: "Standby", waktuStandby: new Date(), kategori: kategoriPilih });
+            }
+
+            // Kirim ke server di balik layar
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
