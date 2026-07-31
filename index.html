@@ -91,7 +91,7 @@
         button { 
             width: 100%; padding: 16px; border-radius: 14px; 
             font-size: 15px; font-weight: 800; cursor: pointer; border: none;
-            text-transform: uppercase; transition: all 0.2s ease;
+            text-transform: uppercase; transition: background-color 0.25s ease, transform 0.1s ease, color 0.25s ease;
             display: inline-flex; justify-content: center; align-items: center; gap: 10px;
             letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
@@ -628,7 +628,7 @@
             }).catch(() => {});
         }
 
-        // --- SEMUA TOMBOL AKSI DILENGKAPI SPINNER PROFESIONAL ---
+        // --- SEMUA TOMBOL AKSI DENGAN TRANSISI HALUS DAN SPINNER ---
         function aksiUtamaAntri() {
             const namaSales = getAkunAktif().trim();
             const kategoriPilih = document.getElementById('pilih-kategori').value;
