@@ -628,21 +628,24 @@
             }).catch(() => {});
         }
 
-        // --- HYBRID OPTIMISTIC UI: SPINNER MUNCUL KILAT & RESPON CEPAT SEBELUM 2 DETIK ---
+        // --- TOMBOL DENGAN SPINNER AMAN & PROSES NYATA KE SERVER ---
 
-        function eksekusiCepatKeServer(url, btnElement, targetStatusLokal) {
-            sedangProsesAksi = true;
+        function aksiUtamaAntri() {
+            const namaSales = getAkunAktif().trim();
+            const kategoriPilih = document.getElementById('pilih-kategori').value;
+            if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
             
-            // 1. Ubah status lokal seketika (Optimistic UI) agar tampilan langsung berubah tanpa nunggu server
-            statusSayaGlobal = targetStatusLokal;
-            renderUIRental(daftarAntrianGlobal, statusSistemGlobal, waktuStandbyHAGlobal, waktuStandbyAVGlobal);
+            sedangProsesAksi = true; 
+            const btn = document.getElementById('btn-utama-antri');
+            btn.disabled = true;
+            btn.className = "btn-success btn-disabled";
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-            // 2. Kirim permintaan ke server di background
-            fetch(url, { method: 'GET', redirect: 'follow' })
+            fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
-                sedangProsesAksi = false;
-                if (res.status !== "sukses" && res.pesan) {
+                sedangProsesAksi = false; 
+                if (res.status !== "sukses") {
                     tampilkanModal("Perhatian", res.pesan);
                 }
                 muatDataAntrian(true);
@@ -652,33 +655,30 @@
             });
         }
 
-        function aksiUtamaAntri() {
-            const namaSales = getAkunAktif().trim();
-            const kategoriPilih = document.getElementById('pilih-kategori').value;
-            if(!namaSales) return tampilkanModal("Perhatian", "Akun belum terikat dengan benar.");
-            
-            const btn = document.getElementById('btn-utama-antri');
-            btn.disabled = true;
-            btn.className = "btn-success btn-disabled";
-            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
-
-            const url = `${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`;
-            eksekusiCepatKeServer(url, btn, "Standby");
-        }
-
         function aksiUtamaCustomer() {
             const namaSales = getAkunAktif();
             if(!namaSales) return;
 
             if (statusSayaGlobal === "Standby") {
                 tampilkanModalKonfirmasi("Konfirmasi", "Sudah membawa customer?", function() {
+                    sedangProsesAksi = true; 
                     const btn = document.getElementById('btn-utama-customer');
                     btn.disabled = true;
                     btn.className = "btn-primary btn-disabled";
                     btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-                    const url = `${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Melayani");
+                    fetch(`${SCRIPT_URL}?aksi=ambilAntrian&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        if(res.status !== "sukses") {
+                            tampilkanModal("Perhatian", res.pesan);
+                        }
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             }
         }
@@ -688,13 +688,21 @@
             if(!namaSales) return;
 
             tampilkanModalKonfirmasi("Konfirmasi Selesai", "Selesai melayani customer? Anda akan dikeluarkan dari antrian.", function() {
+                sedangProsesAksi = true; 
                 const btn = document.getElementById('btn-selesai-closing');
                 btn.disabled = true;
                 btn.className = "btn-danger btn-disabled";
                 btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-                const url = `${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`;
-                eksekusiCepatKeServer(url, btn, "belum_ada");
+                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(res => {
+                    sedangProsesAksi = false; 
+                    muatDataAntrian(true);
+                }).catch(() => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                });
             });
         }
 
@@ -706,21 +714,41 @@
 
             if (statusSayaGlobal === "Standby") {
                 tampilkanModalKonfirmasi("Status Dipanggil CS/GUDANG", "Dipanggil oleh CS/GUDANG? Posisi antrian Anda akan dikunci.", function() {
-                    btn.disabled = true;
-                    btn.className = "btn-purple btn-disabled";
-                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    sedangProsesAksi = true; 
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.className = "btn-purple btn-disabled";
+                        btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    }
 
-                    const url = `${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Dipanggil CS/GUDANG");
+                    fetch(`${SCRIPT_URL}?aksi=panggilCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
                 tampilkanModalKonfirmasi("Selesai Urusan CS/GUDANG", "Urusan CS/GUDANG sudah selesai? Kembali aktif di antrian.", function() {
-                    btn.disabled = true;
-                    btn.className = "btn-success btn-disabled";
-                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    sedangProsesAksi = true; 
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.className = "btn-success btn-disabled";
+                        btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                    }
 
-                    const url = `${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`;
-                    eksekusiCepatKeServer(url, btn, "Standby");
+                    fetch(`${SCRIPT_URL}?aksi=selesaiCS&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                    .then(res => res.json())
+                    .then(res => {
+                        sedangProsesAksi = false; 
+                        muatDataAntrian(true);
+                    }).catch(() => {
+                        sedangProsesAksi = false;
+                        muatDataAntrian(true);
+                    });
                 });
             }
         }
@@ -730,13 +758,23 @@
                 const namaSales = getAkunAktif();
                 if (!namaSales) return;
 
+                sedangProsesAksi = true;
                 const btn = document.getElementById('btn-keluar-istirahat');
-                btn.disabled = true;
-                btn.className = "btn-danger btn-disabled";
-                btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                if (btn) {
+                    btn.disabled = true;
+                    btn.className = "btn-danger btn-disabled";
+                    btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+                }
 
-                const url = `${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`;
-                eksekusiCepatKeServer(url, btn, "belum_ada");
+                fetch(`${SCRIPT_URL}?aksi=selesaiMelayani&namaSales=${encodeURIComponent(namaSales)}`, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(res => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                }).catch(() => {
+                    sedangProsesAksi = false;
+                    muatDataAntrian(true);
+                });
             });
         }
 
