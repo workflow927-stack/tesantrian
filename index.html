@@ -101,6 +101,9 @@
         }
         button:active { transform: scale(0.98); }
 
+        /* MENCEGAH TOMBOL MUNCUL SEBELUM DATA SELESAI DIMUAT */
+        .menu-loading button { visibility: hidden !important; }
+
         /* WARNA TOMBOL YANG BERBEDA-BEDA */
         .btn-success { background: var(--success); color: white; }
         .btn-customer { background: var(--customer-blue); color: white; }
@@ -191,8 +194,8 @@
             <button type="button" class="btn-customer" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
         </div>
 
-        <!-- MENU PROMOTOR -->
-        <div id="panel-menu-utama" style="display: none;">
+        <!-- MENU PROMOTOR (Diberi class menu-loading agar tombol tersembunyi rapi saat awal muat) -->
+        <div id="panel-menu-utama" class="menu-loading" style="display: none;">
             <div class="user-badge">
                 <span style="color: var(--text-muted);">Akun HP Ini:</span> <strong id="label-user-aktif" style="color:var(--primary-dark); font-size: 15px;">-</strong>
             </div>
@@ -629,6 +632,9 @@
             document.getElementById('nama-aktif-av').innerText = namaAVNow;
             document.getElementById('item-antrian-list-ha').innerHTML = listHtmlHA;
             document.getElementById('item-antrian-list-av').innerHTML = listHtmlAV;
+
+            // Hapus status loading agar tombol langsung tampil rapi tanpa berkedip
+            document.getElementById('panel-menu-utama').classList.remove('menu-loading');
         }
 
         function muatDataAntrian(paksaTarik = false) {
@@ -639,7 +645,10 @@
                 if(res && res.status === "sukses") {
                     renderUIRental(res.data, res.statusAntrian, res.waktuStandbyHA, res.waktuStandbyAV);
                 }
-            }).catch(() => {});
+            }).catch(() => {
+                // Jika error pun buka loading agar tidak macet
+                document.getElementById('panel-menu-utama').classList.remove('menu-loading');
+            });
         }
 
         function aksiUtamaAntri() {
