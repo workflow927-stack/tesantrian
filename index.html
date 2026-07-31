@@ -12,10 +12,12 @@
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --success: #059669;
+            --customer-blue: #2563eb;
+            --closing-red: #dc2626;
             --purple-cs: #7c3aed;
+            --teal-cs: #0d9488;
+            --amber-rest: #d97706;
             --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-main: #0f172a;
@@ -74,7 +76,7 @@
             font-size: 18px; font-weight: 800; margin-top: 4px; display: block; 
             font-variant-numeric: tabular-nums; transition: color 0.3s ease;
         }
-        .timer-warning-merah { color: var(--danger) !important; animation: blinkAlert 1s infinite; }
+        .timer-warning-merah { color: var(--closing-red) !important; animation: blinkAlert 1s infinite; }
         @keyframes blinkAlert { 50% { opacity: 0.3; } }
 
         .input-group { margin-bottom: 16px; text-align: left; }
@@ -88,26 +90,31 @@
         select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
         select:disabled { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
+        /* PENGATURAN TOMBOL AGAR RAPI & TIDAK PANJANG KEBAWAH */
         button { 
-            width: 100%; padding: 16px; border-radius: 14px; 
-            font-size: 15px; font-weight: 800; cursor: pointer; border: none;
+            width: 100%; padding: 14px 12px; border-radius: 14px; 
+            font-size: 13px; font-weight: 800; cursor: pointer; border: none;
             text-transform: uppercase; transition: all 0.2s ease;
-            display: inline-flex; justify-content: center; align-items: center; gap: 10px;
-            letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+            letter-spacing: 0.3px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            line-height: 1.3; text-align: center; white-space: normal; word-break: break-word;
         }
         button:active { transform: scale(0.98); }
 
-        .btn-primary { background: var(--primary); color: white; }
+        /* WARNA TOMBOL YANG BERBEDA-BEDA */
         .btn-success { background: var(--success); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
+        .btn-customer { background: var(--customer-blue); color: white; }
+        .btn-closing { background: var(--closing-red); color: white; }
         .btn-purple { background: var(--purple-cs); color: white; }
+        .btn-teal { background: var(--teal-cs); color: white; }
+        .btn-amber { background: var(--amber-rest); color: white; }
+        
         .btn-cancel { background: #e2e8f0; color: var(--text-main); }
         .btn-disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; }
 
         .spinner {
-            width: 18px; height: 18px; border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%; border-top-color: #ffffff; animation: spin 0.8s linear infinite; display: inline-block;
+            width: 16px; height: 16px; border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%; border-top-color: #ffffff; animation: spin 0.8s linear infinite; display: inline-block; flex-shrink: 0;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -181,7 +188,7 @@
                 <label>Pilih Nama Anda (Kunci Perangkat)</label>
                 <select id="pilih-sales"><option value="">-- Pilih Nama Anda --</option></select>
             </div>
-            <button type="button" class="btn-primary" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
+            <button type="button" class="btn-customer" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
         </div>
 
         <!-- MENU PROMOTOR -->
@@ -201,9 +208,9 @@
             <!-- TOMBOL-TOMBOL AKSI PROMOTOR -->
             <button type="button" id="btn-utama-antri" class="btn-success" onclick="aksiUtamaAntri()">Daftar Antrian</button>
             
-            <button type="button" id="btn-utama-customer" class="btn-primary" onclick="aksiUtamaCustomer()" style="display: none; margin-top: 12px;">Sudah Membawa Customer</button>
+            <button type="button" id="btn-utama-customer" class="btn-customer" onclick="aksiUtamaCustomer()" style="display: none; margin-top: 12px;">Sudah Membawa Customer</button>
             
-            <button type="button" id="btn-selesai-closing" class="btn-danger" onclick="aksiSelesaiClosing()" style="display: none; margin-top: 10px;">
+            <button type="button" id="btn-selesai-closing" class="btn-closing" onclick="aksiSelesaiClosing()" style="display: none; margin-top: 10px;">
                 SELESAI MELAYANI (DEAL / CLOSING)
             </button>
 
@@ -211,7 +218,7 @@
             <button type="button" id="btn-utama-cs" class="btn-purple" onclick="aksiToggleCS()" style="display: none; margin-top: 12px;">DIPANGGIL CS/GUDANG (KUNCI POSISI)</button>
 
             <!-- TOMBOL TAMBAHAN: KELUAR ANTRIAN (ISTIRAHAT) -->
-            <button type="button" id="btn-keluar-istirahat" class="btn-danger" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 12px;">KELUAR ANTRIAN (ISTIRAHAT)</button>
+            <button type="button" id="btn-keluar-istirahat" class="btn-amber" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 12px;">KELUAR ANTRIAN (ISTIRAHAT)</button>
         </div>
 
         <!-- LIVE LIST DIPISAH HA DAN AV -->
@@ -244,7 +251,7 @@
             <div id="modal-title" class="modal-title">Pemberitahuan</div>
             <div id="modal-desc" class="modal-desc">Isi pesan...</div>
             <div id="modal-actions" class="modal-actions">
-                <button type="button" class="btn-primary" onclick="tutupModal()">OK</button>
+                <button type="button" class="btn-customer" onclick="tutupModal()">OK</button>
             </div>
         </div>
     </div>
@@ -397,7 +404,7 @@
                         labelTimerHA.innerText = `${menit}:${detik < 10 ? '0' : ''}${detik}`;
                         if (totalDetik <= 60) {
                             labelTimerHA.classList.add('timer-warning-merah');
-                            labelTimerHA.style.color = "#ef4444";
+                            labelTimerHA.style.color = "#dc2626";
                         } else {
                             labelTimerHA.classList.remove('timer-warning-merah');
                             labelTimerHA.style.color = "#2563eb";
@@ -425,7 +432,7 @@
                         labelTimerAV.innerText = `${menit}:${detik < 10 ? '0' : ''}${detik}`;
                         if (totalDetik <= 60) {
                             labelTimerAV.classList.add('timer-warning-merah');
-                            labelTimerAV.style.color = "#ef4444";
+                            labelTimerAV.style.color = "#dc2626";
                         } else {
                             labelTimerAV.classList.remove('timer-warning-merah');
                             labelTimerAV.style.color = "#9333ea";
@@ -541,21 +548,30 @@
 
             if (!sedangProsesAksi) {
                 btnAntri.innerHTML = "Daftar Antrian";
+                btnAntri.className = "btn-success";
+                
                 btnCustomer.innerHTML = "Sudah Membawa Customer";
+                btnCustomer.className = "btn-customer";
+
                 btnClosing.innerHTML = "SELESAI MELAYANI (DEAL / CLOSING)";
+                btnClosing.className = "btn-closing";
+
                 btnCS.innerHTML = "DIPANGGIL CS/GUDANG (KUNCI POSISI)";
+                btnCS.className = "btn-purple";
+
                 btnKeluar.innerHTML = "KELUAR ANTRIAN (ISTIRAHAT)";
+                btnKeluar.className = "btn-amber";
             }
 
             if (statusSayaGlobal === "Melayani") {
                 btnAntri.innerText = "Sedang Melayani Customer";
-                btnAntri.className = "btn-warning btn-disabled";
+                btnAntri.className = "btn-customer btn-disabled";
                 btnAntri.disabled = true;
 
                 btnCustomer.style.display = "none"; 
                 btnClosing.style.display = "block";
                 btnClosing.disabled = false;
-                btnClosing.className = "btn-danger";
+                btnClosing.className = "btn-closing";
 
                 btnCS.style.display = "none";
                 btnKeluar.style.display = "none";
@@ -572,7 +588,7 @@
                 let kategoriSaya = selectKategori.value;
                 let bisaAmbil = (kategoriSaya === "AV" && apakahSayaUrutanPertamaAV) || (kategoriSaya !== "AV" && apakahSayaUrutanPertamaHA);
                 btnCustomer.disabled = !bisaAmbil;
-                btnCustomer.className = bisaAmbil ? "btn-primary" : "btn-primary btn-disabled";
+                btnCustomer.className = bisaAmbil ? "btn-customer" : "btn-customer btn-disabled";
 
                 btnCS.style.display = "block";
                 btnCS.className = "btn-purple";
@@ -580,7 +596,7 @@
 
                 btnKeluar.style.display = "block";
                 btnKeluar.disabled = false;
-                btnKeluar.className = "btn-danger";
+                btnKeluar.className = "btn-amber";
 
                 selectKategori.disabled = true;
             } else if (statusSayaGlobal === "Dipanggil CS/GUDANG" || statusSayaGlobal === "Dipanggil CS") {
@@ -593,14 +609,14 @@
 
                 btnCS.style.display = "block";
                 btnCS.innerText = "SELESAI CS/GUDANG (KEMBALI ANTRI)";
-                btnCS.className = "btn-success";
+                btnCS.className = "btn-teal";
                 btnCS.disabled = false;
 
                 btnKeluar.style.display = "none";
                 selectKategori.disabled = true;
             } else { 
                 btnAntri.innerText = statusSistemGlobal === "TUTUP" ? "Antrian Ditutup Oleh SPV" : "Daftar Antrian";
-                btnAntri.className = statusSistemGlobal === "TUTUP" ? "btn-danger btn-disabled" : "btn-success";
+                btnAntri.className = statusSistemGlobal === "TUTUP" ? "btn-closing btn-disabled" : "btn-success";
                 btnAntri.disabled = (statusSistemGlobal === "TUTUP");
                 btnCustomer.style.display = "none";
                 btnClosing.style.display = "none";
@@ -636,7 +652,6 @@
             btnAntri.disabled = true;
             btnAntri.innerHTML = `<span class="spinner"></span> Memproses...`;
 
-            // Update UI instan agar cepat
             statusSayaGlobal = "Standby";
             const adaAkun = daftarAntrianGlobal.some(item => item.nama.trim().toLowerCase() === namaSales.toLowerCase());
             if (!adaAkun) {
@@ -647,7 +662,6 @@
             fetch(`${SCRIPT_URL}?aksi=daftarAntri&namaSales=${encodeURIComponent(namaSales)}&kategori=${encodeURIComponent(kategoriPilih)}`, { method: 'GET', redirect: 'follow' })
             .then(res => res.json())
             .then(res => {
-                // Beri jeda 1.5 detik agar Google Spreadsheet stabil menyimpan sebelum tarik data resmi
                 setTimeout(() => {
                     sedangProsesAksi = false; 
                     muatDataAntrian(true);
@@ -670,7 +684,7 @@
                     const btnCustomer = document.getElementById('btn-utama-customer');
                     if (btnCustomer) {
                         btnCustomer.disabled = true;
-                        btnCustomer.className = "btn-primary btn-disabled";
+                        btnCustomer.className = "btn-customer btn-disabled";
                         btnCustomer.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
@@ -696,7 +710,7 @@
                 const btnClosing = document.getElementById('btn-selesai-closing');
                 if (btnClosing) {
                     btnClosing.disabled = true;
-                    btnClosing.className = "btn-danger btn-disabled";
+                    btnClosing.className = "btn-closing btn-disabled";
                     btnClosing.innerHTML = `<span class="spinner"></span> Memproses...`;
                 }
 
@@ -742,7 +756,7 @@
                     sedangProsesAksi = true; 
                     if (btnCS) {
                         btnCS.disabled = true;
-                        btnCS.className = "btn-success btn-disabled";
+                        btnCS.className = "btn-teal btn-disabled";
                         btnCS.innerHTML = `<span class="spinner"></span> Memproses...`;
                     }
 
@@ -768,7 +782,7 @@
                 const btnKeluar = document.getElementById('btn-keluar-istirahat');
                 if (btnKeluar) {
                     btnKeluar.disabled = true;
-                    btnKeluar.className = "btn-danger btn-disabled";
+                    btnKeluar.className = "btn-amber btn-disabled";
                     btnKeluar.innerHTML = `<span class="spinner"></span> Memproses...`;
                 }
 
@@ -787,7 +801,7 @@
         function tampilkanModal(judul, desc) {
             document.getElementById('modal-title').innerText = judul;
             document.getElementById('modal-desc').innerText = desc;
-            document.getElementById('modal-actions').innerHTML = `<button type="button" class="btn-primary" onclick="tutupModal()">OK</button>`;
+            document.getElementById('modal-actions').innerHTML = `<button type="button" class="btn-customer" onclick="tutupModal()">OK</button>`;
             document.getElementById('custom-modal').classList.add('active');
         }
 
@@ -796,7 +810,7 @@
             document.getElementById('modal-desc').innerText = desc;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
-                <button type="button" class="btn-primary" id="btn-modal-ya">Ya</button>
+                <button type="button" class="btn-customer" id="btn-modal-ya">Ya</button>
             `;
             document.getElementById('custom-modal').classList.add('active');
             document.getElementById('btn-modal-ya').onclick = function() { tutupModal(); callbackYa(); };
