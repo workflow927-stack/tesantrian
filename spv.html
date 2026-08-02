@@ -122,20 +122,60 @@
         }
         select:focus, input:focus { border-color: var(--spv-purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.15); }
 
+        /* ANIMASI EFEK MENYALA (GLOWING PULSE) UNTUK SEMUA TOMBOL */
+        @keyframes glowSuccess {
+            0% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowDanger {
+            0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowWarning {
+            0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowPrimary {
+            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowPurple {
+            0% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(124, 58, 237, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(124, 58, 237, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowTeal {
+            0% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(13, 148, 136, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(13, 148, 136, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+        @keyframes glowDarkRed {
+            0% { box-shadow: 0 0 5px rgba(185, 28, 28, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+            50% { box-shadow: 0 0 16px rgba(185, 28, 28, 0.9), 0 4px 10px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 0 5px rgba(185, 28, 28, 0.4), 0 4px 10px rgba(0,0,0,0.05); }
+        }
+
         button { 
             width: 100%; padding: 14px; border-radius: 12px; 
             font-size: 13px; font-weight: 800; cursor: pointer; border: none;
             text-transform: uppercase; transition: all 0.2s;
             display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-            letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            letter-spacing: 0.5px;
         }
         button:active { transform: scale(0.98); }
 
-        .btn-purple { background: var(--spv-purple); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-primary { background: var(--primary); color: white; }
+        /* KELAS WARNA DENGAN EFEK MENYALA MASING-MASING */
+        .btn-purple { background: var(--spv-purple); color: white; animation: glowPurple 2.5s infinite ease-in-out; }
+        .btn-success { background: var(--success); color: white; animation: glowSuccess 2.5s infinite ease-in-out; }
+        .btn-warning { background: #ea580c; color: white; animation: glowWarning 2.5s infinite ease-in-out; }
+        .btn-danger { background: var(--danger); color: white; animation: glowDanger 2.5s infinite ease-in-out; }
+        .btn-primary { background: var(--primary); color: white; animation: glowPrimary 2.5s infinite ease-in-out; }
+        .btn-teal { background: #0d9488; color: white; animation: glowTeal 2.5s infinite ease-in-out; }
+        .btn-darkred { background: #b91c1c; color: white; animation: glowDarkRed 2.5s infinite ease-in-out; }
         .btn-cancel { background: #e2e8f0; color: #475569; }
 
         .spinner {
@@ -231,7 +271,7 @@
                 </div>
             </div>
 
-            <!-- 2. LIVE LIST TERPISAH HA DAN AV (DIPINDAHKAN KE ATAS SEBELUM SEKSI KONTROL) -->
+            <!-- 2. LIVE LIST TERPISAH HA DAN AV -->
             <div class="list-section-wrapper">
                 <div>
                     <div class="list-box-title">Live Urutan HA (Home Appliance)</div>
@@ -258,19 +298,18 @@
             <!-- SEKSI 2: MANAJEMEN URUTAN & WAKTU -->
             <div class="section-title">2. Manajemen Urutan & Waktu</div>
             <div class="spv-grid">
-                <button type="button" class="btn-success" onclick="bukaModalTambahAntriSpv()">+ Masukkan Antrian</button>
-                <button type="button" class="btn-warning" style="background: #ea580c;" onclick="bukaModalFormSPVKategori('spvKeluarkanAntrian', 'Keluarkan dari Antrian', true)">- Keluarkan dari Antrian</button>
-                <!-- TOMBOL HIJAU TANPA DROPDOWN -->
-                <button type="button" class="btn-success" style="background: #10b981;" onclick="bukaModalTambahTimerInstan()">⏱️ Tambah Timer Urutan 1</button>
+                <button type="button" class="btn-teal" onclick="bukaModalTambahAntriSpv()">+ Masukkan Antrian</button>
+                <button type="button" class="btn-warning" onclick="bukaModalFormSPVKategori('spvKeluarkanAntrian', 'Keluarkan dari Antrian', true)">- Keluarkan dari Antrian</button>
+                <button type="button" class="btn-purple" onclick="bukaModalTambahTimerInstan()">⏱️ Tambah Timer Urutan 1</button>
             </div>
 
             <!-- SEKSI 3: TINDAKAN KHUSUS & EMERGENCY -->
             <div class="section-title">3. Tindakan Khusus & Emergency</div>
             <div class="spv-grid">
-                <button type="button" class="btn-primary" style="background: #0284c7;" onclick="bukaModalFormSPVKategori('spvAmbilAntrianBebas', 'Paksa Membawa Customer', true)">Paksa Bawa Customer</button>
-                <button type="button" class="btn-danger" onclick="bukaModalFormSPVKategori('selesaiMelayani', 'Paksa Selesai Melayani', true)">Paksa Selesai Melayani</button>
-                <button type="button" class="btn-danger" style="background: #b91c1c;" onclick="bukaModalFormSPVKategori('spvResetDevice', 'Reset Perangkat Sales', true)">Reset Perangkat Promotor</button>
-                <button type="button" class="btn-danger" style="background: #7f1d1d;" onclick="bukaModalResetTotal()">RESET SEMUA ANTRIAN</button>
+                <button type="button" class="btn-primary" onclick="bukaModalFormSPVKategori('spvAmbilAntrianBebas', 'Paksa Membawa Customer', true)">Paksa Bawa Customer</button>
+                <button type="button" class="btn-warning" style="background: #d97706;" onclick="bukaModalFormSPVKategori('selesaiMelayani', 'Paksa Selesai Melayani', true)">Paksa Selesai Melayani</button>
+                <button type="button" class="btn-darkred" onclick="bukaModalFormSPVKategori('spvResetDevice', 'Reset Perangkat Sales', true)">Reset Perangkat Promotor</button>
+                <button type="button" class="btn-danger" style="background: #991b1b;" onclick="bukaModalResetTotal()">RESET SEMUA ANTRIAN</button>
             </div>
 
             <button type="button" class="btn-cancel" style="margin-top: 20px; font-weight: 800;" onclick="logoutSPV()">🔒 Kunci Panel SPV</button>
@@ -289,7 +328,7 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYtbXMd5BFEF3fEcNlpQUKzVTH3DHYv0zVG8qTEiGbGmNU4_LlcgcRub2z3U2CaoO3/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRAVavq87AMEX40cM3-3SsIMP89CeW6kJT_MSpxxILasQ4gohb_sMKtG50zt8kpyye/exec";
         const BATAS_MENIT = 60;
         
         let masterSalesGlobal = [];
@@ -300,16 +339,35 @@
         let promotorAV = null;
         let waktuServerHA = null;
         let waktuServerAV = null;
+        let savedPinSPV = "";
 
         window.onload = function() {
+            muatMasterSalesInstant();
+            muatCacheAntrianInstan();
+
+            savedPinSPV = localStorage.getItem('ufo_spv_pin') || "";
+            if (savedPinSPV) {
+                document.getElementById('input-pin-spv').value = savedPinSPV;
+                document.getElementById('login-spv-box').style.display = 'none';
+                document.getElementById('controls-spv-box').style.display = 'block';
+            } else {
+                document.getElementById('login-spv-box').style.display = 'block';
+                document.getElementById('controls-spv-box').style.display = 'none';
+            }
+
             muatMasterSales();
             muatDataAntrian();
+            
             setInterval(muatDataAntrian, 3000);
             setInterval(renderTampilanTimerSPV, 1000);
         };
 
+        function getActivePinSPV() {
+            return savedPinSPV || document.getElementById('input-pin-spv').value || localStorage.getItem('ufo_spv_pin') || "";
+        }
+
         function prosesLoginSPV() {
-            const pin = document.getElementById('input-pin-spv').value;
+            const pin = document.getElementById('input-pin-spv').value.trim();
             if(!pin) return tampilkanModal("Perhatian", "Masukkan PIN SPV!");
 
             const btn = document.getElementById('btn-login-spv');
@@ -324,6 +382,8 @@
                 btn.innerHTML = textAsli;
 
                 if(res.status === "sukses") {
+                    savedPinSPV = pin;
+                    localStorage.setItem('ufo_spv_pin', pin);
                     document.getElementById('login-spv-box').style.display = 'none';
                     document.getElementById('controls-spv-box').style.display = 'block';
                 } else {
@@ -338,16 +398,83 @@
         }
 
         function logoutSPV() {
+            localStorage.removeItem('ufo_spv_pin');
+            savedPinSPV = "";
             document.getElementById('input-pin-spv').value = "";
             document.getElementById('login-spv-box').style.display = 'block';
             document.getElementById('controls-spv-box').style.display = 'none';
         }
 
-        /* PERHITUNGAN DAN RENDER TIMER STREAM */
+        function muatCacheAntrianInstan() {
+            const cachedAntrian = localStorage.getItem('ufo_spv_antrian_cache');
+            if (cachedAntrian) {
+                try {
+                    const res = JSON.parse(cachedAntrian);
+                    renderUIWithData(res);
+                } catch(e) {}
+            }
+        }
+
+        function muatMasterSalesInstant() {
+            const cachedSales = localStorage.getItem('ufo_master_sales_cache');
+            if (cachedSales) {
+                try {
+                    masterSalesGlobal = JSON.parse(cachedSales) || [];
+                } catch(e) {}
+            }
+        }
+
+        function renderUIWithData(res) {
+            const statusSistem = res.statusAntrian || "BUKA";
+            const badge = document.getElementById('badge-status-sistem');
+            badge.innerText = statusSistem === "BUKA" ? "STATUS: OPEN" : "STATUS: CLOSED";
+            badge.className = statusSistem === "BUKA" ? "status-badge status-open" : "status-badge status-closed";
+
+            let listHtmlHA = "";
+            let listHtmlAV = "";
+            const data = res.data || [];
+            daftarAntrianGlobal = data;
+
+            const dataStandby = data.filter(item => item.status === "Standby");
+            promotorHA = dataStandby.find(item => (item.kategori || "HA") === "HA") || null;
+            promotorAV = dataStandby.find(item => item.kategori === "AV") || null;
+
+            waktuServerHA = res.waktuStandbyHA || res.waktuStandbyPertama;
+            waktuServerAV = res.waktuStandbyAV;
+
+            renderTampilanTimerSPV();
+
+            if(data.length > 0) {
+                let urutHA = 1, urutAV = 1;
+                data.forEach((item) => {
+                    const kategoriItem = item.kategori ? item.kategori : "HA"; 
+                    let itemHtml = "";
+
+                    if (item.status === "Standby") {
+                        let urut = kategoriItem === "AV" ? urutAV++ : urutHA++;
+                        itemHtml = `<li><b>${urut}. ${item.nama}</b> <span class="badge-status-item badge-standby">Standby</span></li>`;
+                    } else if (item.status === "Melayani") {
+                        itemHtml = `<li><b>${item.nama}</b> <span class="badge-status-item badge-melayani">Melayani</span></li>`;
+                    } else if (item.status === "Dipanggil CS/GUDANG" || item.status === "Dipanggil CS") {
+                        let urut = kategoriItem === "AV" ? urutAV++ : urutHA++;
+                        itemHtml = `<li><b>${urut}. ${item.nama}</b> <span class="badge-status-item badge-cs">Dipanggil CS/GUDANG</span></li>`;
+                    }
+
+                    if (kategoriItem === "AV") listHtmlAV += itemHtml;
+                    else listHtmlHA += itemHtml;
+                });
+            }
+
+            if(!listHtmlHA) listHtmlHA = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian HA</span></li>";
+            if(!listHtmlAV) listHtmlAV = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian AV</span></li>";
+
+            document.getElementById('item-antrian-list-ha').innerHTML = listHtmlHA;
+            document.getElementById('item-antrian-list-av').innerHTML = listHtmlAV;
+        }
+
         function renderTampilanTimerSPV() {
             const now = new Date().getTime();
 
-            // RENDER HA
             const namaHaEl = document.getElementById('spv-nama-ha');
             const timerHaEl = document.getElementById('spv-timer-ha');
 
@@ -363,7 +490,6 @@
                 timerHaEl.classList.remove('habis');
             }
 
-            // RENDER AV
             const namaAvEl = document.getElementById('spv-nama-av');
             const timerAvEl = document.getElementById('spv-timer-av');
 
@@ -400,12 +526,11 @@
 
         function bukaModalToggleSistem(targetStatus) {
             const modal = document.getElementById('custom-modal');
-            const pinLogin = document.getElementById('input-pin-spv').value;
+            const currentPin = getActivePinSPV();
             document.getElementById('modal-title').innerText = targetStatus === 'BUKA' ? 'Mulai Antrian' : 'Hentikan Antrian';
             document.getElementById('modal-desc').innerHTML = `
                 Status baru: <b>${targetStatus}</b><br><br>
-                Masukkan PIN SPV:<br>
-                <input type="password" id="spv-toggle-pin" value="${pinLogin}" placeholder="PIN SPV" style="text-align:center;">
+                <input type="hidden" id="spv-toggle-pin" value="${currentPin}">
             `;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
@@ -415,8 +540,8 @@
         }
 
         function eksekusiToggleSistem(targetStatus) {
-            const pin = document.getElementById('spv-toggle-pin').value;
-            if(!pin) return alert("Masukkan PIN SPV!");
+            const pin = getActivePinSPV();
+            if(!pin) return alert("PIN SPV tidak ditemukan, silakan login kembali!");
 
             sedangProsesAksiSPV = true; 
             const btnProses = document.getElementById('btn-modal-proses');
@@ -432,7 +557,7 @@
                     sedangProsesAksiSPV = false;
                     tampilkanModal("Status Sistem", res.pesan);
                     muatDataAntrian();
-                }, 800);
+                }, 400);
             })
             .catch(() => {
                 btnProses.disabled = false;
@@ -443,13 +568,12 @@
 
         function bukaModalResetTotal() {
             const modal = document.getElementById('custom-modal');
-            const pinLogin = document.getElementById('input-pin-spv').value;
+            const currentPin = getActivePinSPV();
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian';
             document.getElementById('modal-desc').innerHTML = `
                 ⚠️ <b>PERINGATAN:</b><br>
-                Semua antrian (Standby & Melayani) akan dihapus total.<br><br>
-                Masukkan PIN SPV:<br>
-                <input type="password" id="spv-reset-pin" value="${pinLogin}" placeholder="PIN SPV" style="text-align:center;">
+                Semua antrian (Standby & Melayani) akan dihapus total.<br>
+                <input type="hidden" id="spv-reset-pin" value="${currentPin}">
             `;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
@@ -459,8 +583,8 @@
         }
 
         function eksekusiResetTotal() {
-            const pin = document.getElementById('spv-reset-pin').value;
-            if(!pin) return alert("Masukkan PIN SPV!");
+            const pin = getActivePinSPV();
+            if(!pin) return alert("PIN SPV tidak ditemukan!");
 
             sedangProsesAksiSPV = true;
             const btnProses = document.getElementById('btn-modal-reset');
@@ -475,7 +599,7 @@
                     sedangProsesAksiSPV = false;
                     tampilkanModal("Status Reset Total", res.pesan);
                     muatDataAntrian();
-                }, 800);
+                }, 400);
             })
             .catch(() => {
                 sedangProsesAksiSPV = false;
@@ -485,7 +609,7 @@
 
         function bukaModalTambahAntriSpv() {
             const modal = document.getElementById('custom-modal');
-            const pinLogin = document.getElementById('input-pin-spv').value;
+            const currentPin = getActivePinSPV();
             document.getElementById('modal-title').innerText = "Masukkan Promotor ke Antrian";
 
             let optionsSales = '<option value="">-- Pilih Promotor --</option>';
@@ -509,10 +633,8 @@
                     <option value="3">Urutan Ke-3</option>
                     <option value="4">Urutan Ke-4</option>
                     <option value="5">Urutan Ke-5</option>
-                </select><br><br>
-
-                PIN SPV:<br>
-                <input type="password" id="spv-input-pin" value="${pinLogin}" placeholder="PIN SPV" style="text-align:center;">
+                </select>
+                <input type="hidden" id="spv-input-pin" value="${currentPin}">
             `;
 
             document.getElementById('modal-desc').innerHTML = htmlContent;
@@ -527,10 +649,10 @@
             const kategori = document.getElementById('spv-select-kategori').value;
             const namaSales = document.getElementById('spv-select-sales').value;
             const posisi = document.getElementById('spv-select-posisi').value;
-            const pin = document.getElementById('spv-input-pin').value;
+            const pin = getActivePinSPV();
 
             if(!namaSales) return alert("Pilih promotor terlebih dahulu!");
-            if(!pin) return alert("Masukkan PIN SPV!");
+            if(!pin) return alert("PIN SPV tidak valid!");
 
             sedangProsesAksiSPV = true; 
             const btnProses = document.getElementById('btn-modal-proses-aksi');
@@ -545,7 +667,7 @@
                     sedangProsesAksiSPV = false;
                     tampilkanModal("Status SPV", res.pesan);
                     muatDataAntrian();
-                }, 800);
+                }, 400);
             })
             .catch(() => {
                 sedangProsesAksiSPV = false;
@@ -555,7 +677,7 @@
 
         function bukaModalTambahTimerInstan() {
             const modal = document.getElementById('custom-modal');
-            const pinLogin = document.getElementById('input-pin-spv').value;
+            const currentPin = getActivePinSPV();
             document.getElementById('modal-title').innerText = "Tambah Timer Urutan 1";
             
             let infoPromotor = "";
@@ -564,9 +686,8 @@
             if (!infoPromotor) infoPromotor = "<br><i>Tidak ada antrian di Urutan 1</i>";
 
             document.getElementById('modal-desc').innerHTML = `
-                Reset/Tambah waktu standby 60 menit untuk:${infoPromotor}<br><br>
-                Masukkan PIN SPV:<br>
-                <input type="password" id="spv-timer-pin" value="${pinLogin}" placeholder="PIN SPV" style="text-align:center;">
+                Reset/Tambah waktu standby 60 menit untuk:${infoPromotor}
+                <input type="hidden" id="spv-timer-pin" value="${currentPin}">
             `;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
@@ -576,8 +697,8 @@
         }
 
         function eksekusiTambahTimerInstan() {
-            const pin = document.getElementById('spv-timer-pin').value;
-            if(!pin) return alert("Masukkan PIN SPV!");
+            const pin = getActivePinSPV();
+            if(!pin) return alert("PIN SPV tidak valid!");
 
             sedangProsesAksiSPV = true;
             const btnProses = document.getElementById('btn-modal-proses-timer');
@@ -594,7 +715,7 @@
                     sedangProsesAksiSPV = false;
                     tampilkanModal("Status SPV", "Waktu timer urutan 1 berhasil diperbarui.");
                     muatDataAntrian();
-                }, 800);
+                }, 400);
             })
             .catch(() => {
                 sedangProsesAksiSPV = false;
@@ -604,7 +725,7 @@
 
         function bukaModalFormSPVKategori(aksiName, judulAksi, butuhPilihPromotor = true) {
             const modal = document.getElementById('custom-modal');
-            const pinLogin = document.getElementById('input-pin-spv').value;
+            const currentPin = getActivePinSPV();
             document.getElementById('modal-title').innerText = judulAksi;
             
             let optionsSales = '<option value="">-- Pilih Promotor --</option>';
@@ -621,14 +742,11 @@
             if (butuhPilihPromotor) {
                 htmlContent += `
                     Promotor:<br>
-                    <select id="spv-select-sales">${optionsSales}</select><br><br>
+                    <select id="spv-select-sales">${optionsSales}</select>
                 `;
             }
 
-            htmlContent += `
-                PIN SPV:<br>
-                <input type="password" id="spv-input-pin" value="${pinLogin}" placeholder="PIN SPV" style="text-align:center;">
-            `;
+            htmlContent += `<input type="hidden" id="spv-input-pin" value="${currentPin}">`;
 
             document.getElementById('modal-desc').innerHTML = htmlContent;
             document.getElementById('modal-actions').innerHTML = `
@@ -641,10 +759,10 @@
         function eksekusiAksiSPVKategori(aksiName, butuhPilihPromotor) {
             const kategori = document.getElementById('spv-select-kategori').value;
             let namaSales = butuhPilihPromotor ? document.getElementById('spv-select-sales').value : "";
-            const pin = document.getElementById('spv-input-pin').value;
+            const pin = getActivePinSPV();
 
             if(butuhPilihPromotor && !namaSales) return alert("Pilih promotor terlebih dahulu!");
-            if(!pin) return alert("Masukkan PIN SPV!");
+            if(!pin) return alert("PIN SPV tidak valid!");
 
             sedangProsesAksiSPV = true; 
             const btnProses = document.getElementById('btn-modal-proses-aksi');
@@ -659,7 +777,7 @@
                     sedangProsesAksiSPV = false;
                     tampilkanModal("Status SPV", res.pesan);
                     muatDataAntrian();
-                }, 800);
+                }, 400);
             })
             .catch(() => {
                 sedangProsesAksiSPV = false;
@@ -671,8 +789,11 @@
             fetch(`${SCRIPT_URL}?aksi=getMasterSales`)
             .then(res => res.json())
             .then(res => {
-                if(res.status === "sukses") masterSalesGlobal = res.data || [];
-            });
+                if(res.status === "sukses") {
+                    masterSalesGlobal = res.data || [];
+                    localStorage.setItem('ufo_master_sales_cache', JSON.stringify(masterSalesGlobal));
+                }
+            }).catch(() => {});
         }
 
         function muatDataAntrian() {
@@ -682,54 +803,10 @@
             .then(res => res.json())
             .then(res => {
                 if(!sedangProsesAksiSPV && res.status === "sukses") {
-                    const statusSistem = res.statusAntrian || "BUKA";
-                    const badge = document.getElementById('badge-status-sistem');
-                    badge.innerText = statusSistem === "BUKA" ? "STATUS: OPEN" : "STATUS: CLOSED";
-                    badge.className = statusSistem === "BUKA" ? "status-badge status-open" : "status-badge status-closed";
-
-                    let listHtmlHA = "";
-                    let listHtmlAV = "";
-                    const data = res.data || [];
-                    daftarAntrianGlobal = data;
-
-                    // FILTER DAN BINDING TIMER SECARA SPESIFIK HA / AV
-                    const dataStandby = data.filter(item => item.status === "Standby");
-                    promotorHA = dataStandby.find(item => (item.kategori || "HA") === "HA") || null;
-                    promotorAV = dataStandby.find(item => item.kategori === "AV") || null;
-
-                    waktuServerHA = res.waktuStandbyHA || res.waktuStandbyPertama;
-                    waktuServerAV = res.waktuStandbyAV;
-
-                    renderTampilanTimerSPV();
-
-                    if(data.length > 0) {
-                        let urutHA = 1, urutAV = 1;
-                        data.forEach((item) => {
-                            const kategoriItem = item.kategori ? item.kategori : "HA"; 
-                            let itemHtml = "";
-
-                            if (item.status === "Standby") {
-                                let urut = kategoriItem === "AV" ? urutAV++ : urutHA++;
-                                itemHtml = `<li><b>${urut}. ${item.nama}</b> <span class="badge-status-item badge-standby">Standby</span></li>`;
-                            } else if (item.status === "Melayani") {
-                                itemHtml = `<li><b>${item.nama}</b> <span class="badge-status-item badge-melayani">Melayani</span></li>`;
-                            } else if (item.status === "Dipanggil CS/GUDANG" || item.status === "Dipanggil CS") {
-                                let urut = kategoriItem === "AV" ? urutAV++ : urutHA++;
-                                itemHtml = `<li><b>${urut}. ${item.nama}</b> <span class="badge-status-item badge-cs">Dipanggil CS/GUDANG</span></li>`;
-                            }
-
-                            if (kategoriItem === "AV") listHtmlAV += itemHtml;
-                            else listHtmlHA += itemHtml;
-                        });
-                    }
-
-                    if(!listHtmlHA) listHtmlHA = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian HA</span></li>";
-                    if(!listHtmlAV) listHtmlAV = "<li><span style='color:#64748b; font-style:italic;'>Belum ada antrian AV</span></li>";
-
-                    document.getElementById('item-antrian-list-ha').innerHTML = listHtmlHA;
-                    document.getElementById('item-antrian-list-av').innerHTML = listHtmlAV;
+                    localStorage.setItem('ufo_spv_antrian_cache', JSON.stringify(res));
+                    renderUIWithData(res);
                 }
-            });
+            }).catch(() => {});
         }
 
         function tampilkanModal(judul, pesan) {
