@@ -196,7 +196,6 @@
         .aktivitas-title .count { font-size: 10px; background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 10px; }
 
         .t-bawa-customer { background: linear-gradient(135deg, #0f172a, #1e293b); }
-        .t-selesai { background: linear-gradient(135deg, #d97706, #b45309); }
         .t-ibadah { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
         .t-makan { background: linear-gradient(135deg, #0d9488, #0f766e); }
         .t-keluar { background: linear-gradient(135deg, #dc2626, #b91c1c); }
@@ -213,7 +212,8 @@
         .aktivitas-list li .waktu { font-size: 11px; color: var(--text-muted); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .aktivitas-empty { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 8px; font-style: italic; }
 
-        .check-deal { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; flex-shrink: 0; }
+        .check-deal { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; flex-shrink: 0; vertical-align: middle; }
+        .label-lihat { font-size: 10px; color: #64748b; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -239,9 +239,8 @@
         </div>
 
         <div id="panel-menu-utama" style="display: none;">
-            <div class="user-badge" style="display:flex; justify-content:space-between; align-items:center;">
-                <span><span style="color: var(--text-muted);">Promotor:</span> <strong id="label-user-aktif" style="color:var(--primary); font-size: 14px;">-</strong></span>
-                <button type="button" onclick="logoutAkun()" style="width:auto; padding:6px 10px; font-size:10px; background:#dc2626; color:white; border-radius:8px;">LOGOUT</button>
+            <div class="user-badge">
+                <span style="color: var(--text-muted);">Promotor:</span> <strong id="label-user-aktif" style="color:var(--primary); font-size: 14px;">-</strong>
             </div>
 
             <div class="timer-box-wrapper">
@@ -303,19 +302,12 @@
         <div class="aktivitas-section">
             <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; text-transform: uppercase;">📋 AKTIVITAS HARI INI</div>
 
-            <!-- Bawa Customer -->
+            <!-- Bawa Customer (termasuk Deal & Lihat-lihat) -->
             <div class="aktivitas-title t-bawa-customer">
-                <span>🛒 Bawa Customer (Melayani)</span>
+                <span>🛒 Bawa Customer</span>
                 <span class="count" id="count-bawa">0</span>
             </div>
             <ul id="list-bawa" class="aktivitas-list"></ul>
-
-            <!-- Selesai (Lihat-lihat saja) -->
-            <div class="aktivitas-title t-selesai">
-                <span>✓ Selesai (Lihat-lihat Saja)</span>
-                <span class="count" id="count-selesai">0</span>
-            </div>
-            <ul id="list-selesai" class="aktivitas-list"></ul>
 
             <!-- Ibadah -->
             <div class="aktivitas-title t-ibadah">
@@ -387,10 +379,6 @@
         function formatJam(ts) {
             const d = new Date(ts);
             return `${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`;
-        }
-
-        function formatRentang(mulai, selesai) {
-            return `${formatJam(mulai)} - ${formatJam(selesai)}`;
         }
 
         // ====== INIT ======
@@ -520,15 +508,6 @@
             renderAktivitas();
         }
 
-        function logoutAkun() {
-            tampilkanModalKonfirmasi("Logout", "Yakin ingin logout dari perangkat ini?", () => {
-                localStorage.removeItem('ufo_nama_sales_aktif');
-                namaSalesAktifGlobal = "";
-                document.getElementById('panel-login').style.display = 'block';
-                document.getElementById('panel-menu-utama').style.display = 'none';
-            });
-        }
-
         // ====== AKSI ======
         function aksiHadirKerja() {
             if (statusSistemGlobal !== "BUKA") { tampilkanModal("Antrian Tutup", "Sistem antrian sedang ditutup."); return; }
@@ -558,11 +537,18 @@
             }).then(() => catatAktivitas(nama, "DaftarAntrian", kat));
         }
 
+        // ===== BAWA CUSTOMER: catat waktu mulai melayani =====
         function aksiUtamaCustomer() {
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
-            window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Melayani", timerMulai: 0, timerAksi: "", posisiTerkunci: 0, waktuMulaiMelayani: Date.now() })
-            .then(() => catatAktivitas(nama, "BawaCustomer", "Melayani"));
+            const now = Date.now();
+            window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { 
+                status: "Melayani", 
+                timerMulai: 0, 
+                timerAksi: "", 
+                posisiTerkunci: 0,
+                waktuMulaiMelayani: now 
+            }).then(() => catatAktivitas(nama, "BawaCustomer", "", { waktuMulai: now }));
         }
 
         function aksiToggleMakan() {
@@ -640,12 +626,47 @@
             document.getElementById('btn-pilih-lihat').onclick = () => selesaiMelayaniAction("Lihat");
         }
 
+        // ===== SELESAI MELAYANI: update record BawaCustomer dengan waktuSelesai & hasil =====
         function selesaiMelayaniAction(hasil) {
             tutupModal();
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
-            window.dbRemove(window.dbRef(window.db, 'antrian/' + clean))
-            .then(() => catatAktivitas(nama, "SelesaiMelayani", hasil));
+            const now = Date.now();
+
+            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
+            const waktuMulaiMelayani = itemSaya ? (itemSaya.waktuMulaiMelayani || now) : now;
+
+            // Cari record BawaCustomer hari ini yang belum punya waktuSelesai
+            const hariIni = getTanggalIndo();
+            const cleanSaya = sanitizeNama(nama);
+            const kandidat = aktivitasGlobal
+                .filter(a => sanitizeNama(a.nama) === cleanSaya 
+                    && a.tanggal === hariIni 
+                    && a.aksi === "BawaCustomer"
+                    && !a.waktuSelesai)
+                .sort((a,b) => (b.waktu||0) - (a.waktu||0));
+
+            const target = kandidat[0];
+
+            if (target && target._key) {
+                // Update record yang ada (jangan bikin baru)
+                window.dbUpdate(window.dbRef(window.db, 'statistikAktivitas/' + target._key), {
+                    waktuSelesai: now,
+                    hasil: hasil, // "Deal" atau "Lihat"
+                    durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
+                });
+            } else {
+                // Fallback: bikin record baru kalau tidak ketemu
+                window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                    nama: nama, aksi: "BawaCustomer", waktu: waktuMulaiMelayani, 
+                    waktuMulai: waktuMulaiMelayani, waktuSelesai: now,
+                    tanggal: hariIni, hasil: hasil,
+                    durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
+                });
+            }
+
+            // Hapus dari antrian
+            window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
         }
 
         function aksiToggleCS() {
@@ -672,7 +693,7 @@
             });
         }
 
-        // ===== CATAT AKTIVITAS (dengan struktur lengkap) =====
+        // ===== CATAT AKTIVITAS =====
         function catatAktivitas(nama, aksi, hasil, extra) {
             const payload = {
                 nama: nama, aksi: aksi, waktu: Date.now(), tanggal: getTanggalIndo(), hasil: hasil || ""
@@ -681,7 +702,6 @@
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
         }
 
-        // Makan: simpan waktuMulai, waktuSelesai, durasi, posisi
         function catatAktivitasMakan(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
             const payload = {
                 nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "",
@@ -696,7 +716,6 @@
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
         }
 
-        // Ibadah: simpan waktuMulai, waktuSelesai, durasi, posisi
         function catatAktivitasIbadah(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
             const payload = {
                 nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "",
@@ -711,7 +730,6 @@
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
         }
 
-        // Autokick dari timer habis (Makan/Ibadah)
         function catatAutokickTimer(nama, jenis, posisi, waktuMulai) {
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
                 nama: nama, aksi: "Autokick", waktu: Date.now(), tanggal: getTanggalIndo(),
@@ -720,7 +738,7 @@
             });
         }
 
-        // ====== TIMER (Makan & Ibadah) — AUTO-KICK jika habis ======
+        // ====== TIMER ======
         function updateTimerAktif(itemSaya) {
             const box = document.getElementById('timer-aktif-box');
             const label = document.getElementById('timer-aktif-label');
@@ -778,28 +796,29 @@
             const hariIni = getTanggalIndo();
             const list = aktivitasGlobal.filter(a => a.tanggal === hariIni);
 
-            // ---- 1. BAWA CUSTOMER (Melayani) ----
+            // ---- 1. BAWA CUSTOMER (gabung mulai + selesai) ----
             const listBawa = list.filter(a => a.aksi === "BawaCustomer").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-bawa').innerText = listBawa.length;
             document.getElementById('list-bawa').innerHTML = listBawa.length === 0
                 ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
                 : listBawa.map(a => {
-                    const deal = a.hasil === "Deal";
-                    const hasilLabel = deal ? '' : ' <span style="font-size:10px; color:#64748b;">(lihat-lihat)</span>';
+                    const mulai = a.waktuMulai || a.waktu;
+                    const selesai = a.waktuSelesai;
+                    const range = selesai 
+                        ? `(${formatJam(mulai)} - ${formatJam(selesai)})`
+                        : `(${formatJam(mulai)} - ...)`;
+                    const isDeal = a.hasil === "Deal";
+                    const labelHasil = isDeal 
+                        ? '' 
+                        : (a.hasil === "Lihat" ? ' <span class="label-lihat">(lihat-lihat)</span>' : ' <span class="label-lihat">(proses)</span>');
+                    const check = isDeal ? ` <span class="check-deal">${SVG_CHECK_DEAL}</span>` : '';
                     return `<li>
-                        <span class="nama">${a.nama}${hasilLabel}</span>
-                        <span class="waktu">${formatJam(a.waktu)}${deal ? ' <span class="check-deal">'+SVG_CHECK_DEAL+'</span>' : ''}</span>
+                        <span class="nama">${a.nama}${labelHasil}${check}</span>
+                        <span class="waktu">${range}</span>
                     </li>`;
                 }).join('');
 
-            // ---- 2. SELESAI (khusus Lihat-lihat saja) ----
-            const listSelesai = list.filter(a => a.aksi === "SelesaiMelayani" && a.hasil === "Lihat").sort((a,b) => (b.waktu||0) - (a.waktu||0));
-            document.getElementById('count-selesai').innerText = listSelesai.length;
-            document.getElementById('list-selesai').innerHTML = listSelesai.length === 0
-                ? '<div class="aktivitas-empty">Belum ada selesai lihat-lihat</div>'
-                : listSelesai.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
-
-            // ---- 3. IBADAH (gabung mulai + selesai per nama) ----
+            // ---- 2. IBADAH ----
             const listIbadah = gabungRentang(list, "MulaiIbadah", "SelesaiIbadah");
             document.getElementById('count-ibadah').innerText = listIbadah.length;
             document.getElementById('list-ibadah').innerHTML = listIbadah.length === 0
@@ -809,7 +828,7 @@
                     <span class="waktu">${a.label}</span>
                 </li>`).join('');
 
-            // ---- 4. WAKTU MAKAN (gabung mulai + selesai per nama) ----
+            // ---- 3. WAKTU MAKAN ----
             const listMakan = gabungRentang(list, "MulaiMakan", "SelesaiMakan");
             document.getElementById('count-makan').innerText = listMakan.length;
             document.getElementById('list-makan').innerHTML = listMakan.length === 0
@@ -819,14 +838,14 @@
                     <span class="waktu">${a.label}</span>
                 </li>`).join('');
 
-            // ---- 5. KELUAR ANTRIAN ----
+            // ---- 4. KELUAR ANTRIAN ----
             const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-keluar').innerText = listKeluar.length;
             document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
                 ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
                 : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
 
-            // ---- 6. AUTOKICK (Timer habis + dari admin) ----
+            // ---- 5. AUTOKICK ----
             const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-autokick').innerText = listAutokick.length;
             document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
@@ -837,9 +856,7 @@
                 </li>`).join('');
         }
 
-        // Gabung Mulai & Selesai jadi rentang waktu
         function gabungRentang(list, aksiMulai, aksiSelesai) {
-            // Kelompokkan per nama
             const perNama = {};
             list.forEach(a => {
                 if (a.aksi === aksiMulai) {
@@ -854,8 +871,8 @@
                 .sort((a,b) => (b.mulai||0) - (a.mulai||0))
                 .map(a => {
                     const label = a.selesai
-                        ? formatRentang(a.mulai, a.selesai)
-                        : `${formatJam(a.mulai)} - ...`;
+                        ? `(${formatJam(a.mulai)} - ${formatJam(a.selesai)})`
+                        : `(${formatJam(a.mulai)} - ...)`;
                     return { ...a, label };
                 });
         }
@@ -1017,7 +1034,6 @@
         window.bukaModalKeluarIstirahat = bukaModalKeluarIstirahat;
         window.toggleDarkMode = toggleDarkMode;
         window.tutupModal = tutupModal;
-        window.logoutAkun = logoutAkun;
     </script>
 </body>
 </html>
