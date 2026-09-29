@@ -185,14 +185,35 @@
         .modal-actions { display: flex; gap: 8px; }
         .modal-actions button { flex: 1; padding: 10px; font-size: 12px; }
 
-        /* AKTIVITAS HARI INI */
-        .aktivitas-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-top: 10px; max-height: 260px; overflow-y: auto; text-align: left; }
-        body.dark-mode .aktivitas-box { background: #140205; }
-        .aktivitas-item { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: 11px; font-weight: 600; }
-        .aktivitas-item:last-child { border-bottom: none; }
-        .aktivitas-waktu { color: var(--text-muted); font-size: 10px; white-space: nowrap; flex-shrink: 0; }
-        .aktivitas-aksi { font-weight: 800; color: var(--text-main); }
-        .aktivitas-hasil { font-size: 10px; color: #059669; font-weight: 700; }
+        /* ====== AKTIVITAS PER KATEGORI ====== */
+        .aktivitas-section { margin-top: 20px; text-align: left; }
+        .aktivitas-title {
+            font-size: 12px; font-weight: 800; text-transform: uppercase;
+            padding: 8px 12px; border-radius: 8px; color: white;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 6px; letter-spacing: 0.5px;
+        }
+        .aktivitas-title .count { font-size: 10px; background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 10px; }
+
+        .t-bawa-customer { background: linear-gradient(135deg, #0f172a, #1e293b); }
+        .t-selesai { background: linear-gradient(135deg, #d97706, #b45309); }
+        .t-ibadah { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+        .t-makan { background: linear-gradient(135deg, #0d9488, #0f766e); }
+        .t-keluar { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .t-autokick { background: linear-gradient(135deg, #7f1d1d, #450a0a); }
+
+        .aktivitas-list { list-style: none; padding: 0; margin: 0 0 6px 0; }
+        .aktivitas-list li {
+            background: #f8fafc; border: 1px solid var(--border); border-radius: 10px;
+            padding: 8px 12px; margin-bottom: 5px; font-size: 12px; font-weight: 600;
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        }
+        body.dark-mode .aktivitas-list li { background: #140205; }
+        .aktivitas-list li .nama { flex: 1; font-weight: 800; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .aktivitas-list li .waktu { font-size: 11px; color: var(--text-muted); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .aktivitas-empty { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 8px; font-style: italic; }
+
+        .check-deal { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -232,7 +253,6 @@
                 </div>
             </div>
 
-            <!-- Timer countdown 15 menit (hanya Makan & Ibadah) -->
             <div id="timer-aktif-box" style="display:none; margin-bottom: 16px;">
                 <div class="timer-card-admin" style="border: 2px solid #d97706;">
                     <span class="timer-badge-title" id="timer-aktif-label">TIMER</span>
@@ -277,12 +297,53 @@
 
             <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;">LIVE URUTAN KATEGORI AV</div>
             <ul id="list-AV" class="list-antrian"><li><span>Memuat...</span></li></ul>
+        </div>
 
-            <!-- AKTIVITAS HARI INI -->
-            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;">AKTIVITAS SAYA HARI INI</div>
-            <div id="aktivitas-hari-ini" class="aktivitas-box">
-                <div style="text-align:center; font-size:11px; color:var(--text-muted); font-weight:600;">Memuat aktivitas...</div>
+        <!-- ===== AKTIVITAS HARI INI (PER KATEGORI) ===== -->
+        <div class="aktivitas-section">
+            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; text-transform: uppercase;">📋 AKTIVITAS HARI INI</div>
+
+            <!-- Bawa Customer -->
+            <div class="aktivitas-title t-bawa-customer">
+                <span>🛒 Bawa Customer (Melayani)</span>
+                <span class="count" id="count-bawa">0</span>
             </div>
+            <ul id="list-bawa" class="aktivitas-list"></ul>
+
+            <!-- Selesai (Lihat-lihat saja) -->
+            <div class="aktivitas-title t-selesai">
+                <span>✓ Selesai (Lihat-lihat Saja)</span>
+                <span class="count" id="count-selesai">0</span>
+            </div>
+            <ul id="list-selesai" class="aktivitas-list"></ul>
+
+            <!-- Ibadah -->
+            <div class="aktivitas-title t-ibadah">
+                <span>🕌 Ibadah</span>
+                <span class="count" id="count-ibadah">0</span>
+            </div>
+            <ul id="list-ibadah" class="aktivitas-list"></ul>
+
+            <!-- Waktu Makan -->
+            <div class="aktivitas-title t-makan">
+                <span>🍽️ Waktu Makan</span>
+                <span class="count" id="count-makan">0</span>
+            </div>
+            <ul id="list-makan" class="aktivitas-list"></ul>
+
+            <!-- Keluar Antrian -->
+            <div class="aktivitas-title t-keluar">
+                <span>🚪 Keluar Antrian</span>
+                <span class="count" id="count-keluar">0</span>
+            </div>
+            <ul id="list-keluar" class="aktivitas-list"></ul>
+
+            <!-- Autokick -->
+            <div class="aktivitas-title t-autokick">
+                <span>⛔ Autokick (Pelanggaran / Admin)</span>
+                <span class="count" id="count-autokick">0</span>
+            </div>
+            <ul id="list-autokick" class="aktivitas-list"></ul>
         </div>
     </div>
 
@@ -302,9 +363,11 @@
         let timerIntervalGlobal = null;
         let masterSalesLoaded = false;
         let aktivitasGlobal = [];
-        let aktivitasLoaded = false;
 
-        const DURASI_TIMER_MENIT = 15; // 15 menit untuk Makan & Ibadah
+        const DURASI_TIMER_MENIT = 15;
+
+        // SVG centang hijau modern (untuk Deal)
+        const SVG_CHECK_DEAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5L10.5 16L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
         // ====== UTIL ======
         function getTanggalIndo() {
@@ -323,26 +386,11 @@
 
         function formatJam(ts) {
             const d = new Date(ts);
-            return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+            return `${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`;
         }
 
-        function labelAksi(aksi) {
-            const map = {
-                "CheckIn": "Check-in",
-                "DaftarAntrian": "Daftar Antrian",
-                "BawaCustomer": "Bawa Customer",
-                "MulaiMakan": "Mulai Makan",
-                "SelesaiMakan": "Selesai Makan",
-                "SelesaiMakanOtomatis": "Makan Habis Waktu",
-                "MulaiIbadah": "Mulai Ibadah",
-                "SelesaiIbadah": "Selesai Ibadah",
-                "SelesaiIbadahOtomatis": "Ibadah Habis Waktu",
-                "PanggilCS": "Panggil CS/Gudang",
-                "KembaliAntriDariCS": "Kembali Antri dari CS",
-                "SelesaiMelayani": "Selesai Melayani",
-                "KeluarAntrian": "Keluar Antrian"
-            };
-            return map[aksi] || aksi;
+        function formatRentang(mulai, selesai) {
+            return `${formatJam(mulai)} - ${formatJam(selesai)}`;
         }
 
         // ====== INIT ======
@@ -426,11 +474,13 @@
                 if (dataRaw) {
                     Object.keys(dataRaw).forEach(k => {
                         const item = dataRaw[k];
-                        if (item && item.nama) aktivitasGlobal.push(item);
+                        if (item && item.nama) {
+                            item._key = k;
+                            aktivitasGlobal.push(item);
+                        }
                     });
                 }
-                aktivitasLoaded = true;
-                renderAktivitasHariIni();
+                renderAktivitas();
             });
         }
 
@@ -467,7 +517,7 @@
             document.getElementById('panel-menu-utama').style.display = 'block';
             document.getElementById('label-user-aktif').innerText = namaPilih;
             renderUI();
-            renderAktivitasHariIni();
+            renderAktivitas();
         }
 
         function logoutAkun() {
@@ -511,11 +561,10 @@
         function aksiUtamaCustomer() {
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
-            window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Melayani", timerMulai: 0, timerAksi: "", posisiTerkunci: 0 })
-            .then(() => catatAktivitas(nama, "BawaCustomer", ""));
+            window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Melayani", timerMulai: 0, timerAksi: "", posisiTerkunci: 0, waktuMulaiMelayani: Date.now() })
+            .then(() => catatAktivitas(nama, "BawaCustomer", "Melayani"));
         }
 
-        // ===== MAKAN: kunci posisi, timer 15 menit, auto-kick jika habis =====
         function aksiToggleMakan() {
             const akun = getAkunAktif();
             const clean = sanitizeNama(akun);
@@ -528,7 +577,6 @@
             }
 
             if (statusNow === "Standby") {
-                // Simpan posisi antrian saat ini (urutan standby kategori)
                 const kat = String(itemSaya.kategori || "HA").toUpperCase();
                 const listStandby = daftarAntrianGlobal
                     .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
@@ -537,20 +585,20 @@
 
                 tampilkanModalKonfirmasi("Waktu Makan", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Jika timer habis sebelum Anda selesai, Anda otomatis KELUAR dari antrian. Lanjutkan?`, () => {
                     localStorage.setItem('ufo_sudah_makan_' + clean, 'true');
+                    const now = Date.now();
                     window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
-                        status: "Waktu Makan", timerMulai: Date.now(), timerAksi: "Makan", posisiTerkunci: posisi
-                    }).then(() => catatAktivitas(akun, "MulaiMakan", `Posisi #${posisi} terkunci`));
+                        status: "Waktu Makan", timerMulai: now, timerAksi: "Makan", posisiTerkunci: posisi
+                    }).then(() => catatAktivitasMakan(akun, "MulaiMakan", now, posisi));
                 });
             } else if (statusNow === "Waktu Makan") {
-                // Selesai lebih awal -> kembali ke Standby dengan posisi semula
                 const posisiLama = itemSaya.posisiTerkunci || 0;
+                const now = Date.now();
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0
-                }).then(() => catatAktivitas(akun, "SelesaiMakan", `Kembali ke posisi #${posisiLama}`));
+                }).then(() => catatAktivitasMakan(akun, "SelesaiMakan", now, posisiLama, itemSaya.timerMulai));
             }
         }
 
-        // ===== IBADAH: sama seperti makan =====
         function aksiToggleIbadah() {
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
@@ -565,13 +613,15 @@
                 const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
 
                 tampilkanModalKonfirmasi("Sedang Ibadah", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Jika timer habis sebelum Anda selesai, Anda otomatis KELUAR dari antrian. Lanjutkan?`, () => {
-                    window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Ibadah", timerMulai: Date.now(), timerAksi: "Ibadah", posisiTerkunci: posisi })
-                    .then(() => catatAktivitas(nama, "MulaiIbadah", `Posisi #${posisi} terkunci`));
+                    const now = Date.now();
+                    window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Ibadah", timerMulai: now, timerAksi: "Ibadah", posisiTerkunci: posisi })
+                    .then(() => catatAktivitasIbadah(nama, "MulaiIbadah", now, posisi));
                 });
             } else if (statusNow === "Ibadah") {
                 const posisiLama = itemSaya.posisiTerkunci || 0;
+                const now = Date.now();
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0 })
-                .then(() => catatAktivitas(nama, "SelesaiIbadah", `Kembali ke posisi #${posisiLama}`));
+                .then(() => catatAktivitasIbadah(nama, "SelesaiIbadah", now, posisiLama, itemSaya.timerMulai));
             }
         }
 
@@ -583,7 +633,6 @@
                     <button type="button" id="btn-pilih-deal" style="background: #059669; color: white; padding: 14px; font-weight: 800; border-radius: 10px; border:none; cursor:pointer;">✓ DEAL / CLOSING</button>
                     <button type="button" id="btn-pilih-lihat" style="background: #d97706; color: white; padding: 14px; font-weight: 800; border-radius: 10px; border:none; cursor:pointer;">◉ LIHAT-LIHAT SAJA</button>
                 </div>`;
-            // Tombol Batal dihilangkan -> pilihan wajib
             document.getElementById('modal-actions').innerHTML = ``;
             document.getElementById('custom-modal').classList.add('active');
 
@@ -619,13 +668,55 @@
                 const nama = getAkunAktif();
                 const clean = sanitizeNama(nama);
                 window.dbRemove(window.dbRef(window.db, 'antrian/' + clean))
-                .then(() => catatAktivitas(nama, "KeluarAntrian", ""));
+                .then(() => catatAktivitas(nama, "KeluarAntrian", "Manual"));
             });
         }
 
-        function catatAktivitas(nama, aksi, hasil) {
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+        // ===== CATAT AKTIVITAS (dengan struktur lengkap) =====
+        function catatAktivitas(nama, aksi, hasil, extra) {
+            const payload = {
                 nama: nama, aksi: aksi, waktu: Date.now(), tanggal: getTanggalIndo(), hasil: hasil || ""
+            };
+            if (extra) Object.assign(payload, extra);
+            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
+        }
+
+        // Makan: simpan waktuMulai, waktuSelesai, durasi, posisi
+        function catatAktivitasMakan(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
+            const payload = {
+                nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "",
+                kategori: "Waktu Makan", posisi: posisi || 0
+            };
+            if (aksi === "MulaiMakan") payload.waktuMulai = waktuSekarang;
+            if (aksi === "SelesaiMakan") {
+                payload.waktuMulai = waktuMulaiSebelumnya || waktuSekarang;
+                payload.waktuSelesai = waktuSekarang;
+                payload.durasiDetik = Math.floor((waktuSekarang - (waktuMulaiSebelumnya||waktuSekarang)) / 1000);
+            }
+            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
+        }
+
+        // Ibadah: simpan waktuMulai, waktuSelesai, durasi, posisi
+        function catatAktivitasIbadah(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
+            const payload = {
+                nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "",
+                kategori: "Ibadah", posisi: posisi || 0
+            };
+            if (aksi === "MulaiIbadah") payload.waktuMulai = waktuSekarang;
+            if (aksi === "SelesaiIbadah") {
+                payload.waktuMulai = waktuMulaiSebelumnya || waktuSekarang;
+                payload.waktuSelesai = waktuSekarang;
+                payload.durasiDetik = Math.floor((waktuSekarang - (waktuMulaiSebelumnya||waktuSekarang)) / 1000);
+            }
+            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
+        }
+
+        // Autokick dari timer habis (Makan/Ibadah)
+        function catatAutokickTimer(nama, jenis, posisi, waktuMulai) {
+            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                nama: nama, aksi: "Autokick", waktu: Date.now(), tanggal: getTanggalIndo(),
+                hasil: `Timer ${jenis} Habis`, kategori: jenis, posisi: posisi || 0,
+                waktuMulai: waktuMulai, sumber: "Timer"
             });
         }
 
@@ -649,6 +740,8 @@
             const totalDetik = DURASI_TIMER_MENIT * 60;
             const cleanNama = sanitizeNama(itemSaya.nama);
             const statusSaatItu = itemSaya.status;
+            const posisiSaatItu = itemSaya.posisiTerkunci || 0;
+            const timerMulaiSaatItu = itemSaya.timerMulai;
 
             const tick = () => {
                 const elapsed = Math.floor((Date.now() - itemSaya.timerMulai) / 1000);
@@ -659,12 +752,10 @@
                     display.classList.add('warning');
                     if (timerIntervalGlobal) { clearInterval(timerIntervalGlobal); timerIntervalGlobal = null; }
 
-                    // AUTO-KICK: hapus dari antrian
-                    const aksiLabel = statusSaatItu === "Waktu Makan" ? "SelesaiMakanOtomatis" : "SelesaiIbadahOtomatis";
                     window.dbRemove(window.dbRef(window.db, 'antrian/' + cleanNama))
                     .then(() => {
-                        catatAktivitas(itemSaya.nama, aksiLabel, "AutoKickKeluarAntrian");
-                        tampilkanModal("Waktu Habis - Auto Keluar", `Waktu ${itemSaya.timerAksi} Anda sudah habis dan Anda belum menyelesaikan. Anda otomatis DIKELUARKAN dari antrian. Silakan check-in ulang jika ingin masuk lagi.`);
+                        catatAutokickTimer(itemSaya.nama, statusSaatItu === "Waktu Makan" ? "Waktu Makan" : "Ibadah", posisiSaatItu, timerMulaiSaatItu);
+                        tampilkanModal("Waktu Habis - Auto Keluar", `Waktu ${itemSaya.timerAksi} Anda sudah habis dan Anda belum menyelesaikan. Anda otomatis DIKELUARKAN dari antrian.`);
                     });
                     return;
                 }
@@ -682,45 +773,94 @@
             timerIntervalGlobal = setInterval(tick, 1000);
         }
 
-        // ====== RENDER AKTIVITAS HARI INI ======
-        function renderAktivitasHariIni() {
-            const box = document.getElementById('aktivitas-hari-ini');
-            if (!box) return;
-
-            const akunSaya = getAkunAktif();
-            if (!akunSaya) {
-                box.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-muted); font-weight:600;">Login dulu untuk melihat aktivitas.</div>';
-                return;
-            }
-
+        // ====== RENDER AKTIVITAS PER KATEGORI ======
+        function renderAktivitas() {
             const hariIni = getTanggalIndo();
-            const cleanSaya = sanitizeNama(akunSaya);
-            const listSaya = aktivitasGlobal
-                .filter(a => sanitizeNama(a.nama) === cleanSaya && a.tanggal === hariIni)
-                .sort((a,b) => (b.waktu||0) - (a.waktu||0))
-                .slice(0, 30);
+            const list = aktivitasGlobal.filter(a => a.tanggal === hariIni);
 
-            if (listSaya.length === 0) {
-                box.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-muted); font-weight:600;">Belum ada aktivitas hari ini.</div>';
-                return;
-            }
+            // ---- 1. BAWA CUSTOMER (Melayani) ----
+            const listBawa = list.filter(a => a.aksi === "BawaCustomer").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-bawa').innerText = listBawa.length;
+            document.getElementById('list-bawa').innerHTML = listBawa.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
+                : listBawa.map(a => {
+                    const deal = a.hasil === "Deal";
+                    const hasilLabel = deal ? '' : ' <span style="font-size:10px; color:#64748b;">(lihat-lihat)</span>';
+                    return `<li>
+                        <span class="nama">${a.nama}${hasilLabel}</span>
+                        <span class="waktu">${formatJam(a.waktu)}${deal ? ' <span class="check-deal">'+SVG_CHECK_DEAL+'</span>' : ''}</span>
+                    </li>`;
+                }).join('');
 
-            let html = "";
-            listSaya.forEach(a => {
-                html += `
-                    <div class="aktivitas-item">
-                        <div>
-                            <div class="aktivitas-aksi">${labelAksi(a.aksi)}</div>
-                            ${a.hasil ? `<div class="aktivitas-hasil">${a.hasil}</div>` : ""}
-                        </div>
-                        <div class="aktivitas-waktu">${formatJam(a.waktu)}</div>
-                    </div>
-                `;
-            });
-            box.innerHTML = html;
+            // ---- 2. SELESAI (khusus Lihat-lihat saja) ----
+            const listSelesai = list.filter(a => a.aksi === "SelesaiMelayani" && a.hasil === "Lihat").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-selesai').innerText = listSelesai.length;
+            document.getElementById('list-selesai').innerHTML = listSelesai.length === 0
+                ? '<div class="aktivitas-empty">Belum ada selesai lihat-lihat</div>'
+                : listSelesai.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
+
+            // ---- 3. IBADAH (gabung mulai + selesai per nama) ----
+            const listIbadah = gabungRentang(list, "MulaiIbadah", "SelesaiIbadah");
+            document.getElementById('count-ibadah').innerText = listIbadah.length;
+            document.getElementById('list-ibadah').innerHTML = listIbadah.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas ibadah</div>'
+                : listIbadah.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#7c3aed; font-weight:700;">#${a.posisi||'-'}</span></span>
+                    <span class="waktu">${a.label}</span>
+                </li>`).join('');
+
+            // ---- 4. WAKTU MAKAN (gabung mulai + selesai per nama) ----
+            const listMakan = gabungRentang(list, "MulaiMakan", "SelesaiMakan");
+            document.getElementById('count-makan').innerText = listMakan.length;
+            document.getElementById('list-makan').innerHTML = listMakan.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas makan</div>'
+                : listMakan.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#0d9488; font-weight:700;">#${a.posisi||'-'}</span></span>
+                    <span class="waktu">${a.label}</span>
+                </li>`).join('');
+
+            // ---- 5. KELUAR ANTRIAN ----
+            const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-keluar').innerText = listKeluar.length;
+            document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
+                : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
+
+            // ---- 6. AUTOKICK (Timer habis + dari admin) ----
+            const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-autokick').innerText = listAutokick.length;
+            document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
+                ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
+                : listAutokick.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#dc2626; font-weight:700;">${a.kategori||''}</span></span>
+                    <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
+                </li>`).join('');
         }
 
-        // ====== RENDER ======
+        // Gabung Mulai & Selesai jadi rentang waktu
+        function gabungRentang(list, aksiMulai, aksiSelesai) {
+            // Kelompokkan per nama
+            const perNama = {};
+            list.forEach(a => {
+                if (a.aksi === aksiMulai) {
+                    if (!perNama[a.nama]) perNama[a.nama] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: null };
+                    else perNama[a.nama].mulai = a.waktuMulai || a.waktu;
+                } else if (a.aksi === aksiSelesai) {
+                    if (!perNama[a.nama]) perNama[a.nama] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: a.waktuSelesai || a.waktu };
+                    else perNama[a.nama].selesai = a.waktuSelesai || a.waktu;
+                }
+            });
+            return Object.values(perNama)
+                .sort((a,b) => (b.mulai||0) - (a.mulai||0))
+                .map(a => {
+                    const label = a.selesai
+                        ? formatRentang(a.mulai, a.selesai)
+                        : `${formatJam(a.mulai)} - ...`;
+                    return { ...a, label };
+                });
+        }
+
+        // ====== RENDER UI UTAMA ======
         function renderUI() {
             const badge = document.getElementById('badge-status-sistem');
             badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS ANTRIAN: OPEN" : "STATUS ANTRIAN: CLOSED";
@@ -730,15 +870,12 @@
             let urutHA = 1, urutAV = 1;
             const akunSaya = sanitizeNama(getAkunAktif());
 
-            // urutkan berdasarkan waktuStandby
             const sorted = [...daftarAntrianGlobal].sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
 
-            // Giliran utama = standby pertama per kategori
             const dataStandby = sorted.filter(item => item.status === "Standby");
             document.getElementById('promotor-nama-ha').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "HA") || {}).nama || "Belum Ada";
             document.getElementById('promotor-nama-av').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "AV") || {}).nama || "Belum Ada";
 
-            // Untuk menghitung urutan standby, skip yang status bukan Standby
             sorted.forEach(item => {
                 let kat = String(item.kategori || "HA").toUpperCase();
                 let itemHtml = "";
