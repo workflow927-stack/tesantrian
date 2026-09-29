@@ -647,7 +647,7 @@
         });
 
         // ⚡ REAL-TIME DATABASE LISTENERS
-        function inisialisasiRealtimeFirebase() {
+       function inisialisasiRealtimeFirebase() {
             const db = window.db;
 
             // 1. Antrian
@@ -660,24 +660,32 @@
                 renderUIRental();
             });
 
-            // 2. Master Sales
+            // 2. Master Sales (Mendukung struktur array dari JSON Anda)
             window.dbOnValue(window.dbRef(db, 'masterSales'), (snapshot) => {
                 const dataRaw = snapshot.val();
                 masterSalesGlobal = [];
                 let selectHtml = '<option value="">-- Pilih Nama Anda --</option>';
+                
                 if (dataRaw) {
-                    Object.keys(dataRaw).forEach(k => {
-                        const s = dataRaw[k];
-                        masterSalesGlobal.push(s);
-                        selectHtml += `<option value="${s.nama}">${s.nama}</option>`;
+                    // Cek apakah strukturnya berupa array (bungkusan "data") atau objek biasa
+                    let listSales = Array.isArray(dataRaw) ? dataRaw : (dataRaw.data || Object.values(dataRaw));
+                    
+                    listSales.forEach(item => {
+                        let salesObj = item.record || item;
+                        let nama = salesObj.NAMA_PROMOTOR || salesObj.nama;
+                        if (nama && typeof nama === 'string' && nama.trim() !== "") {
+                            masterSalesGlobal.push({ nama: nama, ...salesObj });
+                            selectHtml += `<option value="${nama}">${nama}</option>`;
+                        }
                     });
                 }
+                
                 const selectEl = document.getElementById('pilih-sales');
-                if (selectEl && selectEl.options.length <= 1) selectEl.innerHTML = selectHtml;
+                if (selectEl) selectEl.innerHTML = selectHtml;
                 renderUIRental();
             });
 
-            // 3. Setting & Koordinat GPS Toko
+            // 3. Setting & Koordinat Toko
             window.dbOnValue(window.dbRef(db, 'setting'), (snapshot) => {
                 const setting = snapshot.val();
                 if (setting) {
@@ -687,22 +695,11 @@
                         koordinatToko.lng = setting.lngToko;
                         koordinatToko.radius = Number(setting.radiusToko) || 50;
                     }
-                    if (setting.pengumumanAdmin) {
-                        const savedP = localStorage.getItem('ufo_saved_teks_pengumuman') || "";
-                        if (savedP !== setting.pengumumanAdmin) {
-                            localStorage.setItem('ufo_saved_teks_pengumuman', setting.pengumumanAdmin);
-                            localStorage.setItem('ufo_pengumuman_sudah_dibaca', 'false');
-                        }
-                        if (localStorage.getItem('ufo_pengumuman_sudah_dibaca') !== 'true') {
-                            document.getElementById('isi-pengumuman-admin').innerText = setting.pengumumanAdmin;
-                            document.getElementById('modal-pengumuman-admin').classList.add('active');
-                        }
-                    }
                 }
                 renderUIRental();
             });
 
-            // 4. Statistik Aktivitas Hari Ini
+            // 4. Statistik Aktivitas
             window.dbOnValue(window.dbRef(db, 'statistikAktivitas'), (snapshot) => {
                 const dataRaw = snapshot.val();
                 statistikAktivitasGlobal = [];
