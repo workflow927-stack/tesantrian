@@ -753,37 +753,57 @@
             }
             ringkasanEl.innerHTML = ringkasanHtml;
 
-            const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
-            const listSedangMelayani = daftarAntrianGlobal
-                .filter(item => item.status === "Melayani")
-                .map(item => ({
-                    nama: item.nama,
-                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
-                    waktuSelesai: null, hasil: null, _sedangMelayani: true
-                }));
+            // ===== AMBIL SEMUA RECORD BAWA CUSTOMER =====
+const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
 
-            const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
-            const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
-            const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
+// ===== PISAHKAN: SELESAI vs MASIH PROSES =====
+const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
+const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
 
-            let semuaBawa = [];
-            listSedangMelayani.forEach(item => semuaBawa.push(item));
-            statistikMasihProses.forEach(a => {
-                const clean = sanitizeNama(a.nama);
-                if (!namaSedangMelayani.has(clean)) {
-                    semuaBawa.push({
-                        nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
-                        waktuSelesai: null, hasil: null, _sedangMelayani: false
-                    });
-                }
-            });
-            statistikSelesai.forEach(a => {
-                semuaBawa.push({
-                    nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
-                    waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false
-                });
-            });
-            semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
+// ===== SET nama yang sudah SELESAI hari ini =====
+// Kalau promotor sudah selesai, JANGAN tampilkan lagi versi "melayani"
+const namaSudahSelesai = new Set(statistikSelesai.map(a => sanitizeNama(a.nama)));
+
+// ===== SEDANG MELAYANI: dari antrian, tapi SKIP kalau sudah selesai =====
+const listSedangMelayani = daftarAntrianGlobal
+    .filter(item => item.status === "Melayani")
+    .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))  // ✅ FILTER INI KUNCI
+    .map(item => ({
+        nama: item.nama,
+        waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
+        waktuSelesai: null, hasil: null, _sedangMelayani: true
+    }));
+
+// ===== SET nama yang sedang melayani (biar proses statistik tidak dobel) =====
+const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
+
+// ===== GABUNG =====
+let semuaBawa = [];
+
+// 1. Yang sedang melayani (dari antrian)
+listSedangMelayani.forEach(item => semuaBawa.push(item));
+
+// 2. Yang masih proses di statistik (skip kalau sudah ada di "sedang melayani")
+statistikMasihProses.forEach(a => {
+    const clean = sanitizeNama(a.nama);
+    if (!namaSedangMelayani.has(clean)) {
+        semuaBawa.push({
+            nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+            waktuSelesai: null, hasil: null, _sedangMelayani: false
+        });
+    }
+});
+
+// 3. Yang sudah selesai (Deal / Lihat)
+statistikSelesai.forEach(a => {
+    semuaBawa.push({
+        nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+        waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false
+    });
+});
+
+// Urutkan: paling baru di atas
+semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
 
             const listIbadah = gabungRentang(listHariIni, "MulaiIbadah", "SelesaiIbadah");
             const listMakan = gabungRentang(listHariIni, "MulaiMakan", "SelesaiMakan");
