@@ -189,11 +189,28 @@
         .aktivitas-section { margin-top: 20px; text-align: left; }
         .aktivitas-title {
             font-size: 12px; font-weight: 800; text-transform: uppercase;
-            padding: 8px 12px; border-radius: 8px; color: white;
+            padding: 10px 12px; border-radius: 8px; color: white;
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 6px; letter-spacing: 0.5px;
+            gap: 8px;
         }
         .aktivitas-title .count { font-size: 10px; background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 10px; }
+
+        /* Icon SVG di header aktivitas */
+        .aktivitas-title .judul-kategori {
+            display: flex; align-items: center; gap: 8px; flex: 1;
+        }
+        .aktivitas-icon {
+            width: 22px; height: 22px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 6px; flex-shrink: 0;
+            background: rgba(255,255,255,0.2);
+        }
+        .aktivitas-icon svg {
+            width: 13px; height: 13px;
+            stroke: currentColor; stroke-width: 2.4; fill: none;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
 
         .t-bawa-customer { background: linear-gradient(135deg, #0f172a, #1e293b); }
         .t-ibadah { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
@@ -215,12 +232,12 @@
         .check-deal { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; flex-shrink: 0; vertical-align: middle; }
         .label-lihat { font-size: 10px; color: #64748b; font-weight: 700; }
         .label-melayani {
-    font-size: 10px;
-    color: #059669;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
+            font-size: 10px;
+            color: #059669;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
     </style>
 </head>
 <body>
@@ -307,39 +324,70 @@
 
         <!-- ===== AKTIVITAS HARI INI (PER KATEGORI) ===== -->
         <div class="aktivitas-section">
-            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; text-transform: uppercase;">📋 AKTIVITAS HARI INI</div>
+            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; text-transform: uppercase; display:flex; align-items:center; gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                </svg>
+                AKTIVITAS HARI INI
+            </div>
 
-            <!-- Bawa Customer (termasuk Deal & Lihat-lihat) -->
+            <!-- Bawa Customer -->
             <div class="aktivitas-title t-bawa-customer">
-                <span>🛒 Bawa Customer</span>
+                <span class="judul-kategori">
+                    <span class="aktivitas-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </span>
+                    Bawa Customer
+                </span>
                 <span class="count" id="count-bawa">0</span>
             </div>
             <ul id="list-bawa" class="aktivitas-list"></ul>
 
             <!-- Ibadah -->
             <div class="aktivitas-title t-ibadah">
-                <span>🕌 Ibadah</span>
+                <span class="judul-kategori">
+                    <span class="aktivitas-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>
+                    </span>
+                    Ibadah
+                </span>
                 <span class="count" id="count-ibadah">0</span>
             </div>
             <ul id="list-ibadah" class="aktivitas-list"></ul>
 
             <!-- Waktu Makan -->
             <div class="aktivitas-title t-makan">
-                <span>🍽️ Waktu Makan</span>
+                <span class="judul-kategori">
+                    <span class="aktivitas-icon">
+                        <svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg>
+                    </span>
+                    Waktu Makan
+                </span>
                 <span class="count" id="count-makan">0</span>
             </div>
             <ul id="list-makan" class="aktivitas-list"></ul>
 
             <!-- Keluar Antrian -->
             <div class="aktivitas-title t-keluar">
-                <span>🚪 Keluar Antrian</span>
+                <span class="judul-kategori">
+                    <span class="aktivitas-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </span>
+                    Keluar Antrian
+                </span>
                 <span class="count" id="count-keluar">0</span>
             </div>
             <ul id="list-keluar" class="aktivitas-list"></ul>
 
             <!-- Autokick -->
             <div class="aktivitas-title t-autokick">
-                <span>⛔ Autokick (Pelanggaran / Admin)</span>
+                <span class="judul-kategori">
+                    <span class="aktivitas-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                    </span>
+                    Autokick (Pelanggaran / Admin)
+                </span>
                 <span class="count" id="count-autokick">0</span>
             </div>
             <ul id="list-autokick" class="aktivitas-list"></ul>
@@ -435,6 +483,7 @@
                     });
                 }
                 renderUI();
+                renderAktivitas();
             });
 
             const pathUtama = 'mastersales';
@@ -462,7 +511,6 @@
                 renderUI();
             });
 
-            // Realtime aktivitas
             window.dbOnValue(window.dbRef(db, 'statistikAktivitas'), (snapshot) => {
                 const dataRaw = snapshot.val();
                 aktivitasGlobal = [];
@@ -544,7 +592,6 @@
             }).then(() => catatAktivitas(nama, "DaftarAntrian", kat));
         }
 
-        // ===== BAWA CUSTOMER: catat waktu mulai melayani =====
         function aksiUtamaCustomer() {
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
@@ -633,7 +680,6 @@
             document.getElementById('btn-pilih-lihat').onclick = () => selesaiMelayaniAction("Lihat");
         }
 
-        // ===== SELESAI MELAYANI: update record BawaCustomer dengan waktuSelesai & hasil =====
         function selesaiMelayaniAction(hasil) {
             tutupModal();
             const nama = getAkunAktif();
@@ -643,7 +689,6 @@
             const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
             const waktuMulaiMelayani = itemSaya ? (itemSaya.waktuMulaiMelayani || now) : now;
 
-            // Cari record BawaCustomer hari ini yang belum punya waktuSelesai
             const hariIni = getTanggalIndo();
             const cleanSaya = sanitizeNama(nama);
             const kandidat = aktivitasGlobal
@@ -656,14 +701,12 @@
             const target = kandidat[0];
 
             if (target && target._key) {
-                // Update record yang ada (jangan bikin baru)
                 window.dbUpdate(window.dbRef(window.db, 'statistikAktivitas/' + target._key), {
                     waktuSelesai: now,
-                    hasil: hasil, // "Deal" atau "Lihat"
+                    hasil: hasil,
                     durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
                 });
             } else {
-                // Fallback: bikin record baru kalau tidak ketemu
                 window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
                     nama: nama, aksi: "BawaCustomer", waktu: waktuMulaiMelayani, 
                     waktuMulai: waktuMulaiMelayani, waktuSelesai: now,
@@ -672,7 +715,6 @@
                 });
             }
 
-            // Hapus dari antrian
             window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
         }
 
@@ -700,7 +742,6 @@
             });
         }
 
-        // ===== CATAT AKTIVITAS =====
         function catatAktivitas(nama, aksi, hasil, extra) {
             const payload = {
                 nama: nama, aksi: aksi, waktu: Date.now(), tanggal: getTanggalIndo(), hasil: hasil || ""
@@ -798,152 +839,120 @@
             timerIntervalGlobal = setInterval(tick, 1000);
         }
 
-        // ====== RENDER AKTIVITAS PER KATEGORI ======
-      function renderAktivitas() {
-    const hariIni = getTanggalIndo();
-    const list = aktivitasGlobal.filter(a => a.tanggal === hariIni);
+        // ====== RENDER AKTIVITAS ======
+        function renderAktivitas() {
+            const hariIni = getTanggalIndo();
+            const list = aktivitasGlobal.filter(a => a.tanggal === hariIni);
 
-    // ---- 1. BAWA CUSTOMER (gabung mulai + selesai + sedang melayani) ----
-    // Ambil record BawaCustomer dari statistik
-    const listBawaStatistik = list.filter(a => a.aksi === "BawaCustomer");
+            // ===== BAWA CUSTOMER =====
+            const listBawaStatistik = list.filter(a => a.aksi === "BawaCustomer");
 
-    // Ambil yang SEDANG melayani dari daftar antrian global (status Melayani)
-    const listSedangMelayani = daftarAntrianGlobal
-        .filter(item => item.status === "Melayani")
-        .map(item => ({
-            nama: item.nama,
-            _sedangMelayani: true,
-            waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now()
-        }));
+            // Yang sudah selesai hari ini
+            const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
+            const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
 
-    // Gabung: yang sedang melayani + yang sudah selesai (dari statistik)
-    // Tapi hindari duplikat: kalau promotor sedang melayani DAN belum ada record selesai, pakai yg sedang melayani
-    const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
+            // ✅ SET nama yang sudah SELESAI — JANGAN tampilkan lagi versi "melayani"
+            const namaSudahSelesai = new Set(statistikSelesai.map(a => sanitizeNama(a.nama)));
 
-    // Dari statistik, pisahkan: yang masih proses (belum ada waktuSelesai) vs yang sudah selesai
-    const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
-    const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
+            // Yang sedang melayani (dari antrian) — SKIP kalau sudah selesai
+            const listSedangMelayani = daftarAntrianGlobal
+                .filter(item => item.status === "Melayani")
+                .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
+                .map(item => ({
+                    nama: item.nama,
+                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
+                    waktuSelesai: null, hasil: null, _sedangMelayani: true
+                }));
 
-    // Gabung semua: 
-    // - yang sedang melayani (dari antrian global)
-    // - yang masih proses di statistik (belum selesai)
-    // - yang sudah selesai di statistik
-    let semuaBawa = [];
+            const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
 
-    // 1. Yang sedang melayani (prioritas tampil "melayani")
-    listSedangMelayani.forEach(item => {
-        semuaBawa.push({
-            nama: item.nama,
-            waktuMulai: item.waktuMulai,
-            waktuSelesai: null,
-            hasil: null,
-            _sedangMelayani: true
-        });
-    });
-
-    // 2. Yang masih proses di statistik (belum ada di list sedang melayani)
-    statistikMasihProses.forEach(a => {
-        const clean = sanitizeNama(a.nama);
-        if (!namaSedangMelayani.has(clean)) {
-            semuaBawa.push({
-                nama: a.nama,
-                waktuMulai: a.waktuMulai || a.waktu,
-                waktuSelesai: null,
-                hasil: null,
-                _sedangMelayani: false
-            });
-        }
-    });
-
-    // 3. Yang sudah selesai
-    statistikSelesai.forEach(a => {
-        semuaBawa.push({
-            nama: a.nama,
-            waktuMulai: a.waktuMulai || a.waktu,
-            waktuSelesai: a.waktuSelesai,
-            hasil: a.hasil,
-            _sedangMelayani: false
-        });
-    });
-
-    // Urutkan terbaru dulu
-    semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
-
-    document.getElementById('count-bawa').innerText = semuaBawa.length;
-    document.getElementById('list-bawa').innerHTML = semuaBawa.length === 0
-        ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
-        : semuaBawa.map(a => {
-            const mulai = a.waktuMulai;
-            const selesai = a.waktuSelesai;
-
-            // ==== Tentukan tampilan ====
-            let rangeLabel = "";
-            let namaLabel = "";
-            let badgeHtml = "";
-
-            if (a._sedangMelayani) {
-                // SEDANG MELAYANI
-                rangeLabel = `(${formatJam(mulai)} - ...)`;
-                namaLabel = `${a.nama} <span class="label-melayani">(melayani)</span>`;
-            } else if (selesai) {
-                // SELESAI (Deal / Lihat-lihat)
-                rangeLabel = `(${formatJam(mulai)} - ${formatJam(selesai)})`;
-                if (a.hasil === "Deal") {
-                    namaLabel = `${a.nama} <span class="check-deal">${SVG_CHECK_DEAL}</span>`;
-                } else if (a.hasil === "Lihat") {
-                    namaLabel = `${a.nama} <span class="label-lihat">(Lihat-lihat)</span>`;
-                } else {
-                    namaLabel = `${a.nama} <span class="label-lihat">(selesai)</span>`;
+            let semuaBawa = [];
+            listSedangMelayani.forEach(item => semuaBawa.push(item));
+            statistikMasihProses.forEach(a => {
+                const clean = sanitizeNama(a.nama);
+                if (!namaSedangMelayani.has(clean)) {
+                    semuaBawa.push({
+                        nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+                        waktuSelesai: null, hasil: null, _sedangMelayani: false
+                    });
                 }
-            } else {
-                // PROSES (belum klik selesai, tapi tidak di antrian sebagai Melayani — kasus langka)
-                rangeLabel = `(${formatJam(mulai)} - ...)`;
-                namaLabel = `${a.nama} <span class="label-lihat">(proses)</span>`;
-            }
+            });
+            statistikSelesai.forEach(a => {
+                semuaBawa.push({
+                    nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+                    waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false
+                });
+            });
+            semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
 
-            return `<li>
-                <span class="nama">${namaLabel}</span>
-                <span class="waktu">${rangeLabel}</span>
-            </li>`;
-        }).join('');
+            document.getElementById('count-bawa').innerText = semuaBawa.length;
+            document.getElementById('list-bawa').innerHTML = semuaBawa.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
+                : semuaBawa.map(a => {
+                    const mulai = a.waktuMulai;
+                    const selesai = a.waktuSelesai;
+                    let rangeLabel, namaLabel;
 
-    // ---- 2. IBADAH ----
-    const listIbadah = gabungRentang(list, "MulaiIbadah", "SelesaiIbadah");
-    document.getElementById('count-ibadah').innerText = listIbadah.length;
-    document.getElementById('list-ibadah').innerHTML = listIbadah.length === 0
-        ? '<div class="aktivitas-empty">Belum ada aktivitas ibadah</div>'
-        : listIbadah.map(a => `<li>
-            <span class="nama">${a.nama} <span style="font-size:10px; color:#7c3aed; font-weight:700;">#${a.posisi||'-'}</span></span>
-            <span class="waktu">${a.label}</span>
-        </li>`).join('');
+                    if (a._sedangMelayani) {
+                        rangeLabel = `(${formatJam(mulai)} - ...)`;
+                        namaLabel = `${a.nama} <span class="label-melayani">(MELAYANI)</span>`;
+                    } else if (selesai) {
+                        rangeLabel = `(${formatJam(mulai)} - ${formatJam(selesai)})`;
+                        if (a.hasil === "Deal") {
+                            namaLabel = `${a.nama} <span class="check-deal">${SVG_CHECK_DEAL}</span>`;
+                        } else if (a.hasil === "Lihat") {
+                            namaLabel = `${a.nama} <span class="label-lihat">(Lihat-lihat)</span>`;
+                        } else {
+                            namaLabel = `${a.nama} <span class="label-lihat">(selesai)</span>`;
+                        }
+                    } else {
+                        rangeLabel = `(${formatJam(mulai)} - ...)`;
+                        namaLabel = `${a.nama} <span class="label-lihat">(proses)</span>`;
+                    }
 
-    // ---- 3. WAKTU MAKAN ----
-    const listMakan = gabungRentang(list, "MulaiMakan", "SelesaiMakan");
-    document.getElementById('count-makan').innerText = listMakan.length;
-    document.getElementById('list-makan').innerHTML = listMakan.length === 0
-        ? '<div class="aktivitas-empty">Belum ada aktivitas makan</div>'
-        : listMakan.map(a => `<li>
-            <span class="nama">${a.nama} <span style="font-size:10px; color:#0d9488; font-weight:700;">#${a.posisi||'-'}</span></span>
-            <span class="waktu">${a.label}</span>
-        </li>`).join('');
+                    return `<li>
+                        <span class="nama">${namaLabel}</span>
+                        <span class="waktu">${rangeLabel}</span>
+                    </li>`;
+                }).join('');
 
-    // ---- 4. KELUAR ANTRIAN ----
-    const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
-    document.getElementById('count-keluar').innerText = listKeluar.length;
-    document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
-        ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
-        : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
+            // ===== IBADAH =====
+            const listIbadah = gabungRentang(list, "MulaiIbadah", "SelesaiIbadah");
+            document.getElementById('count-ibadah').innerText = listIbadah.length;
+            document.getElementById('list-ibadah').innerHTML = listIbadah.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas ibadah</div>'
+                : listIbadah.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#7c3aed; font-weight:700;">#${a.posisi||'-'}</span></span>
+                    <span class="waktu">${a.label}</span>
+                </li>`).join('');
 
-    // ---- 5. AUTOKICK ----
-    const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
-    document.getElementById('count-autokick').innerText = listAutokick.length;
-    document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
-        ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
-        : listAutokick.map(a => `<li>
-            <span class="nama">${a.nama} <span style="font-size:10px; color:#dc2626; font-weight:700;">${a.kategori||''}</span></span>
-            <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
-        </li>`).join('');
-}
+            // ===== WAKTU MAKAN =====
+            const listMakan = gabungRentang(list, "MulaiMakan", "SelesaiMakan");
+            document.getElementById('count-makan').innerText = listMakan.length;
+            document.getElementById('list-makan').innerHTML = listMakan.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas makan</div>'
+                : listMakan.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#0d9488; font-weight:700;">#${a.posisi||'-'}</span></span>
+                    <span class="waktu">${a.label}</span>
+                </li>`).join('');
+
+            // ===== KELUAR ANTRIAN =====
+            const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-keluar').innerText = listKeluar.length;
+            document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
+                : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
+
+            // ===== AUTOKICK =====
+            const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-autokick').innerText = listAutokick.length;
+            document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
+                ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
+                : listAutokick.map(a => `<li>
+                    <span class="nama">${a.nama} <span style="font-size:10px; color:#dc2626; font-weight:700;">${a.kategori||''}</span></span>
+                    <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
+                </li>`).join('');
+        }
 
         function gabungRentang(list, aksiMulai, aksiSelesai) {
             const perNama = {};
