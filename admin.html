@@ -115,7 +115,6 @@
         .badge-melayani { background: #059669 !important; color: #ffffff !important; }
         .badge-cs { background: #7c3aed !important; color: #ffffff !important; }
         .badge-ibadah { background: #7c3aed !important; color: #ffffff !important; }
-        .badge-locked { background: #991b1b !important; color: #ffffff !important; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.2s; padding: 16px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
@@ -130,32 +129,135 @@
 
         @media (max-width: 480px) { .timer-box-wrapper { grid-template-columns: 1fr; } }
 
-        /* Statistik */
-        .stat-kategori-card { display: flex !important; flex-direction: column !important; padding: 0 !important; gap: 0 !important; background: #ffffff !important; border-radius: 14px !important; border: 1px solid var(--border) !important; overflow: hidden; margin-bottom: 10px !important; }
+        /* ===== KARTU STATISTIK ===== */
+        .stat-kategori-card {
+            display: flex !important; flex-direction: column !important;
+            padding: 0 !important; gap: 0 !important;
+            background: #ffffff !important; border-radius: 14px !important;
+            border: 1px solid var(--border) !important;
+            overflow: hidden; margin-bottom: 10px !important;
+            list-style: none;
+        }
         body.dark-mode .stat-kategori-card { background: linear-gradient(145deg, #140205 0%, #0a0103 100%) !important; border: 2px solid #ff1f3d !important; }
-        .stat-kategori-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-bottom: 1px solid #e2e8f0; font-size: 11px; font-weight: 800; color: #334155; text-transform: uppercase; }
-        body.dark-mode .stat-kategori-header { background: linear-gradient(135deg, #2b0007, #140205) !important; border-bottom: 1px solid #ff1f3d !important; color: #ffb3bc !important; }
+
+        .stat-kategori-header {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 11px; font-weight: 800; color: #334155;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        body.dark-mode .stat-kategori-header {
+            background: linear-gradient(135deg, #2b0007, #140205) !important;
+            border-bottom: 1px solid #ff1f3d !important;
+            color: #ffb3bc !important;
+        }
         .stat-kategori-header b { flex: 1; }
         .stat-kategori-count { background: #0f172a; color: #ffffff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
         body.dark-mode .stat-kategori-count { background: #99001f; border: 1px solid #ff1f3d; }
-        .stat-kategori-body { display: flex; flex-direction: column; gap: 2px; padding: 6px 14px 10px 14px; }
-        .stat-detail-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #64748b; padding: 6px 0; border-bottom: 1px dashed #f1f5f9; }
+
+        .stat-kategori-body {
+            display: flex; flex-direction: column;
+            padding: 6px 14px 10px 14px;
+        }
+
+        /* ===== BARIS AKTIVITAS RAPI ===== */
+        .stat-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            padding: 8px 0;
+            border-bottom: 1px dashed #f1f5f9;
+            flex-wrap: nowrap;
+        }
         .stat-detail-row:last-child { border-bottom: none; }
         body.dark-mode .stat-detail-row { color: #ffb3bc !important; border-bottom-color: #50000e !important; }
-        .stat-detail-time { display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
-        .stat-action-name { color: #0f172a; font-weight: 800; font-size: 12px; margin-right: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+
+        /* Kolom kiri: nama + waktu */
+        .stat-detail-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-action-name {
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 110px;
+            flex-shrink: 1;
+            min-width: 0;
+        }
         body.dark-mode .stat-action-name { color: #ffffff !important; }
-        .stat-action-time { color: #0f172a; font-weight: 800; font-size: 12px; font-family: monospace; }
-        body.dark-mode .stat-action-time { color: #ffffff !important; }
-        .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info { display: inline-flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 800; padding: 4px 9px; border-radius: 20px; white-space: nowrap; text-transform: uppercase; }
+
+        .stat-action-label {
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-style: italic;
+        }
+        body.dark-mode .stat-action-label { color: #ffb3bc !important; }
+
+        .stat-action-time {
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 11px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            white-space: nowrap;
+            letter-spacing: -0.2px;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        body.dark-mode .stat-action-time {
+            color: #ffffff !important;
+            background: #50000e !important;
+        }
+
+        /* Badge */
+        .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 4px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            min-width: 58px;
+            justify-content: center;
+        }
         .stat-badge-deal { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; }
         .stat-badge-lihat { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; }
         .stat-badge-pending { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); color: #475569; }
         .stat-badge-info { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff; }
-        body.dark-mode .stat-badge-deal { background: #064e3b !important; color: #34d399 !important; border: 1px solid #059669; }
-        body.dark-mode .stat-badge-lihat { background: #78350f !important; color: #fef08a !important; border: 1px solid #facc15; }
-        body.dark-mode .stat-badge-pending { background: #50000e !important; color: #ffb3bc !important; border: 1px solid #ff1f3d; }
-        body.dark-mode .stat-badge-info { background: #1e3a8a !important; color: #93c5fd !important; border: 1px solid #3b82f6; }
+        body.dark-mode .stat-badge-deal { background: linear-gradient(135deg, #022c22, #064e3b) !important; color: #34d399 !important; border: 1px solid #059669; }
+        body.dark-mode .stat-badge-lihat { background: linear-gradient(135deg, #422006, #78350f) !important; color: #fef08a !important; border: 1px solid #facc15; }
+        body.dark-mode .stat-badge-pending { background: linear-gradient(135deg, #50000e, #2b0007) !important; color: #ffb3bc !important; border: 1px solid #ff1f3d; }
+        body.dark-mode .stat-badge-info { background: linear-gradient(135deg, #1e3a8a, #1e40af) !important; color: #93c5fd !important; border: 1px solid #3b82f6; }
+
+        /* Responsif HP kecil */
+        @media (max-width: 480px) {
+            .stat-action-name { max-width: 80px; font-size: 11px; }
+            .stat-action-time { font-size: 10px; padding: 2px 6px; }
+            .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info { font-size: 9px; padding: 3px 7px; min-width: 50px; }
+        }
 
         .info-sync { font-size: 10px; color: #059669; font-weight: 700; text-align: center; margin-top: 4px; }
         body.dark-mode .info-sync { color: #34d399 !important; }
@@ -210,7 +312,7 @@
                     📊 AKTIVITAS HARI INI (<span id="tanggal-statistik-admin">-</span>)
                 </div>
                 <div id="ringkasan-statistik-admin" style="font-size: 11px; margin-bottom: 10px; padding: 8px 12px; background: #f1f5f9; border-radius: 8px; color: #475569; font-weight: 600; text-align: center;">Memuat...</div>
-                <ul id="list-statistik-admin" class="list-antrian" style="font-size: 12px;">
+                <ul id="list-statistik-admin" style="list-style:none; padding:0; margin:0;">
                     <li><span style="color:#94a3b8; font-style:italic;">Memuat...</span></li>
                 </ul>
             </div>
@@ -263,23 +365,28 @@
     <script>
         window.addEventListener('unhandledrejection', e => { e.preventDefault(); console.warn("Handled:", e.reason); });
 
-        const PIN_ADMIN_DEFAULT = "123456"; // ganti sesuai keinginan
+        const PIN_ADMIN_DEFAULT = "123456";
 
-        let masterSalesGlobal = [];      // array of {nama, locked, alasan, waktuSelesaiLock}
+        let masterSalesGlobal = [];
         let daftarAntrianGlobal = [];
         let statistikGlobal = [];
         let statusSistemGlobal = "BUKA";
         let koordinatTokoAdmin = { lat: "", lng: "", radius: 50 };
         let savedPinAdmin = "";
         let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null;
+        let timerCekGantiHari = null;
 
         // ===== HELPERS =====
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
-        function getTanggalIndo() {
-            const now = new Date();
+        function getTanggalIndo(d) {
+            const now = d || new Date();
             return `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`;
+        }
+        function getTanggalKey(d) {
+            const now = d || new Date();
+            return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
         }
         function formatJam(ts) {
             const d = new Date(ts);
@@ -315,7 +422,6 @@
                 const snap = await window.dbGet(window.dbRef(db, 'setting/pinAdmin'));
                 const pinDb = snap.exists() ? String(snap.val()).trim() : PIN_ADMIN_DEFAULT;
 
-                // Kalau belum ada di DB, set default
                 if (!snap.exists()) {
                     await window.dbSet(window.dbRef(db, 'setting/pinAdmin'), PIN_ADMIN_DEFAULT);
                 }
@@ -350,7 +456,6 @@
         function mulaiListenerFirebase() {
             const db = window.db;
 
-            // 1. Antrian
             unsubAntrian = window.dbOnValue(window.dbRef(db, 'antrian'), snapshot => {
                 const dataRaw = snapshot.val();
                 daftarAntrianGlobal = [];
@@ -366,7 +471,6 @@
                 renderAntrianAdmin();
             });
 
-            // 2. Setting
             unsubSetting = window.dbOnValue(window.dbRef(db, 'setting'), snapshot => {
                 const s = snapshot.val() || {};
                 statusSistemGlobal = s.statusAntrian || "BUKA";
@@ -377,7 +481,6 @@
                 renderStatusGPS();
             });
 
-            // 3. Statistik
             unsubStatistik = window.dbOnValue(window.dbRef(db, 'statistikAktivitas'), snapshot => {
                 const dataRaw = snapshot.val();
                 statistikGlobal = [];
@@ -393,11 +496,15 @@
                 renderStatistikAdmin();
             });
 
-            // 4. Master Sales
             unsubMaster = window.dbOnValue(window.dbRef(db, 'mastersales'), snapshot => {
-                const dataRaw = snapshot.val();
-                prosesMasterSales(dataRaw);
+                prosesMasterSales(snapshot.val());
             });
+
+            // ✅ AUTO-CLEANUP: cek tiap 30 detik kalau sudah ganti hari
+            // Kalau belum pernah cleanup hari ini, jalankan
+            cekDanJalankanAutoCleanup();
+            if (timerCekGantiHari) clearInterval(timerCekGantiHari);
+            timerCekGantiHari = setInterval(cekDanJalankanAutoCleanup, 30000);
         }
 
         function matikanListenerFirebase() {
@@ -405,6 +512,7 @@
             if (unsubSetting) { unsubSetting(); unsubSetting = null; }
             if (unsubStatistik) { unsubStatistik(); unsubStatistik = null; }
             if (unsubMaster) { unsubMaster(); unsubMaster = null; }
+            if (timerCekGantiHari) { clearInterval(timerCekGantiHari); timerCekGantiHari = null; }
         }
 
         function prosesMasterSales(dataRaw) {
@@ -425,6 +533,107 @@
                 }
             });
             masterSalesGlobal.sort((a,b) => a.nama.localeCompare(b.nama));
+        }
+
+        // ============================================================
+        // ✅ AUTO-CLEANUP SETIAP GANTI HARI (jam 00:01)
+        // ============================================================
+        async function cekDanJalankanAutoCleanup() {
+            try {
+                const hariIniKey = getTanggalKey();
+                const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
+
+                // Kalau sudah cleanup hari ini, skip
+                if (lastCleanup === hariIniKey) return;
+
+                // Sekarang jam berapa?
+                const now = new Date();
+                const jam = now.getHours();
+                const menit = now.getMinutes();
+
+                // Jalankan cleanup kalau sudah lewat jam 00:01
+                if (jam > 0 || (jam === 0 && menit >= 1)) {
+                    console.log("🧹 Menjalankan auto-cleanup untuk tanggal:", hariIniKey);
+                    await jalankanAutoCleanup(hariIniKey);
+                }
+            } catch (e) {
+                console.warn("Auto-cleanup error:", e);
+            }
+        }
+
+        async function jalankanAutoCleanup(hariIniKey) {
+            const db = window.db;
+
+            // 1. Bersihkan antrian yang waktuStandby-nya bukan hari ini
+            const snapAntrian = await window.dbGet(window.dbRef(db, 'antrian'));
+            if (snapAntrian.exists()) {
+                const data = snapAntrian.val();
+                const awalHariIni = new Date();
+                awalHariIni.setHours(0, 0, 0, 0);
+                const startToday = awalHariIni.getTime();
+
+                const updates = {};
+                let jumlahDibersihkan = 0;
+
+                Object.keys(data).forEach(key => {
+                    const item = data[key];
+                    if (!item) return;
+                    // Kalau waktuStandby sebelum awal hari ini → antrian kemarin
+                    if (item.waktuStandby && item.waktuStandby < startToday) {
+                        updates['antrian/' + key] = null;
+                        jumlahDibersihkan++;
+                    }
+                });
+
+                if (jumlahDibersihkan > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                    console.log(`🧹 ${jumlahDibersihkan} antrian kemarin dibersihkan`);
+                }
+            }
+
+            // 2. Bersihkan statistik aktivitas yang bukan hari ini (opsional, bisa dimatikan)
+            // CATATAN: Kalau mau simpan history, jangan hapus bagian ini.
+            // Kalau mau hemat storage, aktifkan.
+            /*
+            const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
+            if (snapStat.exists()) {
+                const data = snapStat.val();
+                const hariIniIndo = getTanggalIndo();
+                const updates = {};
+                Object.keys(data).forEach(k => {
+                    if (data[k] && data[k].tanggal !== hariIniIndo) {
+                        updates['statistikAktivitas/' + k] = null;
+                    }
+                });
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                }
+            }
+            */
+
+            // 3. Unlock promotor yang waktu lock-nya sudah habis
+            const snapMaster = await window.dbGet(window.dbRef(db, 'mastersales'));
+            if (snapMaster.exists()) {
+                const data = snapMaster.val();
+                const updates = {};
+                const now = Date.now();
+                Object.keys(data).forEach(k => {
+                    const item = data[k];
+                    if (item && item.locked && item.waktuSelesaiLock > 0 && now >= item.waktuSelesaiLock) {
+                        updates['mastersales/' + k + '/locked'] = false;
+                        updates['mastersales/' + k + '/alasan'] = "";
+                        updates['mastersales/' + k + '/waktuSelesaiLock'] = 0;
+                    }
+                });
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                    console.log("🔓 Lock promotor yang expired dibuka otomatis");
+                }
+            }
+
+            // Tandai sudah cleanup hari ini
+            localStorage.setItem('ufo_admin_last_cleanup', hariIniKey);
+            console.log("✅ Auto-cleanup selesai untuk", hariIniKey);
         }
 
         // ===== RENDER =====
@@ -469,16 +678,12 @@
             if (!found) return { locked: false };
             if (!found.locked) return { locked: false };
 
-            // Cek expired
-            if (found.waktuSelesaiLock > 0) {
-                if (Date.now() >= found.waktuSelesaiLock) {
-                    // expired → auto unlock
-                    const clean = sanitizeNama(found.nama);
-                    window.dbUpdate(window.dbRef(window.db, 'mastersales/' + clean), {
-                        locked: false, alasan: "", waktuSelesaiLock: 0
-                    });
-                    return { locked: false };
-                }
+            if (found.waktuSelesaiLock > 0 && Date.now() >= found.waktuSelesaiLock) {
+                const clean = sanitizeNama(found.nama);
+                window.dbUpdate(window.dbRef(window.db, 'mastersales/' + clean), {
+                    locked: false, alasan: "", waktuSelesaiLock: 0
+                });
+                return { locked: false };
             }
             return { locked: true, alasan: found.alasan, sampai: found.waktuSelesaiLock };
         }
@@ -554,8 +759,44 @@
             }
             ringkasanEl.innerHTML = ringkasanHtml;
 
-            // ===== GROUPING =====
-            const listBawa = listHariIni.filter(a => a.aksi === "BawaCustomer").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            // Gabung: sedang melayani (dari antrian) + statistik Bawa Customer
+            const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
+            const listSedangMelayani = daftarAntrianGlobal
+                .filter(item => item.status === "Melayani")
+                .map(item => ({
+                    nama: item.nama,
+                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
+                    waktuSelesai: null,
+                    hasil: null,
+                    _sedangMelayani: true
+                }));
+
+            const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
+            const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
+            const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
+
+            let semuaBawa = [];
+            listSedangMelayani.forEach(item => semuaBawa.push(item));
+            statistikMasihProses.forEach(a => {
+                const clean = sanitizeNama(a.nama);
+                if (!namaSedangMelayani.has(clean)) {
+                    semuaBawa.push({
+                        nama: a.nama,
+                        waktuMulai: a.waktuMulai || a.waktu,
+                        waktuSelesai: null, hasil: null, _sedangMelayani: false
+                    });
+                }
+            });
+            statistikSelesai.forEach(a => {
+                semuaBawa.push({
+                    nama: a.nama,
+                    waktuMulai: a.waktuMulai || a.waktu,
+                    waktuSelesai: a.waktuSelesai,
+                    hasil: a.hasil, _sedangMelayani: false
+                });
+            });
+            semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
+
             const listIbadah = gabungRentang(listHariIni, "MulaiIbadah", "SelesaiIbadah");
             const listMakan = gabungRentang(listHariIni, "MulaiMakan", "SelesaiMakan");
             const listKeluar = listHariIni.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
@@ -564,30 +805,44 @@
             let html = "";
 
             // 1. BAWA CUSTOMER
-            if (listBawa.length > 0) {
+            if (semuaBawa.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <b>🛒 BAWA CUSTOMER</b>
-                        <span class="stat-kategori-count">${listBawa.length}</span>
-                    </div>
+                    <div class="stat-kategori-header"><b>🛒 BAWA CUSTOMER</b><span class="stat-kategori-count">${semuaBawa.length}</span></div>
                     <div class="stat-kategori-body">`;
-                listBawa.forEach(a => {
-                    const mulai = a.waktuMulai || a.waktu;
+                semuaBawa.forEach(a => {
+                    const mulai = a.waktuMulai;
                     const selesai = a.waktuSelesai;
-                    const range = selesai
-                        ? `(${formatJam(mulai)} - ${formatJam(selesai)})`
-                        : `(${formatJam(mulai)} - ...)`;
-                    const isDeal = a.hasil === "Deal";
-                    const labelHasil = isDeal ? "" : (a.hasil === "Lihat" ? ' <span style="font-size:10px; color:#64748b;">(lihat-lihat)</span>' : ' <span style="font-size:10px; color:#64748b;">(proses)</span>');
-                    const badge = isDeal
-                        ? `<span class="stat-badge-deal">✓ Deal</span>`
-                        : (a.hasil === "Lihat" ? `<span class="stat-badge-lihat">◉ Lihat</span>` : `<span class="stat-badge-pending">Proses</span>`);
+                    let range, labelHasil, badge;
+
+                    if (a._sedangMelayani) {
+                        range = `${formatJam(mulai)} – ...`;
+                        labelHasil = `<span class="stat-action-label">(melayani)</span>`;
+                        badge = `<span class="stat-badge-info">Melayani</span>`;
+                    } else if (selesai) {
+                        range = `${formatJam(mulai)} – ${formatJam(selesai)}`;
+                        if (a.hasil === "Deal") {
+                            labelHasil = "";
+                            badge = `<span class="stat-badge-deal">✓ Deal</span>`;
+                        } else if (a.hasil === "Lihat") {
+                            labelHasil = `<span class="stat-action-label">(lihat)</span>`;
+                            badge = `<span class="stat-badge-lihat">◉ Lihat</span>`;
+                        } else {
+                            labelHasil = "";
+                            badge = `<span class="stat-badge-pending">Selesai</span>`;
+                        }
+                    } else {
+                        range = `${formatJam(mulai)} – ...`;
+                        labelHasil = `<span class="stat-action-label">(proses)</span>`;
+                        badge = `<span class="stat-badge-pending">Proses</span>`;
+                    }
+
                     html += `
                         <div class="stat-detail-row">
-                            <span class="stat-detail-time">
-                                <b class="stat-action-name">${a.nama}</b>${labelHasil}
+                            <div class="stat-detail-left">
+                                <b class="stat-action-name">${a.nama}</b>
+                                ${labelHasil}
                                 <b class="stat-action-time">${range}</b>
-                            </span>
+                            </div>
                             ${badge}
                         </div>
                     `;
@@ -598,18 +853,18 @@
             // 2. IBADAH
             if (listIbadah.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <b>🕌 IBADAH</b>
-                        <span class="stat-kategori-count">${listIbadah.length}</span>
-                    </div>
+                    <div class="stat-kategori-header"><b>🕌 IBADAH</b><span class="stat-kategori-count">${listIbadah.length}</span></div>
                     <div class="stat-kategori-body">`;
                 listIbadah.forEach(a => {
+                    const range = a.selesai
+                        ? `${formatJam(a.mulai)} – ${formatJam(a.selesai)}`
+                        : `${formatJam(a.mulai)} – ...`;
                     html += `
                         <div class="stat-detail-row">
-                            <span class="stat-detail-time">
+                            <div class="stat-detail-left">
                                 <b class="stat-action-name">${a.nama}</b>
-                                <b class="stat-action-time">${a.label}</b>
-                            </span>
+                                <b class="stat-action-time">${range}</b>
+                            </div>
                             ${a.posisi ? `<span class="stat-badge-info">#${a.posisi}</span>` : ''}
                         </div>
                     `;
@@ -620,18 +875,18 @@
             // 3. WAKTU MAKAN
             if (listMakan.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <b>🍽️ WAKTU MAKAN</b>
-                        <span class="stat-kategori-count">${listMakan.length}</span>
-                    </div>
+                    <div class="stat-kategori-header"><b>🍽️ WAKTU MAKAN</b><span class="stat-kategori-count">${listMakan.length}</span></div>
                     <div class="stat-kategori-body">`;
                 listMakan.forEach(a => {
+                    const range = a.selesai
+                        ? `${formatJam(a.mulai)} – ${formatJam(a.selesai)}`
+                        : `${formatJam(a.mulai)} – ...`;
                     html += `
                         <div class="stat-detail-row">
-                            <span class="stat-detail-time">
+                            <div class="stat-detail-left">
                                 <b class="stat-action-name">${a.nama}</b>
-                                <b class="stat-action-time">${a.label}</b>
-                            </span>
+                                <b class="stat-action-time">${range}</b>
+                            </div>
                             ${a.posisi ? `<span class="stat-badge-info">#${a.posisi}</span>` : ''}
                         </div>
                     `;
@@ -642,18 +897,15 @@
             // 4. KELUAR ANTRIAN
             if (listKeluar.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <b>🚪 KELUAR ANTRIAN</b>
-                        <span class="stat-kategori-count">${listKeluar.length}</span>
-                    </div>
+                    <div class="stat-kategori-header"><b>🚪 KELUAR ANTRIAN</b><span class="stat-kategori-count">${listKeluar.length}</span></div>
                     <div class="stat-kategori-body">`;
                 listKeluar.forEach(a => {
                     html += `
                         <div class="stat-detail-row">
-                            <span class="stat-detail-time">
+                            <div class="stat-detail-left">
                                 <b class="stat-action-name">${a.nama}</b>
                                 <b class="stat-action-time">${formatJam(a.waktu)}</b>
-                            </span>
+                            </div>
                             <span class="stat-badge-info">${a.hasil || "Manual"}</span>
                         </div>
                     `;
@@ -664,18 +916,15 @@
             // 5. AUTOKICK
             if (listAutokick.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <b>⛔ AUTOKICK</b>
-                        <span class="stat-kategori-count">${listAutokick.length}</span>
-                    </div>
+                    <div class="stat-kategori-header"><b>⛔ AUTOKICK</b><span class="stat-kategori-count">${listAutokick.length}</span></div>
                     <div class="stat-kategori-body">`;
                 listAutokick.forEach(a => {
                     html += `
                         <div class="stat-detail-row">
-                            <span class="stat-detail-time">
+                            <div class="stat-detail-left">
                                 <b class="stat-action-name">${a.nama}</b>
                                 <b class="stat-action-time">${formatJam(a.waktu)}</b>
-                            </span>
+                            </div>
                             <span class="stat-badge-info">${a.kategori || a.hasil || ""}</span>
                         </div>
                     `;
@@ -698,19 +947,10 @@
                     else perNama[key].selesai = a.waktuSelesai || a.waktu;
                 }
             });
-            return Object.values(perNama)
-                .sort((a,b) => (b.mulai||0) - (a.mulai||0))
-                .map(a => {
-                    const label = a.selesai
-                        ? `(${formatJam(a.mulai)} - ${formatJam(a.selesai)})`
-                        : `(${formatJam(a.mulai)} - ...)`;
-                    return { ...a, label };
-                });
+            return Object.values(perNama).sort((a,b) => (b.mulai||0) - (a.mulai||0));
         }
 
         // ===== AKSI ADMIN =====
-
-        // ---- BUKA / TUTUP SISTEM ----
         function bukaModalToggleSistem(targetStatus) {
             document.getElementById('modal-title').innerText = targetStatus === 'BUKA' ? 'Mulai Antrian' : 'Hentikan Antrian';
             document.getElementById('modal-desc').innerHTML = `Ubah status sistem menjadi: <b>${targetStatus}</b>?`;
@@ -731,7 +971,6 @@
             }
         }
 
-        // ---- TAMBAH MASTER SALES ----
         function bukaModalTambahMasterSales() {
             document.getElementById('modal-title').innerText = "Tambah Nama Promotor Baru";
             document.getElementById('modal-desc').innerHTML = `Masukkan Nama Promotor Baru:<br><input type="text" id="input-nama-baru" placeholder="Nama Lengkap Promotor">`;
@@ -751,7 +990,6 @@
             btn.innerHTML = `<span class="spinner"></span> Menyimpan...`;
 
             try {
-                // Cek duplikat
                 const snap = await window.dbGet(window.dbRef(window.db, 'mastersales/' + clean));
                 if (snap.exists()) {
                     tutupModal();
@@ -769,7 +1007,6 @@
             }
         }
 
-        // ---- HAPUS MASTER SALES ----
         function bukaModalHapusMasterSales() {
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -802,7 +1039,6 @@
             }
         }
 
-        // ---- MASUKKAN KE ANTRIAN ----
         function bukaModalTambahAntriAdmin() {
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -835,7 +1071,6 @@
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
 
             try {
-                // Cek sudah ada?
                 const snap = await window.dbGet(window.dbRef(window.db, 'antrian/' + clean));
                 if (snap.exists()) {
                     tutupModal();
@@ -854,7 +1089,6 @@
             }
         }
 
-        // ---- KELUARKAN DARI ANTRIAN ----
         function bukaModalKeluarkanAntrian() {
             if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -879,7 +1113,6 @@
 
             try {
                 await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
-                // Catat aktivitas
                 await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
                     nama: nama, aksi: "KeluarAntrian", waktu: Date.now(),
                     tanggal: getTanggalIndo(), hasil: "Admin"
@@ -892,7 +1125,6 @@
             }
         }
 
-        // ---- PAKSA BAWA CUSTOMER ----
         function bukaModalPaksaBawaCustomer() {
             if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -932,7 +1164,6 @@
             }
         }
 
-        // ---- LOCK / UNLOCK PROMOTOR ----
         function bukaModalLockPromotorAdmin() {
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -991,7 +1222,6 @@
                     await window.dbUpdate(window.dbRef(window.db, 'mastersales/' + clean), {
                         locked: true, alasan: alasan, waktuSelesaiLock: waktuSelesai
                     });
-                    // Hapus dari antrian jika ada
                     await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
                     tutupModal();
                     tampilkanModal("Berhasil", `${nama} dikunci ${durasi} menit.`);
@@ -1008,22 +1238,18 @@
             }
         }
 
-        // ---- RESET DEVICE ----
         function bukaModalResetDeviceAdmin() {
             document.getElementById('modal-title').innerText = "Reset Kunci Perangkat Promotor";
             document.getElementById('modal-desc').innerHTML = `
                 <div style="font-size:13px;">
-                    Fitur ini akan menghapus kunci perangkat promotor. Karena sekarang sistem sudah 1 HP 1 promotor (tanpa device binding), fitur ini <b>tidak diperlukan lagi</b>.<br><br>
-                    Kalau promotor mau ganti nama di HP, cukup buka halaman promotor → logout → pilih nama lain. Tidak perlu reset dari admin.
+                    Fitur ini tidak diperlukan lagi karena sistem sudah 1 HP 1 promotor (tanpa device binding).<br><br>
+                    Kalau promotor mau ganti nama di HP: buka halaman promotor → logout → pilih nama lain.
                 </div>
             `;
-            document.getElementById('modal-actions').innerHTML = `
-                <button type="button" onclick="tutupModal()">Mengerti</button>
-            `;
+            document.getElementById('modal-actions').innerHTML = `<button type="button" onclick="tutupModal()">Mengerti</button>`;
             document.getElementById('custom-modal').classList.add('active');
         }
 
-        // ---- RESET TOTAL ----
         function bukaModalResetTotal() {
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
             document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. Lanjutkan?`;
@@ -1041,7 +1267,6 @@
             try {
                 await window.dbRemove(window.dbRef(window.db, 'antrian'));
 
-                // Hapus statistik hari ini
                 const hariIni = getTanggalIndo();
                 const snapshot = await window.dbGet(window.dbRef(window.db, 'statistikAktivitas'));
                 if (snapshot.exists()) {
@@ -1065,10 +1290,8 @@
             }
         }
 
-        // ---- GPS TOKO ----
         function toggleGPSAdmin(aktif) {
             if (!aktif) {
-                // Matikan GPS
                 if (!confirm("Matikan validasi GPS toko?")) return;
                 window.dbUpdate(window.dbRef(window.db, 'setting'), {
                     latToko: "", lngToko: "", radiusToko: 50
@@ -1080,7 +1303,6 @@
                 return;
             }
 
-            // Aktifkan GPS
             if (!navigator.geolocation) {
                 tampilkanModal("Gagal", "Browser tidak mendukung GPS.");
                 return;
@@ -1100,7 +1322,7 @@
                     }).then(() => {
                         btnOn.disabled = false;
                         btnOn.innerHTML = asli;
-                        tampilkanModal("GPS Diaktifkan", "Titik GPS toko berhasil disimpan dari perangkat Anda (radius 50m).");
+                        tampilkanModal("GPS Diaktifkan", "Titik GPS toko berhasil disimpan (radius 50m).");
                     }).catch(() => {
                         btnOn.disabled = false;
                         btnOn.innerHTML = asli;
