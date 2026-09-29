@@ -804,12 +804,17 @@
         }
 
         // MAKAN
-        // MAKAN
-        function aksiToggleMakan() {
+      function aksiToggleMakan() {
             const akun = getAkunAktif();
             const clean = sanitizeNama(akun);
             const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
             const statusNow = itemSaya ? itemSaya.status : "";
+
+            // Cek apakah hari ini sudah pernah makan
+            if (localStorage.getItem('ufo_sudah_makan_' + clean) === 'true') {
+                tampilkanModal("Perhatian", "Anda sudah menggunakan jatah waktu makan hari ini!");
+                return;
+            }
 
             if (statusNow === "Standby") {
                 tampilkanModalKonfirmasi("Waktu Makan", "Posisi antrian utama Anda akan dikunci sementara selama waktu makan. Lanjutkan?", () => {
@@ -821,7 +826,6 @@
                     }).then(() => { catatAktivitas(akun, "MulaiMakan", ""); });
                 });
             } else {
-                // Apa pun statusnya selain Standby (termasuk Waktu Makan), langsung kembalikan ke Standby
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Standby",
                     timerMulai: 0,
@@ -829,7 +833,6 @@
                 }).then(() => { catatAktivitas(akun, "SelesaiMakan", ""); });
             }
         }
-
         // CLOSING / DEAL / LIHAT
         function aksiSelesaiClosing() {
             document.getElementById('modal-title').innerText = "Hasil Melayani Customer";
