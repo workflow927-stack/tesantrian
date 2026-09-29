@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="#">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- FIREBASE SDK -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getDatabase, ref, set, get, update, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -141,7 +140,7 @@
         body.dark-mode .stat-kategori-card { background: linear-gradient(145deg, #140205 0%, #0a0103 100%) !important; border: 2px solid #ff1f3d !important; }
 
         .stat-kategori-header {
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 10px;
             padding: 10px 14px;
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             border-bottom: 1px solid #e2e8f0;
@@ -154,6 +153,32 @@
             color: #ffb3bc !important;
         }
         .stat-kategori-header b { flex: 1; }
+
+        /* ===== ICON SVG MODERN ===== */
+        .stat-kategori-icon {
+            width: 26px; height: 26px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 8px; flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .stat-kategori-icon svg {
+            width: 14px; height: 14px;
+            stroke: #ffffff; stroke-width: 2.2; fill: none;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .stat-kategori-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-kategori-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .stat-kategori-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .stat-kategori-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-kategori-icon.maroon { background: linear-gradient(135deg, #991b1b, #7f1d1d); }
+
+        body.dark-mode .stat-kategori-icon.green { box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); }
+        body.dark-mode .stat-kategori-icon.red { box-shadow: 0 0 12px rgba(239, 68, 68, 0.7); }
+        body.dark-mode .stat-kategori-icon.purple { box-shadow: 0 0 12px rgba(139, 92, 246, 0.7); }
+        body.dark-mode .stat-kategori-icon.amber { box-shadow: 0 0 12px rgba(245, 158, 11, 0.7); }
+        body.dark-mode .stat-kategori-icon.maroon { box-shadow: 0 0 12px rgba(153, 27, 27, 0.7); }
+
         .stat-kategori-count { background: #0f172a; color: #ffffff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
         body.dark-mode .stat-kategori-count { background: #99001f; border: 1px solid #ff1f3d; }
 
@@ -178,7 +203,6 @@
         .stat-detail-row:last-child { border-bottom: none; }
         body.dark-mode .stat-detail-row { color: #ffb3bc !important; border-bottom-color: #50000e !important; }
 
-        /* Kolom kiri: nama + waktu */
         .stat-detail-left {
             display: flex;
             align-items: center;
@@ -227,7 +251,6 @@
             background: #50000e !important;
         }
 
-        /* Badge */
         .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info {
             display: inline-flex;
             align-items: center;
@@ -252,7 +275,6 @@
         body.dark-mode .stat-badge-pending { background: linear-gradient(135deg, #50000e, #2b0007) !important; color: #ffb3bc !important; border: 1px solid #ff1f3d; }
         body.dark-mode .stat-badge-info { background: linear-gradient(135deg, #1e3a8a, #1e40af) !important; color: #93c5fd !important; border: 1px solid #3b82f6; }
 
-        /* Responsif HP kecil */
         @media (max-width: 480px) {
             .stat-action-name { max-width: 80px; font-size: 11px; }
             .stat-action-time { font-size: 10px; padding: 2px 6px; }
@@ -356,7 +378,7 @@
         <div class="modal-box">
             <div id="modal-title" class="modal-title">Pemberitahuan</div>
             <div id="modal-desc" class="modal-desc">Isi pesan...</div>
-            <div id="modal-actions" class="modal-actions">
+            <div class="modal-actions" id="modal-actions">
                 <button type="button" onclick="tutupModal()">OK</button>
             </div>
         </div>
@@ -375,6 +397,16 @@
         let savedPinAdmin = "";
         let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null;
         let timerCekGantiHari = null;
+
+        // ===== ICON SVG MODERN =====
+        const ICON = {
+            BAWA: `<svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+            IBADAH: `<svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>`,
+            MAKAN: `<svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg>`,
+            KELUAR: `<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+            AUTOKICK: `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>`,
+            CHECK: `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+        };
 
         // ===== HELPERS =====
         function sanitizeNama(nama) {
@@ -500,8 +532,6 @@
                 prosesMasterSales(snapshot.val());
             });
 
-            // ✅ AUTO-CLEANUP: cek tiap 30 detik kalau sudah ganti hari
-            // Kalau belum pernah cleanup hari ini, jalankan
             cekDanJalankanAutoCleanup();
             if (timerCekGantiHari) clearInterval(timerCekGantiHari);
             timerCekGantiHari = setInterval(cekDanJalankanAutoCleanup, 30000);
@@ -535,25 +565,19 @@
             masterSalesGlobal.sort((a,b) => a.nama.localeCompare(b.nama));
         }
 
-        // ============================================================
-        // ✅ AUTO-CLEANUP SETIAP GANTI HARI (jam 00:01)
-        // ============================================================
+        // ===== AUTO-CLEANUP =====
         async function cekDanJalankanAutoCleanup() {
             try {
                 const hariIniKey = getTanggalKey();
                 const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
-
-                // Kalau sudah cleanup hari ini, skip
                 if (lastCleanup === hariIniKey) return;
 
-                // Sekarang jam berapa?
                 const now = new Date();
                 const jam = now.getHours();
                 const menit = now.getMinutes();
 
-                // Jalankan cleanup kalau sudah lewat jam 00:01
                 if (jam > 0 || (jam === 0 && menit >= 1)) {
-                    console.log("🧹 Menjalankan auto-cleanup untuk tanggal:", hariIniKey);
+                    console.log("🧹 Auto-cleanup tanggal:", hariIniKey);
                     await jalankanAutoCleanup(hariIniKey);
                 }
             } catch (e) {
@@ -564,7 +588,6 @@
         async function jalankanAutoCleanup(hariIniKey) {
             const db = window.db;
 
-            // 1. Bersihkan antrian yang waktuStandby-nya bukan hari ini
             const snapAntrian = await window.dbGet(window.dbRef(db, 'antrian'));
             if (snapAntrian.exists()) {
                 const data = snapAntrian.val();
@@ -573,45 +596,18 @@
                 const startToday = awalHariIni.getTime();
 
                 const updates = {};
-                let jumlahDibersihkan = 0;
-
                 Object.keys(data).forEach(key => {
                     const item = data[key];
                     if (!item) return;
-                    // Kalau waktuStandby sebelum awal hari ini → antrian kemarin
                     if (item.waktuStandby && item.waktuStandby < startToday) {
                         updates['antrian/' + key] = null;
-                        jumlahDibersihkan++;
-                    }
-                });
-
-                if (jumlahDibersihkan > 0) {
-                    await window.dbUpdate(window.dbRef(db), updates);
-                    console.log(`🧹 ${jumlahDibersihkan} antrian kemarin dibersihkan`);
-                }
-            }
-
-            // 2. Bersihkan statistik aktivitas yang bukan hari ini (opsional, bisa dimatikan)
-            // CATATAN: Kalau mau simpan history, jangan hapus bagian ini.
-            // Kalau mau hemat storage, aktifkan.
-            /*
-            const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
-            if (snapStat.exists()) {
-                const data = snapStat.val();
-                const hariIniIndo = getTanggalIndo();
-                const updates = {};
-                Object.keys(data).forEach(k => {
-                    if (data[k] && data[k].tanggal !== hariIniIndo) {
-                        updates['statistikAktivitas/' + k] = null;
                     }
                 });
                 if (Object.keys(updates).length > 0) {
                     await window.dbUpdate(window.dbRef(db), updates);
                 }
             }
-            */
 
-            // 3. Unlock promotor yang waktu lock-nya sudah habis
             const snapMaster = await window.dbGet(window.dbRef(db, 'mastersales'));
             if (snapMaster.exists()) {
                 const data = snapMaster.val();
@@ -627,13 +623,11 @@
                 });
                 if (Object.keys(updates).length > 0) {
                     await window.dbUpdate(window.dbRef(db), updates);
-                    console.log("🔓 Lock promotor yang expired dibuka otomatis");
                 }
             }
 
-            // Tandai sudah cleanup hari ini
             localStorage.setItem('ufo_admin_last_cleanup', hariIniKey);
-            console.log("✅ Auto-cleanup selesai untuk", hariIniKey);
+            console.log("✅ Auto-cleanup selesai:", hariIniKey);
         }
 
         // ===== RENDER =====
@@ -748,7 +742,7 @@
 
             if (listHariIni.length === 0) {
                 ringkasanEl.innerHTML = `<i>Belum ada aktivitas hari ini.</i>`;
-                listEl.innerHTML = `<li><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
+                listEl.innerHTML = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
                 return;
             }
 
@@ -759,16 +753,13 @@
             }
             ringkasanEl.innerHTML = ringkasanHtml;
 
-            // Gabung: sedang melayani (dari antrian) + statistik Bawa Customer
             const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
             const listSedangMelayani = daftarAntrianGlobal
                 .filter(item => item.status === "Melayani")
                 .map(item => ({
                     nama: item.nama,
                     waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
-                    waktuSelesai: null,
-                    hasil: null,
-                    _sedangMelayani: true
+                    waktuSelesai: null, hasil: null, _sedangMelayani: true
                 }));
 
             const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
@@ -781,18 +772,15 @@
                 const clean = sanitizeNama(a.nama);
                 if (!namaSedangMelayani.has(clean)) {
                     semuaBawa.push({
-                        nama: a.nama,
-                        waktuMulai: a.waktuMulai || a.waktu,
+                        nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
                         waktuSelesai: null, hasil: null, _sedangMelayani: false
                     });
                 }
             });
             statistikSelesai.forEach(a => {
                 semuaBawa.push({
-                    nama: a.nama,
-                    waktuMulai: a.waktuMulai || a.waktu,
-                    waktuSelesai: a.waktuSelesai,
-                    hasil: a.hasil, _sedangMelayani: false
+                    nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+                    waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false
                 });
             });
             semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
@@ -807,7 +795,11 @@
             // 1. BAWA CUSTOMER
             if (semuaBawa.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header"><b>🛒 BAWA CUSTOMER</b><span class="stat-kategori-count">${semuaBawa.length}</span></div>
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon green">${ICON.BAWA}</span>
+                        <b>BAWA CUSTOMER</b>
+                        <span class="stat-kategori-count">${semuaBawa.length}</span>
+                    </div>
                     <div class="stat-kategori-body">`;
                 semuaBawa.forEach(a => {
                     const mulai = a.waktuMulai;
@@ -853,7 +845,11 @@
             // 2. IBADAH
             if (listIbadah.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header"><b>🕌 IBADAH</b><span class="stat-kategori-count">${listIbadah.length}</span></div>
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon purple">${ICON.IBADAH}</span>
+                        <b>IBADAH</b>
+                        <span class="stat-kategori-count">${listIbadah.length}</span>
+                    </div>
                     <div class="stat-kategori-body">`;
                 listIbadah.forEach(a => {
                     const range = a.selesai
@@ -875,7 +871,11 @@
             // 3. WAKTU MAKAN
             if (listMakan.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header"><b>🍽️ WAKTU MAKAN</b><span class="stat-kategori-count">${listMakan.length}</span></div>
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon amber">${ICON.MAKAN}</span>
+                        <b>WAKTU MAKAN</b>
+                        <span class="stat-kategori-count">${listMakan.length}</span>
+                    </div>
                     <div class="stat-kategori-body">`;
                 listMakan.forEach(a => {
                     const range = a.selesai
@@ -897,7 +897,11 @@
             // 4. KELUAR ANTRIAN
             if (listKeluar.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header"><b>🚪 KELUAR ANTRIAN</b><span class="stat-kategori-count">${listKeluar.length}</span></div>
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon red">${ICON.KELUAR}</span>
+                        <b>KELUAR ANTRIAN</b>
+                        <span class="stat-kategori-count">${listKeluar.length}</span>
+                    </div>
                     <div class="stat-kategori-body">`;
                 listKeluar.forEach(a => {
                     html += `
@@ -916,7 +920,11 @@
             // 5. AUTOKICK
             if (listAutokick.length > 0) {
                 html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header"><b>⛔ AUTOKICK</b><span class="stat-kategori-count">${listAutokick.length}</span></div>
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon maroon">${ICON.AUTOKICK}</span>
+                        <b>AUTOKICK (PELANGGARAN / ADMIN)</b>
+                        <span class="stat-kategori-count">${listAutokick.length}</span>
+                    </div>
                     <div class="stat-kategori-body">`;
                 listAutokick.forEach(a => {
                     html += `
@@ -932,7 +940,47 @@
                 html += `</div></li>`;
             }
 
-            listEl.innerHTML = html || `<li><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
+            // Placeholder kalau kosong (untuk kategori yang tidak ada isinya)
+            if (!html) {
+                html = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
+            }
+
+            // Tambahkan placeholder kosong untuk kategori yang tidak muncul
+            const placeholderIbadah = listIbadah.length === 0 ? `
+                <li class="stat-kategori-card" style="opacity:0.5;">
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon purple">${ICON.IBADAH}</span>
+                        <b>IBADAH</b>
+                        <span class="stat-kategori-count">0</span>
+                    </div>
+                    <div class="stat-kategori-body">
+                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Belum ada aktivitas ibadah</div>
+                    </div>
+                </li>` : "";
+            const placeholderMakan = listMakan.length === 0 ? `
+                <li class="stat-kategori-card" style="opacity:0.5;">
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon amber">${ICON.MAKAN}</span>
+                        <b>WAKTU MAKAN</b>
+                        <span class="stat-kategori-count">0</span>
+                    </div>
+                    <div class="stat-kategori-body">
+                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Belum ada aktivitas makan</div>
+                    </div>
+                </li>` : "";
+            const placeholderAutokick = listAutokick.length === 0 ? `
+                <li class="stat-kategori-card" style="opacity:0.5;">
+                    <div class="stat-kategori-header">
+                        <span class="stat-kategori-icon maroon">${ICON.AUTOKICK}</span>
+                        <b>AUTOKICK (PELANGGARAN / ADMIN)</b>
+                        <span class="stat-kategori-count">0</span>
+                    </div>
+                    <div class="stat-kategori-body">
+                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Tidak ada pelanggaran hari ini 👍</div>
+                    </div>
+                </li>` : "";
+
+            listEl.innerHTML = html + placeholderIbadah + placeholderMakan + placeholderAutokick;
         }
 
         function gabungRentang(list, aksiMulai, aksiSelesai) {
@@ -1338,7 +1386,6 @@
             );
         }
 
-        // ===== DARK MODE =====
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
@@ -1355,7 +1402,6 @@
             if (btn) btn.innerHTML = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
         }
 
-        // ===== MODAL =====
         function tampilkanModal(judul, pesan) {
             document.getElementById('modal-title').innerText = judul;
             document.getElementById('modal-desc').innerHTML = String(pesan).replace(/\n/g, '<br>');
@@ -1364,7 +1410,6 @@
         }
         function tutupModal() { document.getElementById('custom-modal').classList.remove('active'); }
 
-        // Ekspos ke global
         window.prosesLoginAdmin = prosesLoginAdmin;
         window.logoutAdmin = logoutAdmin;
         window.bukaModalToggleSistem = bukaModalToggleSistem;
