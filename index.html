@@ -14,17 +14,16 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getDatabase, ref, set, get, update, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-      // ⚠️ GANTI DENGAN KONFIGURASI DARI FIREBASE CONSOLE ANDA
-   const firebaseConfig = {
-  apiKey: "AIzaSyBwMpFtET1sub8OPyfR_g7XDJYHjKSiFBI",
-  authDomain: "antrian-walk-in.firebaseapp.com",
-  databaseURL: "https://antrian-walk-in-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "antrian-walk-in",
-  storageBucket: "antrian-walk-in.firebasestorage.app",
-  messagingSenderId: "229095316838",
-  appId: "1:229095316838:web:72c12839919c06d162fca7",
-  measurementId: "G-DKW3HEC8GD"
-};
+      const firebaseConfig = {
+        apiKey: "AIzaSyBwMpFtET1sub8OPyfR_g7XDJYHjKSiFBI",
+        authDomain: "antrian-walk-in.firebaseapp.com",
+        databaseURL: "https://antrian-walk-in-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "antrian-walk-in",
+        storageBucket: "antrian-walk-in.firebasestorage.app",
+        messagingSenderId: "229095316838",
+        appId: "1:229095316838:web:72c12839919c06d162fca7",
+        measurementId: "G-DKW3HEC8GD"
+      };
 
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
@@ -646,8 +645,8 @@
             setInterval(() => { updateTimerTombol(); }, 1000);
         });
 
-        // ⚡ REAL-TIME DATABASE LISTENERS
-       function inisialisasiRealtimeFirebase() {
+        // ⚡ REAL-TIME DATABASE LISTENERS (Universal Path Scanner untuk masterSales)
+        function inisialisasiRealtimeFirebase() {
             const db = window.db;
 
             // 1. Antrian
@@ -660,29 +659,35 @@
                 renderUIRental();
             });
 
-            // 2. Master Sales (Mendukung struktur array dari JSON Anda)
-            window.dbOnValue(window.dbRef(db, 'masterSales'), (snapshot) => {
-                const dataRaw = snapshot.val();
-                masterSalesGlobal = [];
-                let selectHtml = '<option value="">-- Pilih Nama Anda --</option>';
-                
-                if (dataRaw) {
-                    // Cek apakah strukturnya berupa array (bungkusan "data") atau objek biasa
+            // 2. Master Sales - Pindai Universal dari berbagai variasi path impor JSON
+            ['mastersales', 'masterSales', 'master_sales', 'data'].forEach(nodePath => {
+                window.dbOnValue(window.dbRef(db, nodePath), (snapshot) => {
+                    const dataRaw = snapshot.val();
+                    if (!dataRaw) return;
+
+                    let selectHtml = '<option value="">-- Pilih Nama Anda --</option>';
                     let listSales = Array.isArray(dataRaw) ? dataRaw : (dataRaw.data || Object.values(dataRaw));
                     
+                    let foundAny = false;
                     listSales.forEach(item => {
                         let salesObj = item.record || item;
-                        let nama = salesObj.NAMA_PROMOTOR || salesObj.nama;
+                        let nama = salesObj.NAMA_PROMOTOR || salesObj.nama || salesObj.Nama_Sales;
+                        
                         if (nama && typeof nama === 'string' && nama.trim() !== "") {
+                            foundAny = true;
                             masterSalesGlobal.push({ nama: nama, ...salesObj });
                             selectHtml += `<option value="${nama}">${nama}</option>`;
                         }
                     });
-                }
-                
-                const selectEl = document.getElementById('pilih-sales');
-                if (selectEl) selectEl.innerHTML = selectHtml;
-                renderUIRental();
+
+                    if (foundAny) {
+                        const selectEl = document.getElementById('pilih-sales');
+                        if (selectEl && selectEl.options.length <= 1) {
+                            selectEl.innerHTML = selectHtml;
+                        }
+                    }
+                    renderUIRental();
+                });
             });
 
             // 3. Setting & Koordinat Toko
