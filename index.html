@@ -804,6 +804,7 @@
         }
 
         // MAKAN
+        // MAKAN
         function aksiToggleMakan() {
             const akun = getAkunAktif();
             const clean = sanitizeNama(akun);
@@ -819,7 +820,8 @@
                         timerAksi: "Makan"
                     }).then(() => { catatAktivitas(akun, "MulaiMakan", ""); });
                 });
-            } else if (statusNow === "Waktu Makan") {
+            } else {
+                // Apa pun statusnya selain Standby (termasuk Waktu Makan), langsung kembalikan ke Standby
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Standby",
                     timerMulai: 0,
