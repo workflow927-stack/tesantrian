@@ -15,24 +15,16 @@
       import { getDatabase, ref, set, get, update, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
       // ⚠️ GANTI DENGAN KONFIGURASI DARI FIREBASE CONSOLE ANDA
-     const firebaseConfig = {
-
+   const firebaseConfig = {
   apiKey: "AIzaSyBwMpFtET1sub8OPyfR_g7XDJYHjKSiFBI",
-
   authDomain: "antrian-walk-in.firebaseapp.com",
-
+  databaseURL: "https://antrian-walk-in-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "antrian-walk-in",
-
   storageBucket: "antrian-walk-in.firebasestorage.app",
-
   messagingSenderId: "229095316838",
-
   appId: "1:229095316838:web:72c12839919c06d162fca7",
-
   measurementId: "G-DKW3HEC8GD"
-
 };
-
 
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
