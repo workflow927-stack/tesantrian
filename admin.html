@@ -363,7 +363,6 @@
             <div class="admin-grid">
                 <button type="button" class="btn-black-custom" onclick="bukaModalPaksaBawaCustomer()">Paksa Bawa Customer</button>
                 <button type="button" onclick="bukaModalLockPromotorAdmin()">Kontrol Hukuman / Lock Akun</button>
-                <button type="button" onclick="bukaModalResetDeviceAdmin()">Reset Kunci Perangkat Promotor</button>
                 <button type="button" onclick="bukaModalResetTotal()">Reset Seluruh Antrian Aktif</button>
             </div>
 
@@ -1364,18 +1363,7 @@
             }
         }
 
-        function bukaModalResetDeviceAdmin() {
-            document.getElementById('modal-title').innerText = "Reset Kunci Perangkat Promotor";
-            document.getElementById('modal-desc').innerHTML = `
-                <div style="font-size:13px;">
-                    Fitur ini tidak diperlukan lagi karena sistem sudah 1 HP 1 promotor (tanpa device binding).<br><br>
-                    Kalau promotor mau ganti nama di HP: buka halaman promotor → logout → pilih nama lain.
-                </div>
-            `;
-            document.getElementById('modal-actions').innerHTML = `<button type="button" onclick="tutupModal()">Mengerti</button>`;
-            document.getElementById('custom-modal').classList.add('active');
-        }
-
+        
         function bukaModalResetTotal() {
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
             document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. Lanjutkan?`;
@@ -1505,7 +1493,6 @@
         window.bukaModalLockPromotorAdmin = bukaModalLockPromotorAdmin;
         window.toggleAlasanLockField = toggleAlasanLockField;
         window.eksekusiLockPromotorAdmin = eksekusiLockPromotorAdmin;
-        window.bukaModalResetDeviceAdmin = bukaModalResetDeviceAdmin;
         window.bukaModalResetTotal = bukaModalResetTotal;
         window.eksekusiResetTotal = eksekusiResetTotal;
         window.toggleGPSAdmin = toggleGPSAdmin;
