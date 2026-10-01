@@ -79,9 +79,9 @@
 
         .input-group { margin-bottom: 18px; text-align: left; }
         .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
-        select, input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #ffffff; font-size: 14px; font-weight: 500; color: var(--text-main); outline: none; }
+        select, input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="time"] { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #ffffff; font-size: 14px; font-weight: 500; color: var(--text-main); outline: none; }
         body.dark-mode select, body.dark-mode input { background: #2b0007 !important; color: #ffffff !important; border: 2px solid #ff1f3d !important; }
-        input[type="text"], input[type="password"], input[type="number"] { background-image: none; cursor: text; }
+        input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="time"] { background-image: none; cursor: text; }
 
         button { width: 100%; padding: 12px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid #b91c1c; text-transform: uppercase; display: inline-flex; justify-content: center; align-items: center; gap: 8px; background: #dc2626 !important; color: #ffffff !important; }
         button:hover { background: #b91c1c !important; }
@@ -117,7 +117,7 @@
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.2s; padding: 16px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-box { background: white; width: 100%; max-width: 400px; padding: 28px; border-radius: 16px; text-align: center; border: 1px solid var(--border); }
+        .modal-box { background: white; width: 100%; max-width: 400px; padding: 28px; border-radius: 16px; text-align: center; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
         body.dark-mode .modal-box { background: #2b0007 !important; border: 3px solid #ff1f3d !important; color: #ffffff !important; }
         .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
         .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; text-align: left; font-weight: 500; }
@@ -128,7 +128,6 @@
 
         @media (max-width: 480px) { .timer-box-wrapper { grid-template-columns: 1fr; } }
 
-        /* ===== KARTU STATISTIK ===== */
         .stat-kategori-card {
             display: flex !important; flex-direction: column !important;
             padding: 0 !important; gap: 0 !important;
@@ -180,10 +179,7 @@
         .stat-kategori-count { background: #0f172a; color: #ffffff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
         body.dark-mode .stat-kategori-count { background: #99001f; border: 1px solid #ff1f3d; }
 
-        .stat-kategori-body {
-            display: flex; flex-direction: column;
-            padding: 6px 14px 10px 14px;
-        }
+        .stat-kategori-body { display: flex; flex-direction: column; padding: 6px 14px 10px 14px; }
 
         .stat-detail-row {
             display: flex;
@@ -200,68 +196,37 @@
         .stat-detail-row:last-child { border-bottom: none; }
         body.dark-mode .stat-detail-row { color: #ffb3bc !important; border-bottom-color: #50000e !important; }
 
-        .stat-detail-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            min-width: 0;
-        }
+        .stat-detail-left { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
 
         .stat-action-name {
-            color: #0f172a;
-            font-weight: 800;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 110px;
-            flex-shrink: 1;
-            min-width: 0;
+            color: #0f172a; font-weight: 800; font-size: 12px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            max-width: 110px; flex-shrink: 1; min-width: 0;
         }
         body.dark-mode .stat-action-name { color: #ffffff !important; }
 
         .stat-action-label {
-            font-size: 10px;
-            color: #94a3b8;
-            font-weight: 700;
-            white-space: nowrap;
-            flex-shrink: 0;
-            font-style: italic;
+            font-size: 10px; color: #94a3b8; font-weight: 700;
+            white-space: nowrap; flex-shrink: 0; font-style: italic;
         }
         body.dark-mode .stat-action-label { color: #ffb3bc !important; }
 
         .stat-action-time {
-            color: #0f172a;
-            font-weight: 800;
-            font-size: 11px;
+            color: #0f172a; font-weight: 800; font-size: 11px;
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-            white-space: nowrap;
-            letter-spacing: -0.2px;
-            flex-shrink: 0;
-            background: #f1f5f9;
-            padding: 3px 8px;
-            border-radius: 6px;
+            white-space: nowrap; letter-spacing: -0.2px;
+            flex-shrink: 0; background: #f1f5f9;
+            padding: 3px 8px; border-radius: 6px;
         }
-        body.dark-mode .stat-action-time {
-            color: #ffffff !important;
-            background: #50000e !important;
-        }
+        body.dark-mode .stat-action-time { color: #ffffff !important; background: #50000e !important; }
 
         .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 9.5px;
-            font-weight: 800;
-            padding: 4px 9px;
-            border-radius: 20px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            min-width: 58px;
-            justify-content: center;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 9.5px; font-weight: 800;
+            padding: 4px 9px; border-radius: 20px;
+            white-space: nowrap; flex-shrink: 0;
+            text-transform: uppercase; letter-spacing: 0.4px;
+            min-width: 58px; justify-content: center;
         }
         .stat-badge-deal { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; }
         .stat-badge-lihat { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; }
@@ -395,7 +360,6 @@
         let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null;
         let timerCekGantiHari = null;
 
-        // ===== ICON SVG MODERN =====
         const ICON = {
             BAWA: `<svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
             IBADAH: `<svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>`,
@@ -405,7 +369,6 @@
             CHECK: `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
         };
 
-        // ===== HELPERS =====
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
@@ -422,7 +385,6 @@
             return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
         }
 
-        // ===== INIT =====
         window.addEventListener('firebase-ready', () => {
             initDarkMode();
             savedPinAdmin = localStorage.getItem('ufo_admin_pin') || "";
@@ -436,7 +398,6 @@
             }
         });
 
-        // ===== LOGIN =====
         async function prosesLoginAdmin() {
             const pin = document.getElementById('input-pin-admin').value.trim();
             if (!pin) { tampilkanModal("Perhatian", "Masukkan PIN Admin!"); return; }
@@ -481,7 +442,6 @@
             document.getElementById('controls-admin-box').style.display = 'none';
         }
 
-        // ===== FIREBASE LISTENERS =====
         function mulaiListenerFirebase() {
             const db = window.db;
 
@@ -525,12 +485,10 @@
                 renderStatistikAdmin();
             });
 
-            // Master sales dari node 'data'
             unsubMaster = window.dbOnValue(window.dbRef(db, 'data'), snapshot => {
                 prosesMasterSales(snapshot.val());
             });
 
-            // Lock status dari node 'lockPromotor'
             unsubLock = window.dbOnValue(window.dbRef(db, 'lockPromotor'), snapshot => {
                 lockGlobal = snapshot.val() || {};
                 applyLockToMaster();
@@ -559,21 +517,16 @@
             arr.forEach(item => {
                 let salesObj = item;
                 if (item && item.record) salesObj = item.record;
-
                 if (typeof salesObj === 'string') {
                     masterSalesGlobal.push({ nama: salesObj, locked: false, alasan: "", waktuSelesaiLock: 0 });
                 } else if (salesObj && (salesObj.nama || salesObj.NAMA_PROMOTOR || salesObj.Nama_Sales)) {
                     const nama = salesObj.nama || salesObj.NAMA_PROMOTOR || salesObj.Nama_Sales;
                     masterSalesGlobal.push({
                         nama: String(nama).trim(),
-                        locked: false,
-                        alasan: "",
-                        waktuSelesaiLock: 0
+                        locked: false, alasan: "", waktuSelesaiLock: 0
                     });
                 }
             });
-
-            // Buang duplikat nama
             const seen = new Set();
             masterSalesGlobal = masterSalesGlobal.filter(s => {
                 const key = s.nama.toLowerCase();
@@ -582,7 +535,6 @@
                 return true;
             });
             masterSalesGlobal.sort((a,b) => a.nama.localeCompare(b.nama));
-
             applyLockToMaster();
         }
 
@@ -592,8 +544,11 @@
                 const clean = sanitizeNama(s.nama);
                 const lockData = lockGlobal[clean];
                 if (lockData && lockData.locked) {
+                    const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
                     const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
-                    if (waktuExpired === 0 || now < waktuExpired) {
+                    const sudahMulai = waktuMulai === 0 || now >= waktuMulai;
+                    const belumExpired = waktuExpired === 0 || now < waktuExpired;
+                    if (sudahMulai && belumExpired) {
                         s.locked = true;
                         s.alasan = lockData.alasan || "";
                         s.waktuSelesaiLock = waktuExpired;
@@ -610,17 +565,14 @@
             });
         }
 
-        // ===== AUTO-CLEANUP =====
         async function cekDanJalankanAutoCleanup() {
             try {
                 const hariIniKey = getTanggalKey();
                 const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
                 if (lastCleanup === hariIniKey) return;
-
                 const now = new Date();
                 const jam = now.getHours();
                 const menit = now.getMinutes();
-
                 if (jam > 0 || (jam === 0 && menit >= 1)) {
                     console.log("🧹 Auto-cleanup tanggal:", hariIniKey);
                     await jalankanAutoCleanup(hariIniKey);
@@ -633,28 +585,42 @@
         async function jalankanAutoCleanup(hariIniKey) {
             const db = window.db;
 
-            // Hapus antrian kemarin
             const snapAntrian = await window.dbGet(window.dbRef(db, 'antrian'));
             if (snapAntrian.exists()) {
                 const data = snapAntrian.val();
                 const awalHariIni = new Date();
                 awalHariIni.setHours(0, 0, 0, 0);
                 const startToday = awalHariIni.getTime();
-
                 const updates = {};
+                const promotorNyangkut = [];
                 Object.keys(data).forEach(key => {
                     const item = data[key];
                     if (!item) return;
                     if (item.waktuStandby && item.waktuStandby < startToday) {
                         updates['antrian/' + key] = null;
+                        promotorNyangkut.push(item.nama);
                     }
                 });
                 if (Object.keys(updates).length > 0) {
                     await window.dbUpdate(window.dbRef(db), updates);
                 }
+
+                // Auto-lock pending hukuman
+                for (const nama of promotorNyangkut) {
+                    const clean = sanitizeNama(nama);
+                    const cekLock = await window.dbGet(window.dbRef(db, 'lockPromotor/' + clean));
+                    if (cekLock.exists() && cekLock.val().locked) continue;
+
+                    await window.dbUpdate(window.dbRef(db, 'pendingHukuman/' + clean), {
+                        nama: nama,
+                        alasan: "Pulang tanpa keluar antrian",
+                        waktuDeteksi: Date.now(),
+                        status: "pending"
+                    });
+                }
             }
 
-            // Unlock promotor expired di 'lockPromotor'
+            // Unlock promotor expired
             const snapLock = await window.dbGet(window.dbRef(db, 'lockPromotor'));
             if (snapLock.exists()) {
                 const data = snapLock.val();
@@ -677,12 +643,10 @@
             console.log("✅ Auto-cleanup selesai:", hariIniKey);
         }
 
-        // ===== RENDER =====
         function renderStatusSistem() {
             const badge = document.getElementById('badge-status-sistem');
             badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS: OPEN" : "STATUS: CLOSED";
             badge.className = statusSistemGlobal === "BUKA" ? "status-badge status-open" : "status-badge status-closed";
-
             const btnBuka = document.getElementById('btn-buka-sistem');
             const btnTutup = document.getElementById('btn-tutup-sistem');
             if (btnBuka && btnTutup) {
@@ -701,7 +665,6 @@
             const btnOn = document.getElementById('btn-on-gps');
             const btnOff = document.getElementById('btn-off-gps');
             if (!label || !btnOn || !btnOff) return;
-
             const aktif = koordinatTokoAdmin.lat && koordinatTokoAdmin.lat !== "";
             if (aktif) {
                 label.innerHTML = `Status GPS: <b style="color:#059669;">AKTIF</b> (Radius: ${koordinatTokoAdmin.radius}m)`;
@@ -718,8 +681,6 @@
             const found = masterSalesGlobal.find(s => sanitizeNama(s.nama) === sanitizeNama(nama));
             if (!found) return { locked: false };
             if (!found.locked) return { locked: false };
-
-            // Cek expired
             if (found.waktuSelesaiLock > 0 && Date.now() >= found.waktuSelesaiLock) {
                 const clean = sanitizeNama(found.nama);
                 window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
@@ -733,9 +694,7 @@
         function renderAntrianAdmin() {
             let listHA = "", listAV = "";
             let urutHA = 1, urutAV = 1;
-
             const sorted = [...daftarAntrianGlobal].sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
-
             const dataStandby = sorted.filter(i => i.status === "Standby");
             document.getElementById('admin-nama-ha').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "HA") || {}).nama || "Belum Ada";
             document.getElementById('admin-nama-av').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "AV") || {}).nama || "Belum Ada";
@@ -745,7 +704,6 @@
                 const lockInfo = isLocked(item.nama);
                 const prefixLock = lockInfo.locked ? "🔒 " : "";
                 let html = "";
-
                 if (item.status === "Standby") {
                     const urut = kat === "HA" ? urutHA++ : urutAV++;
                     const badge = urut === 1
@@ -761,7 +719,6 @@
                 } else if (item.status === "Ibadah") {
                     html = `<li><b>${prefixLock}${item.nama}</b> <span class="badge-status-item badge-ibadah">Ibadah #${item.posisiTerkunci||'-'}</span></li>`;
                 }
-
                 if (kat === "HA") listHA += html;
                 else if (kat === "AV") listAV += html;
             });
@@ -771,7 +728,6 @@
             document.getElementById('list-AV').innerHTML = listAV || empty;
         }
 
-        // ===== STATISTIK =====
         function renderStatistikAdmin() {
             const tanggalEl = document.getElementById('tanggal-statistik-admin');
             const ringkasanEl = document.getElementById('ringkasan-statistik-admin');
@@ -801,7 +757,6 @@
             }
             ringkasanEl.innerHTML = ringkasanHtml;
 
-            // ===== BAWA CUSTOMER =====
             const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
             const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
             const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
@@ -817,7 +772,6 @@
                 }));
 
             const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
-
             let semuaBawa = [];
             listSedangMelayani.forEach(item => semuaBawa.push(item));
             statistikMasihProses.forEach(a => {
@@ -844,7 +798,6 @@
 
             let html = "";
 
-            // 1. BAWA CUSTOMER
             if (semuaBawa.length > 0) {
                 html += `<li class="stat-kategori-card">
                     <div class="stat-kategori-header">
@@ -857,7 +810,6 @@
                     const mulai = a.waktuMulai;
                     const selesai = a.waktuSelesai;
                     let range, labelHasil, badge;
-
                     if (a._sedangMelayani) {
                         range = `${formatJam(mulai)} – ...`;
                         labelHasil = `<span class="stat-action-label">(melayani)</span>`;
@@ -879,7 +831,6 @@
                         labelHasil = `<span class="stat-action-label">(proses)</span>`;
                         badge = `<span class="stat-badge-pending">Proses</span>`;
                     }
-
                     html += `
                         <div class="stat-detail-row">
                             <div class="stat-detail-left">
@@ -894,7 +845,6 @@
                 html += `</div></li>`;
             }
 
-            // 2. IBADAH
             if (listIbadah.length > 0) {
                 html += `<li class="stat-kategori-card">
                     <div class="stat-kategori-header">
@@ -920,7 +870,6 @@
                 html += `</div></li>`;
             }
 
-            // 3. WAKTU MAKAN
             if (listMakan.length > 0) {
                 html += `<li class="stat-kategori-card">
                     <div class="stat-kategori-header">
@@ -946,7 +895,6 @@
                 html += `</div></li>`;
             }
 
-            // 4. KELUAR ANTRIAN
             if (listKeluar.length > 0) {
                 html += `<li class="stat-kategori-card">
                     <div class="stat-kategori-header">
@@ -969,7 +917,6 @@
                 html += `</div></li>`;
             }
 
-            // 5. AUTOKICK
             if (listAutokick.length > 0) {
                 html += `<li class="stat-kategori-card">
                     <div class="stat-kategori-header">
@@ -979,13 +926,15 @@
                     </div>
                     <div class="stat-kategori-body">`;
                 listAutokick.forEach(a => {
+                    const teksAlasan = a.alasan ? a.alasan : (a.kategori || a.hasil || "");
                     html += `
                         <div class="stat-detail-row">
                             <div class="stat-detail-left">
                                 <b class="stat-action-name">${a.nama}</b>
+                                <span class="stat-action-label">${teksAlasan}</span>
                                 <b class="stat-action-time">${formatJam(a.waktu)}</b>
                             </div>
-                            <span class="stat-badge-info">${a.kategori || a.hasil || ""}</span>
+                            <span class="stat-badge-info">${a.sumber || ""}</span>
                         </div>
                     `;
                 });
@@ -996,7 +945,6 @@
                 html = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
             }
 
-            // Placeholder kategori kosong
             const placeholderIbadah = listIbadah.length === 0 ? `
                 <li class="stat-kategori-card" style="opacity:0.5;">
                     <div class="stat-kategori-header">
@@ -1049,7 +997,6 @@
             return Object.values(perNama).sort((a,b) => (b.mulai||0) - (a.mulai||0));
         }
 
-        // ===== AKSI ADMIN =====
         function bukaModalToggleSistem(targetStatus) {
             document.getElementById('modal-title').innerText = targetStatus === 'BUKA' ? 'Mulai Antrian' : 'Hentikan Antrian';
             document.getElementById('modal-desc').innerHTML = `Ubah status sistem menjadi: <b>${targetStatus}</b>?`;
@@ -1082,20 +1029,16 @@
         async function eksekusiTambahMasterSales() {
             const namaBaru = document.getElementById('input-nama-baru').value.trim();
             if (!namaBaru) { alert("Nama tidak boleh kosong!"); return; }
-
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Menyimpan...`;
-
             try {
-                // Cek duplikat dari state global
                 const cek = masterSalesGlobal.find(s => s.nama.toLowerCase() === namaBaru.toLowerCase());
                 if (cek) {
                     tutupModal();
                     tampilkanModal("Gagal", "Nama promotor tersebut sudah terdaftar!");
                     return;
                 }
-
                 await window.dbPush(window.dbRef(window.db, 'data'), {
                     record: { NAMA_PROMOTOR: namaBaru }
                 });
@@ -1111,7 +1054,6 @@
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
             masterSalesGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama}</option>`; });
-
             document.getElementById('modal-title').innerText = "Hapus Nama Permanen";
             document.getElementById('modal-desc').innerHTML = `Pilih promotor yang akan dihapus:<br><select id="select-hapus-sales">${options}</select>`;
             document.getElementById('modal-actions').innerHTML = `
@@ -1123,13 +1065,10 @@
         async function eksekusiHapusMasterSales() {
             const nama = document.getElementById('select-hapus-sales').value;
             if (!nama) { alert("Pilih promotor terlebih dahulu!"); return; }
-
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Menghapus...`;
-
             try {
-                // Cari key di 'data' yang NAMA_PROMOTOR-nya cocok
                 const snap = await window.dbGet(window.dbRef(window.db, 'data'));
                 if (!snap.exists()) { tutupModal(); tampilkanModal("Gagal", "Data kosong"); return; }
                 const allData = snap.val();
@@ -1142,13 +1081,11 @@
                         keyTarget = k;
                     }
                 });
-
                 if (!keyTarget) {
                     tutupModal();
                     tampilkanModal("Gagal", "Promotor tidak ditemukan.");
                     return;
                 }
-
                 await window.dbRemove(window.dbRef(window.db, 'data/' + keyTarget));
                 tutupModal();
                 tampilkanModal("Berhasil", `Promotor ${nama} dihapus permanen.`);
@@ -1162,7 +1099,6 @@
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
             masterSalesGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama}</option>`; });
-
             document.getElementById('modal-title').innerText = "Masukkan Promotor ke Antrian";
             document.getElementById('modal-desc').innerHTML = `
                 Kategori:<br>
@@ -1184,11 +1120,9 @@
             const nama = document.getElementById('admin-select-sales').value;
             if (!nama) { alert("Pilih promotor!"); return; }
             const clean = sanitizeNama(nama);
-
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
-
             try {
                 const snap = await window.dbGet(window.dbRef(window.db, 'antrian/' + clean));
                 if (snap.exists()) {
@@ -1212,7 +1146,6 @@
             if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
             daftarAntrianGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama} (${n.status})</option>`; });
-
             document.getElementById('modal-title').innerText = "Keluarkan dari Antrian";
             document.getElementById('modal-desc').innerHTML = `Pilih promotor yang akan dikeluarkan:<br><select id="select-keluar-sales">${options}</select>`;
             document.getElementById('modal-actions').innerHTML = `
@@ -1225,11 +1158,9 @@
             const nama = document.getElementById('select-keluar-sales').value;
             if (!nama) { alert("Pilih promotor dulu!"); return; }
             const clean = sanitizeNama(nama);
-
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
-
             try {
                 await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
                 await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
@@ -1248,7 +1179,6 @@
             if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
             daftarAntrianGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama} (${n.status})</option>`; });
-
             document.getElementById('modal-title').innerText = "Paksa Bawa Customer";
             document.getElementById('modal-desc').innerHTML = `Pilih promotor yang dipaksa melayani:<br><select id="select-paksa-sales">${options}</select>`;
             document.getElementById('modal-actions').innerHTML = `
@@ -1262,11 +1192,9 @@
             if (!nama) { alert("Pilih promotor dulu!"); return; }
             const clean = sanitizeNama(nama);
             const now = Date.now();
-
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
-
             try {
                 await window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Melayani", waktuMulaiMelayani: now, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
@@ -1283,6 +1211,7 @@
             }
         }
 
+        // ===== LOCK PROMOTOR (dengan opsi terjadwal) =====
         function bukaModalLockPromotorAdmin() {
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -1291,25 +1220,46 @@
                 options += `<option value="${n.nama}">${n.nama}${lockIcon}</option>`;
             });
 
+            const now = new Date();
+            const tglDefault = now.toISOString().split('T')[0];
+            const jamDefault = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
             document.getElementById('modal-title').innerText = "Kontrol Hukuman / Lock Akun";
             document.getElementById('modal-desc').innerHTML = `
                 Pilih Promotor:<br>
                 <select id="admin-select-sales-lock" style="margin-bottom:12px;">${options}</select>
+
                 Aksi:<br>
                 <select id="admin-select-status-lock" style="margin-bottom:12px;" onchange="toggleAlasanLockField(this.value)">
                     <option value="LOCK">🔒 Kunci Akun (Beri Hukuman)</option>
                     <option value="UNLOCK">🔓 Buka Akun (Lepas Hukuman)</option>
                 </select>
+
                 <div id="wrapper-alasan-hukuman">
                     Alasan:<br>
                     <select id="admin-select-alasan" style="margin-bottom:12px;">
                         <option value="Pulang tanpa keluar antrian">Pulang tanpa keluar antrian</option>
                         <option value="Istirahat tanpa keluar antrian">Istirahat tanpa keluar antrian</option>
-                        <option value="Melayani tapi tidak menekan tombol">Melayani tapi tidak menekan tombol</option>
+                        <option value="Melayani tapi tidak menekan tombol">Tidak Tekan Tombol SMC</option>
                         <option value="Pelanggaran lain">Pelanggaran lain</option>
                     </select>
-                    Durasi (Menit):<br>
-                    <input type="number" id="admin-input-durasi-menit" value="15" min="1" max="1440">
+
+                    <label style="font-size:11px; font-weight:700;">Waktu Mulai Hukuman:</label><br>
+                    <select id="admin-select-waktu-mulai" style="margin-bottom:10px;" onchange="toggleJadwalField(this.value)">
+                        <option value="SEKARANG">🔒 Lock Sekarang</option>
+                        <option value="TERJADWAL">⏰ Lock Terjadwal</option>
+                    </select>
+
+                    <div id="wrapper-jadwal" style="display:none;">
+                        Tanggal Mulai:<br>
+                        <input type="date" id="admin-input-tgl-mulai" value="${tglDefault}" style="margin-bottom:8px;">
+                        Jam Mulai:<br>
+                        <input type="time" id="admin-input-jam-mulai" value="${jamDefault}" style="margin-bottom:8px;">
+                    </div>
+
+                    Durasi Hukuman (Menit):<br>
+                    <input type="number" id="admin-input-durasi-menit" value="60" min="1" max="10080">
+                    <div style="font-size:10px; color:#94a3b8; margin-top:4px;">Contoh: 60 = 1 jam, 1440 = 24 jam, 10080 = 7 hari</div>
                 </div>
             `;
             document.getElementById('modal-actions').innerHTML = `
@@ -1318,15 +1268,23 @@
             `;
             document.getElementById('custom-modal').classList.add('active');
         }
+
         function toggleAlasanLockField(nilai) {
             const wrapper = document.getElementById('wrapper-alasan-hukuman');
             if (wrapper) wrapper.style.display = (nilai === "UNLOCK") ? "none" : "block";
         }
+
+        function toggleJadwalField(nilai) {
+            const wrapper = document.getElementById('wrapper-jadwal');
+            if (wrapper) wrapper.style.display = (nilai === "TERJADWAL") ? "block" : "none";
+        }
+
         async function eksekusiLockPromotorAdmin() {
             const nama = document.getElementById('admin-select-sales-lock').value;
             const aksi = document.getElementById('admin-select-status-lock').value;
             const alasan = document.getElementById('admin-select-alasan') ? document.getElementById('admin-select-alasan').value : "";
-            const durasi = document.getElementById('admin-input-durasi-menit') ? parseInt(document.getElementById('admin-input-durasi-menit').value) || 15 : 15;
+            const durasi = document.getElementById('admin-input-durasi-menit') ? parseInt(document.getElementById('admin-input-durasi-menit').value) || 60 : 60;
+            const waktuMulai = document.getElementById('admin-select-waktu-mulai') ? document.getElementById('admin-select-waktu-mulai').value : "SEKARANG";
 
             if (!nama) { alert("Pilih promotor!"); return; }
             const clean = sanitizeNama(nama);
@@ -1337,33 +1295,79 @@
 
             try {
                 if (aksi === "LOCK") {
-                    const waktuSelesai = Date.now() + (durasi * 60 * 1000);
-                    // Simpan status lock ke node 'lockPromotor'
+                    let timestampMulai = Date.now();
+
+                    if (waktuMulai === "TERJADWAL") {
+                        const tgl = document.getElementById('admin-input-tgl-mulai').value;
+                        const jam = document.getElementById('admin-input-jam-mulai').value;
+                        if (!tgl || !jam) {
+                            btn.disabled = false;
+                            btn.innerHTML = "Proses";
+                            alert("Isi tanggal & jam mulai hukuman!");
+                            return;
+                        }
+                        const dateObj = new Date(`${tgl}T${jam}:00`);
+                        timestampMulai = dateObj.getTime();
+                        if (timestampMulai < Date.now()) {
+                            btn.disabled = false;
+                            btn.innerHTML = "Proses";
+                            alert("Waktu mulai tidak boleh di masa lalu!");
+                            return;
+                        }
+                    }
+
+                    const waktuSelesai = timestampMulai + (durasi * 60 * 1000);
+
                     await window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
                         nama: nama,
                         locked: true,
                         alasan: alasan,
-                        waktuSelesaiLock: waktuSelesai
+                        waktuMulaiLock: timestampMulai,
+                        waktuSelesaiLock: waktuSelesai,
+                        waktuDibuat: Date.now(),
+                        modeTerjadwal: waktuMulai === "TERJADWAL"
                     });
-                    // Hapus dari antrian kalau ada
-                    await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+
+                    if (waktuMulai === "SEKARANG") {
+                        await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+                    }
+
+                    const teksWaktu = waktuMulai === "SEKARANG"
+                        ? `Dikunci Sekarang (${durasi} menit)`
+                        : `Dikunci Terjadwal: ${new Date(timestampMulai).toLocaleString('id-ID')} (${durasi} menit)`;
+
+                    await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                        nama: nama,
+                        aksi: "Autokick",
+                        waktu: Date.now(),
+                        tanggal: getTanggalIndo(),
+                        hasil: teksWaktu,
+                        kategori: "Lock Hukuman",
+                        sumber: "Admin",
+                        alasan: alasan,
+                        durasi: durasi
+                    });
+
                     tutupModal();
-                    tampilkanModal("Berhasil", `${nama} dikunci ${durasi} menit.`);
+                    tampilkanModal("Berhasil",
+                        waktuMulai === "SEKARANG"
+                            ? `${nama} dikunci SEKARANG (${durasi} menit).`
+                            : `${nama} akan dikunci pada ${new Date(timestampMulai).toLocaleString('id-ID')} selama ${durasi} menit.`
+                    );
                 } else {
-                    // Unlock
                     await window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
-                        locked: false, alasan: "", waktuSelesaiLock: 0
+                        locked: false, alasan: "", waktuSelesaiLock: 0, waktuMulaiLock: 0
                     });
                     tutupModal();
                     tampilkanModal("Berhasil", `${nama} dibuka.`);
                 }
             } catch (e) {
+                console.warn("Error lock:", e);
                 tutupModal();
                 tampilkanModal("Gagal", "Tidak bisa memproses.");
             }
         }
 
-        
         function bukaModalResetTotal() {
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
             document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. Lanjutkan?`;
@@ -1377,10 +1381,8 @@
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses Reset...`;
-
             try {
                 await window.dbRemove(window.dbRef(window.db, 'antrian'));
-
                 const hariIni = getTanggalIndo();
                 const snapshot = await window.dbGet(window.dbRef(window.db, 'statistikAktivitas'));
                 if (snapshot.exists()) {
@@ -1395,7 +1397,6 @@
                         await window.dbUpdate(window.dbRef(window.db), updates);
                     }
                 }
-
                 tutupModal();
                 tampilkanModal("Reset Total", "Semua antrian dan log hari ini berhasil direset.");
             } catch (e) {
@@ -1492,6 +1493,7 @@
         window.eksekusiPaksaBawaCustomer = eksekusiPaksaBawaCustomer;
         window.bukaModalLockPromotorAdmin = bukaModalLockPromotorAdmin;
         window.toggleAlasanLockField = toggleAlasanLockField;
+        window.toggleJadwalField = toggleJadwalField;
         window.eksekusiLockPromotorAdmin = eksekusiLockPromotorAdmin;
         window.bukaModalResetTotal = bukaModalResetTotal;
         window.eksekusiResetTotal = eksekusiResetTotal;
