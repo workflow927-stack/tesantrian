@@ -255,6 +255,7 @@
         .aktivitas-icon svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
         .t-bawa-customer, .t-ibadah, .t-makan, .t-keluar, .t-autokick { background: linear-gradient(135deg, #0f172a, #1e293b); }
+        .t-rekap { background: linear-gradient(135deg, #7c3aed, #a855f7); }
 
         .aktivitas-list { list-style: none; padding: 0; margin: 0 0 6px 0; }
         .aktivitas-list li { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; margin-bottom: 5px; font-size: 12px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -300,6 +301,50 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s ease-in-out infinite; vertical-align: middle; margin-right: 6px; }
+
+        /* ===== TABEL REKAP BAWA CUSTOMER ===== */
+        .rekap-tabel { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+        .rekap-tabel th {
+            background: #f1f5f9; color: var(--text-muted); font-weight: 800;
+            text-transform: uppercase; font-size: 10px; letter-spacing: 0.3px;
+            padding: 8px 6px; text-align: center; border-bottom: 2px solid var(--border);
+        }
+        .rekap-tabel th.kolom-nama { text-align: left; padding-left: 12px; }
+        .rekap-tabel td {
+            padding: 10px 6px; text-align: center; font-weight: 700;
+            border-bottom: 1px solid var(--border); color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+        }
+        .rekap-tabel td.kolom-nama {
+            text-align: left; padding-left: 12px; font-weight: 800;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;
+        }
+        .rekap-tabel td.angka-deal { color: #059669; }
+        .rekap-tabel td.angka-lihat { color: #d97706; }
+        .rekap-tabel td.angka-nosale { color: #dc2626; }
+        .rekap-tabel td.angka-hari { color: #64748b; font-size: 11px; }
+        .rekap-tabel tr.total-row td {
+            background: #f8fafc; border-top: 2px solid var(--border);
+            border-bottom: none; font-weight: 800; padding-top: 10px; padding-bottom: 10px;
+        }
+        .rekap-tabel tr.total-row td.angka-deal { color: #047857; }
+        .rekap-tabel tr.total-row td.angka-lihat { color: #b45309; }
+        .rekap-tabel tr.total-row td.angka-nosale { color: #b91c1c; }
+
+        body.dark-mode .rekap-tabel th {
+            background: #2b0007; color: #ff99a8; border-bottom-color: #ff1f3d;
+        }
+        body.dark-mode .rekap-tabel td {
+            border-bottom-color: #5a0011; color: #ffffff;
+        }
+        body.dark-mode .rekap-tabel td.kolom-nama { color: #ffffff; }
+        body.dark-mode .rekap-tabel tr.total-row td {
+            background: #2b0007; border-top-color: #ff1f3d;
+        }
+        body.dark-mode .rekap-tabel td.angka-deal { color: #34d399; text-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+        body.dark-mode .rekap-tabel td.angka-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+        body.dark-mode .rekap-tabel td.angka-nosale { color: #ff667a; text-shadow: 0 0 6px rgba(255, 102, 122, 0.6); }
+        body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
     </style>
 </head>
 <body>
@@ -435,6 +480,31 @@
                 </div>
                 <ul id="list-keluar" class="aktivitas-list"></ul>
 
+                <!-- ===== REKAP BAWA CUSTOMER PER PROMOTOR ===== -->
+                <div class="aktivitas-title t-rekap">
+                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>Rekap Bawa Customer per Promotor</span>
+                </div>
+                <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-bottom: 10px;">
+                    <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-align: center; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px;">
+                        Periode: <span id="rekap-periode-label">-</span>
+                    </div>
+                    <table class="rekap-tabel">
+                        <thead>
+                            <tr>
+                                <th class="kolom-nama">Nama Promotor</th>
+                                <th>Deal</th>
+                                <th>Lihat</th>
+                                <th>No Sale</th>
+                                <th>Hari</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rekap-tbody">
+                            <tr><td colspan="5" class="aktivitas-empty">Memuat data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- ===== END REKAP ===== -->
+
                 <div class="aktivitas-title t-autokick">
                     <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span>Autokick (Pelanggaran)</span>
                     <span class="count" id="count-autokick">0</span>
@@ -451,8 +521,7 @@
             <div id="modal-actions" class="modal-actions"><button type="button" class="btn-customer" onclick="tutupModal()">OK</button></div>
         </div>
     </div>
-
-    <script>
+        <script>
         let daftarAntrianGlobal = [];
         let masterSalesGlobal = [];
         let statusSistemGlobal = "BUKA";
@@ -460,6 +529,7 @@
         let timerIntervalGlobal = null;
         let masterSalesLoaded = false;
         let aktivitasGlobal = [];
+        let checkinHarianGlobal = {};
 
         let koordinatToko = { lat: null, lng: null, radius: 50 };
         let mapPromotor = null;
@@ -490,6 +560,12 @@
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         }
 
+        function getBulanLabelIndo() {
+            const bulanNama = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const now = new Date();
+            return `${bulanNama[now.getMonth()]} ${now.getFullYear()}`;
+        }
+
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
@@ -508,6 +584,12 @@
                       Math.sin(dLon/2) * Math.sin(dLon/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             return R * c;
+        }
+
+        // Cek apakah tanggalKey (YYYY-MM-DD) berada di bulan yang sama dengan sekarang
+        function isTanggalBulanIni(tanggalKey) {
+            if (!tanggalKey) return false;
+            return String(tanggalKey).startsWith(getBulanKey());
         }
 
         window.addEventListener('firebase-ready', () => {
@@ -631,15 +713,24 @@
                     });
                 }
                 renderAktivitas();
+                renderRekapBawaCustomer();
             });
 
             window.dbOnValue(window.dbRef(db, 'checkinHarian'), (snapshot) => {
                 const dataCheckin = snapshot.val() || {};
+                checkinHarianGlobal = dataCheckin;
                 const akunSaya = sanitizeNama(getAkunAktif());
-                if (!akunSaya) return;
-                const checkinSaya = dataCheckin[akunSaya];
+                if (!akunSaya) { renderRekapBawaCustomer(); return; }
+                const dataSaya = dataCheckin[akunSaya];
                 const hariIni = getTanggalKey();
-                if (checkinSaya && checkinSaya.tanggalKey === hariIni) {
+                let sudahHariIni = false;
+                if (dataSaya) {
+                    // Struktur baru (per tanggal)
+                    if (dataSaya[hariIni] || (dataSaya.tanggalKey === hariIni)) {
+                        sudahHariIni = true;
+                    }
+                }
+                if (sudahHariIni) {
                     localStorage.setItem('ufo_checkin_hari_ini', 'true');
                     localStorage.setItem('ufo_checkin_tanggal', hariIni);
                 } else {
@@ -647,6 +738,7 @@
                     localStorage.removeItem('ufo_checkin_tanggal');
                 }
                 renderUI();
+                renderRekapBawaCustomer();
             });
 
             window.dbOnValue(window.dbRef(db, 'lockPromotor'), (snapshot) => {
@@ -827,6 +919,7 @@
                 document.getElementById('label-user-aktif').innerText = namaPilih;
                 renderUI();
                 renderAktivitas();
+                renderRekapBawaCustomer();
             });
         }
 
@@ -942,15 +1035,17 @@
                 const kat = document.getElementById('pilih-kategori-hadir').value;
                 const nama = getAkunAktif();
                 const clean = sanitizeNama(nama);
+                const tglKey = getTanggalKey();
 
                 window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
                     nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 }).then(() => {
-                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: getTanggalKey(), waktu: Date.now()
+                    // ✅ SIMPAN CHECK-IN PER TANGGAL (tidak menimpa)
+                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
+                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
                     });
                     localStorage.setItem('ufo_checkin_hari_ini', 'true');
-                    localStorage.setItem('ufo_checkin_tanggal', getTanggalKey());
+                    localStorage.setItem('ufo_checkin_tanggal', tglKey);
                     catatAktivitas(nama, "CheckIn", kat);
                     renderUI();
                 });
@@ -986,15 +1081,16 @@
                 const kat = document.getElementById('pilih-kategori-normal').value;
                 const nama = getAkunAktif();
                 const clean = sanitizeNama(nama);
+                const tglKey = getTanggalKey();
 
                 window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
                     nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 }).then(() => {
-                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: getTanggalKey(), waktu: Date.now()
+                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
+                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
                     });
                     localStorage.setItem('ufo_checkin_hari_ini', 'true');
-                    localStorage.setItem('ufo_checkin_tanggal', getTanggalKey());
+                    localStorage.setItem('ufo_checkin_tanggal', tglKey);
                     catatAktivitas(nama, "DaftarAntrian", kat);
                 });
             });
@@ -1108,13 +1204,10 @@
                 });
             }
 
-            // ✅ UPDATE RIWAYAT BULANAN
             updateRiwayatBulanan(nama, hasil);
-
             window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
         }
 
-        // ✅ Fungsi baru: update riwayat bulanan
         function updateRiwayatBulanan(nama, hasil) {
             const now = new Date();
             const bulanKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -1342,6 +1435,138 @@
                         <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
                     </li>`;
                 }).join('');
+        }
+
+        // ============ RENDER REKAP BAWA CUSTOMER PER PROMOTOR ============
+        function renderRekapBawaCustomer() {
+            const tbody = document.getElementById('rekap-tbody');
+            const labelPeriode = document.getElementById('rekap-periode-label');
+            if (!tbody) return;
+
+            const bulanIni = getBulanKey();
+            const tglHariIni = new Date().getDate();
+            const labelBulan = getBulanLabelIndo();
+            if (labelPeriode) labelPeriode.innerText = `1 - ${tglHariIni} ${labelBulan}`;
+
+            // 1) Ambil semua promotor dari mastersales
+            const promotorMap = {};
+            masterSalesGlobal.forEach(item => {
+                const clean = sanitizeNama(item.nama);
+                if (clean) {
+                    promotorMap[clean] = { nama: item.nama, clean: clean };
+                }
+            });
+
+            // 2) Hitung Deal & Lihat dari statistikAktivitas (bulan ini)
+            const perPromotor = {};
+            // Inisialisasi dari master
+            Object.keys(promotorMap).forEach(clean => {
+                perPromotor[clean] = { nama: promotorMap[clean].nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
+            });
+
+            aktivitasGlobal.forEach(a => {
+                const tgl = a.tanggal; // DD-MM-YYYY
+                if (!tgl) return;
+                // Konversi DD-MM-YYYY -> YYYY-MM-DD untuk cek bulan
+                const parts = String(tgl).split('-');
+                if (parts.length !== 3) return;
+                const tglKey = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                if (!tglKey.startsWith(bulanIni)) return; // bukan bulan ini
+
+                const clean = sanitizeNama(a.nama);
+                if (!clean) return;
+                if (!perPromotor[clean]) {
+                    perPromotor[clean] = { nama: a.nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
+                }
+                if (a.aksi === "BawaCustomer" && a.waktuSelesai) {
+                    if (a.hasil === "Deal") perPromotor[clean].deal++;
+                    else if (a.hasil === "Lihat") perPromotor[clean].lihat++;
+                }
+            });
+
+            // 3) Hitung Hari (dari checkinHarian bulan ini) & No Sale
+            // Struktur checkinHarian: { cleanNama: { 'YYYY-MM-DD': {...}, ... } }
+            Object.keys(perPromotor).forEach(clean => {
+                const dataCheckinPromotor = checkinHarianGlobal[clean];
+                if (!dataCheckinPromotor) return;
+
+                const hariSet = new Set();
+                Object.keys(dataCheckinPromotor).forEach(k => {
+                    // k bisa berupa tanggalKey (YYYY-MM-DD) ATAU field lama (nama, tanggal, tanggalKey, waktu)
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(k)) {
+                        if (k.startsWith(bulanIni)) hariSet.add(k);
+                    }
+                });
+                // Handle format lama (single object) — hanya tanggalKey saat ini
+                if (dataCheckinPromotor.tanggalKey && /^\d{4}-\d{2}-\d{2}$/.test(dataCheckinPromotor.tanggalKey)) {
+                    if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) {
+                        hariSet.add(dataCheckinPromotor.tanggalKey);
+                    }
+                }
+
+                const jumlahHari = hariSet.size;
+                perPromotor[clean].hari = jumlahHari;
+
+                // Hitung No Sale: cek per hari check-in, ada BawaCustomer?
+                let noSaleCount = 0;
+                hariSet.forEach(tglKeyHari => {
+                    // Konversi tglKeyHari (YYYY-MM-DD) ke format DD-MM-YYYY untuk cocokkan dengan a.tanggal
+                    const p = tglKeyHari.split('-');
+                    const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
+                    const adaBawa = aktivitasGlobal.some(a =>
+                        sanitizeNama(a.nama) === clean &&
+                        a.tanggal === tglIndoHari &&
+                        a.aksi === "BawaCustomer"
+                    );
+                    if (!adaBawa) noSaleCount++;
+                });
+                perPromotor[clean].noSale = noSaleCount;
+            });
+
+            // 4) Susun array, urut Deal terbanyak
+            const arr = Object.values(perPromotor)
+                .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0) // tampilkan yang aktif saja
+                .sort((a, b) => {
+                    if (b.deal !== a.deal) return b.deal - a.deal;
+                    if (b.lihat !== a.lihat) return b.lihat - a.lihat;
+                    return a.nama.localeCompare(b.nama);
+                });
+
+            if (arr.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="aktivitas-empty">Belum ada data bulan ini</td></tr>';
+                return;
+            }
+
+            // 5) Hitung total
+            let totalDeal = 0, totalLihat = 0, totalNoSale = 0;
+            arr.forEach(p => {
+                totalDeal += p.deal;
+                totalLihat += p.lihat;
+                totalNoSale += p.noSale;
+            });
+
+            // 6) Render
+            let html = arr.map(p => `
+                <tr>
+                    <td class="kolom-nama">${p.nama}</td>
+                    <td class="angka-deal">${p.deal}</td>
+                    <td class="angka-lihat">${p.lihat}</td>
+                    <td class="angka-nosale">${p.noSale}</td>
+                    <td class="angka-hari">${p.hari}</td>
+                </tr>
+            `).join('');
+
+            html += `
+                <tr class="total-row">
+                    <td class="kolom-nama">TOTAL</td>
+                    <td class="angka-deal">${totalDeal}</td>
+                    <td class="angka-lihat">${totalLihat}</td>
+                    <td class="angka-nosale">${totalNoSale}</td>
+                    <td></td>
+                </tr>
+            `;
+
+            tbody.innerHTML = html;
         }
 
         function gabungRentang(list, aksiMulai, aksiSelesai) {
