@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - UFO Kebonsari</title>
     <link rel="shortcut icon" href="#">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -46,7 +46,7 @@
             --bg: #050102 !important; --card-bg: #1a0205 !important; --text-main: #ffffff !important;
             --text-muted: #ff8585 !important; --border: #ff1f3d !important;
         }
-        *, body, button, select, input { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important; box-sizing: border-box; }
+        *, body, button, select, input { font-family: 'Plus Jakarta Sans', sans-serif !important; box-sizing: border-box; }
         body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); color: var(--text-main); margin: 0; padding: 24px; display: flex; justify-content: center; min-height: 100vh; }
         body.dark-mode { background: #050102 !important; }
         .admin-container { width: 100%; max-width: 680px; background: var(--card-bg); border-radius: 20px; padding: 32px; border: 1px solid var(--border); box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.05); }
@@ -128,125 +128,48 @@
 
         @media (max-width: 480px) { .timer-box-wrapper { grid-template-columns: 1fr; } }
 
-        .stat-kategori-card {
-            display: flex !important; flex-direction: column !important;
-            padding: 0 !important; gap: 0 !important;
-            background: #ffffff !important; border-radius: 14px !important;
-            border: 1px solid var(--border) !important;
-            overflow: hidden; margin-bottom: 10px !important;
-            list-style: none;
-        }
-        body.dark-mode .stat-kategori-card { background: linear-gradient(145deg, #140205 0%, #0a0103 100%) !important; border: 2px solid #ff1f3d !important; }
+        /* ===== RIWAYAT BULANAN ===== */
+        .riwayat-list { list-style: none; padding: 0; margin: 0; }
+        .riwayat-list li { padding: 10px 14px; background: var(--card-bg); border-radius: 10px; margin-bottom: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .riwayat-badge { padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; color: #ffffff; white-space: nowrap; }
+        .riwayat-badge.deal { background: #059669; }
+        .riwayat-badge.lihat { background: #f59e0b; }
+        .riwayat-badge.nosale { background: #dc2626; }
 
-        .stat-kategori-header {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 11px; font-weight: 800; color: #334155;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        body.dark-mode .stat-kategori-header {
-            background: linear-gradient(135deg, #2b0007, #140205) !important;
-            border-bottom: 1px solid #ff1f3d !important;
-            color: #ffb3bc !important;
-        }
-        .stat-kategori-header b { flex: 1; }
-
-        .stat-kategori-icon {
-            width: 26px; height: 26px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border-radius: 8px; flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .stat-kategori-icon svg {
-            width: 14px; height: 14px;
-            stroke: #ffffff; stroke-width: 2.2; fill: none;
-            stroke-linecap: round; stroke-linejoin: round;
-        }
-        .stat-kategori-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
-        .stat-kategori-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .stat-kategori-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .stat-kategori-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .stat-kategori-icon.maroon { background: linear-gradient(135deg, #991b1b, #7f1d1d); }
-
-        body.dark-mode .stat-kategori-icon.green { box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); }
-        body.dark-mode .stat-kategori-icon.red { box-shadow: 0 0 12px rgba(239, 68, 68, 0.7); }
-        body.dark-mode .stat-kategori-icon.purple { box-shadow: 0 0 12px rgba(139, 92, 246, 0.7); }
-        body.dark-mode .stat-kategori-icon.amber { box-shadow: 0 0 12px rgba(245, 158, 11, 0.7); }
-        body.dark-mode .stat-kategori-icon.maroon { box-shadow: 0 0 12px rgba(153, 27, 27, 0.7); }
-
-        .stat-kategori-count { background: #0f172a; color: #ffffff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
-        body.dark-mode .stat-kategori-count { background: #99001f; border: 1px solid #ff1f3d; }
-
-        .stat-kategori-body { display: flex; flex-direction: column; padding: 6px 14px 10px 14px; }
-
-        .stat-detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* ===== STATISTIK ===== */
+        .aktivitas-section { margin-top: 20px; text-align: left; }
+        .aktivitas-title {
+            font-size: 12px; font-weight: 800; text-transform: uppercase;
+            padding: 10px 12px; border-radius: 8px; color: white;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 6px; letter-spacing: 0.5px;
             gap: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748b;
-            padding: 8px 0;
-            border-bottom: 1px dashed #f1f5f9;
-            flex-wrap: nowrap;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
         }
-        .stat-detail-row:last-child { border-bottom: none; }
-        body.dark-mode .stat-detail-row { color: #ffb3bc !important; border-bottom-color: #50000e !important; }
+        .aktivitas-title .count { font-size: 10px; background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 10px; }
+        .aktivitas-title .judul-kategori { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .aktivitas-icon { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; flex-shrink: 0; background: rgba(255,255,255,0.2); }
+        .aktivitas-icon svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-        .stat-detail-left { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
-
-        .stat-action-name {
-            color: #0f172a; font-weight: 800; font-size: 12px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            max-width: 110px; flex-shrink: 1; min-width: 0;
+        .aktivitas-list { list-style: none; padding: 0; margin: 0 0 6px 0; }
+        .aktivitas-list li {
+            background: #f8fafc; border: 1px solid var(--border); border-radius: 10px;
+            padding: 8px 12px; margin-bottom: 5px; font-size: 12px; font-weight: 600;
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
         }
-        body.dark-mode .stat-action-name { color: #ffffff !important; }
+        body.dark-mode .aktivitas-list li { background: #2b0007; border: 2px solid #ff1f3d; box-shadow: 0 0 15px rgba(255, 31, 61, 0.4); color: #ffffff; }
+        .aktivitas-list li .nama { flex: 1; font-weight: 800; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        body.dark-mode .aktivitas-list li .nama { color: #ffffff; }
+        .aktivitas-list li .waktu { font-size: 11px; color: var(--text-muted); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        body.dark-mode .aktivitas-list li .waktu { color: #ff99a8; }
+        .aktivitas-empty { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 8px; font-style: italic; }
+        body.dark-mode .aktivitas-empty { color: #ff8585; }
 
-        .stat-action-label {
-            font-size: 10px; color: #94a3b8; font-weight: 700;
-            white-space: nowrap; flex-shrink: 0; font-style: italic;
-        }
-        body.dark-mode .stat-action-label { color: #ffb3bc !important; }
-
-        .stat-action-time {
-            color: #0f172a; font-weight: 800; font-size: 11px;
-            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-            white-space: nowrap; letter-spacing: -0.2px;
-            flex-shrink: 0; background: #f1f5f9;
-            padding: 3px 8px; border-radius: 6px;
-        }
-        body.dark-mode .stat-action-time { color: #ffffff !important; background: #50000e !important; }
-
-        .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 9.5px; font-weight: 800;
-            padding: 4px 9px; border-radius: 20px;
-            white-space: nowrap; flex-shrink: 0;
-            text-transform: uppercase; letter-spacing: 0.4px;
-            min-width: 58px; justify-content: center;
-        }
-        .stat-badge-deal { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; }
-        .stat-badge-lihat { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; }
-        .stat-badge-pending { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); color: #475569; }
-        .stat-badge-info { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff; }
-        body.dark-mode .stat-badge-deal { background: linear-gradient(135deg, #022c22, #064e3b) !important; color: #34d399 !important; border: 1px solid #059669; }
-        body.dark-mode .stat-badge-lihat { background: linear-gradient(135deg, #422006, #78350f) !important; color: #fef08a !important; border: 1px solid #facc15; }
-        body.dark-mode .stat-badge-pending { background: linear-gradient(135deg, #50000e, #2b0007) !important; color: #ffb3bc !important; border: 1px solid #ff1f3d; }
-        body.dark-mode .stat-badge-info { background: linear-gradient(135deg, #1e3a8a, #1e40af) !important; color: #93c5fd !important; border: 1px solid #3b82f6; }
-
-        @media (max-width: 480px) {
-            .stat-action-name { max-width: 80px; font-size: 11px; }
-            .stat-action-time { font-size: 10px; padding: 2px 6px; }
-            .stat-badge-deal, .stat-badge-lihat, .stat-badge-pending, .stat-badge-info { font-size: 9px; padding: 3px 7px; min-width: 50px; }
-        }
-
-        .info-sync { font-size: 10px; color: #059669; font-weight: 700; text-align: center; margin-top: 4px; }
-        body.dark-mode .info-sync { color: #34d399 !important; }
-        .badge-realtime { display: inline-block; width: 8px; height: 8px; background: #059669; border-radius: 50%; margin-right: 4px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .check-deal { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; flex-shrink: 0; vertical-align: middle; }
+        .label-lihat { font-size: 10px; color: #64748b; font-weight: 700; }
+        body.dark-mode .label-lihat { color: #ff99a8; }
+        .label-melayani { font-size: 10px; color: #059669; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+        body.dark-mode .label-melayani { color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); }
     </style>
 </head>
 <body>
@@ -272,7 +195,7 @@
         </div>
 
         <div id="controls-admin-box" style="display: none;">
-            <div class="info-sync"><span class="badge-realtime"></span>Terhubung Firebase Realtime</div>
+            <div style="font-size: 10px; color: #059669; font-weight: 700; text-align: center; margin-top: 4px;">🟢 Terhubung Firebase Realtime</div>
 
             <div class="timer-box-wrapper">
                 <div class="timer-card-admin ha">
@@ -291,14 +214,96 @@
                 <ul id="list-AV" class="list-antrian"><li><span>Memuat...</span></li></ul>
             </div>
 
-            <div id="section-statistik-aktivitas-admin" class="list-section-wrapper">
-                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 10px; text-transform: uppercase;">
-                    📊 AKTIVITAS HARI INI (<span id="tanggal-statistik-admin">-</span>)
+            <!-- ===== AKTIVITAS HARI INI ===== -->
+            <div class="aktivitas-section">
+                <div class="aktivitas-title t-bawa-customer" style="cursor: pointer;" onclick="toggleAktivitasAdmin()">
+                    <span class="judul-kategori">
+                        <span class="aktivitas-icon">
+                            <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                        </span>
+                        Aktivitas Hari Ini
+                    </span>
+                    <span class="count" id="arrow-aktivitas-admin">▼</span>
                 </div>
-                <div id="ringkasan-statistik-admin" style="font-size: 11px; margin-bottom: 10px; padding: 8px 12px; background: #f1f5f9; border-radius: 8px; color: #475569; font-weight: 600; text-align: center;">Memuat...</div>
-                <ul id="list-statistik-admin" style="list-style:none; padding:0; margin:0;">
-                    <li><span style="color:#94a3b8; font-style:italic;">Memuat...</span></li>
-                </ul>
+
+                <div id="content-aktivitas-admin">
+                    <div class="aktivitas-title t-bawa-customer">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            </span>
+                            Bawa Customer
+                        </span>
+                        <span class="count" id="count-bawa">0</span>
+                    </div>
+                    <ul id="list-bawa" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-ibadah">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>
+                            </span>
+                            Ibadah
+                        </span>
+                        <span class="count" id="count-ibadah">0</span>
+                    </div>
+                    <ul id="list-ibadah" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-makan">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg>
+                            </span>
+                            Waktu Makan
+                        </span>
+                        <span class="count" id="count-makan">0</span>
+                    </div>
+                    <ul id="list-makan" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-keluar">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            </span>
+                            Keluar Antrian
+                        </span>
+                        <span class="count" id="count-keluar">0</span>
+                    </div>
+                    <ul id="list-keluar" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-autokick">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                            </span>
+                            Autokick (Pelanggaran)
+                        </span>
+                        <span class="count" id="count-autokick">0</span>
+                    </div>
+                    <ul id="list-autokick" class="aktivitas-list"></ul>
+                </div>
+            </div>
+
+            <!-- ===== RIWAYAT BULANAN ===== -->
+            <div class="aktivitas-section">
+                <div class="aktivitas-title" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); cursor: pointer;" onclick="toggleRiwayatAdmin()">
+                    <span class="judul-kategori">
+                        <span class="aktivitas-icon">
+                            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </span>
+                        Riwayat Bulanan Promotor
+                    </span>
+                    <span class="count" id="arrow-riwayat-admin">▼</span>
+                </div>
+
+                <div id="content-riwayat-admin" style="display: none; margin-top: 8px;">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; padding: 6px 0 10px 0; text-transform: uppercase;">
+                        📅 <span id="bulan-riwayat-label">-</span>
+                    </div>
+                    <ul id="list-riwayat-bulanan" class="riwayat-list">
+                        <li><span style="color:#94a3b8; font-style:italic;">Memuat...</span></li>
+                    </ul>
+                </div>
             </div>
 
             <div class="section-title">Konfigurasi Validasi GPS Toko</div>
@@ -349,25 +354,18 @@
         window.addEventListener('unhandledrejection', e => { e.preventDefault(); console.warn("Handled:", e.reason); });
 
         const PIN_ADMIN_DEFAULT = "123456";
+        const SVG_CHECK_DEAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5L10.5 16L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
         let masterSalesGlobal = [];
         let daftarAntrianGlobal = [];
         let statistikGlobal = [];
         let lockGlobal = {};
+        let riwayatBulananGlobal = [];
         let statusSistemGlobal = "BUKA";
         let koordinatTokoAdmin = { lat: "", lng: "", radius: 50 };
         let savedPinAdmin = "";
-        let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null;
+        let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null, unsubRiwayat = null;
         let timerCekGantiHari = null;
-
-        const ICON = {
-            BAWA: `<svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
-            IBADAH: `<svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>`,
-            MAKAN: `<svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg>`,
-            KELUAR: `<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
-            AUTOKICK: `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>`,
-            CHECK: `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
-        };
 
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
@@ -380,9 +378,13 @@
             const now = d || new Date();
             return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
         }
+        function getBulanKey(d) {
+            const now = d || new Date();
+            return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+        }
         function formatJam(ts) {
             const d = new Date(ts);
-            return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+            return `${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`;
         }
 
         window.addEventListener('firebase-ready', () => {
@@ -496,6 +498,14 @@
                 renderStatistikAdmin();
             });
 
+            // ✅ Listener riwayat bulanan
+            const bulanKeySekarang = getBulanKey();
+            unsubRiwayat = window.dbOnValue(window.dbRef(db, 'riwayatBulanan/' + bulanKeySekarang), snapshot => {
+                const dataRaw = snapshot.val() || {};
+                riwayatBulananGlobal = Object.values(dataRaw).filter(r => r && r.nama);
+                renderRiwayatBulanan();
+            });
+
             cekDanJalankanAutoCleanup();
             if (timerCekGantiHari) clearInterval(timerCekGantiHari);
             timerCekGantiHari = setInterval(cekDanJalankanAutoCleanup, 30000);
@@ -507,6 +517,7 @@
             if (unsubStatistik) { unsubStatistik(); unsubStatistik = null; }
             if (unsubMaster) { unsubMaster(); unsubMaster = null; }
             if (unsubLock) { unsubLock(); unsubLock = null; }
+            if (unsubRiwayat) { unsubRiwayat(); unsubRiwayat = null; }
             if (timerCekGantiHari) { clearInterval(timerCekGantiHari); timerCekGantiHari = null; }
         }
 
@@ -536,6 +547,7 @@
             });
             masterSalesGlobal.sort((a,b) => a.nama.localeCompare(b.nama));
             applyLockToMaster();
+            renderRiwayatBulanan();
         }
 
         function applyLockToMaster() {
@@ -567,15 +579,26 @@
 
         async function cekDanJalankanAutoCleanup() {
             try {
-                const hariIniKey = getTanggalKey();
-                const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
-                if (lastCleanup === hariIniKey) return;
                 const now = new Date();
-                const jam = now.getHours();
-                const menit = now.getMinutes();
-                if (jam > 0 || (jam === 0 && menit >= 1)) {
-                    console.log("🧹 Auto-cleanup tanggal:", hariIniKey);
-                    await jalankanAutoCleanup(hariIniKey);
+                const hariIniKey = getTanggalKey();
+                const bulanIniKey = getBulanKey();
+
+                const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
+                if (lastCleanup !== hariIniKey) {
+                    const jam = now.getHours();
+                    const menit = now.getMinutes();
+                    if (jam > 0 || (jam === 0 && menit >= 1)) {
+                        await jalankanAutoCleanup(hariIniKey);
+                    }
+                }
+
+                // ✅ No Sale harian (cek kemarin)
+                await catatNoSaleHarian();
+
+                // ✅ Cleanup bulanan
+                const lastBulanCleanup = localStorage.getItem('ufo_admin_last_bulan_cleanup');
+                if (lastBulanCleanup !== bulanIniKey) {
+                    await jalankanResetBulanan(bulanIniKey);
                 }
             } catch (e) {
                 console.warn("Auto-cleanup error:", e);
@@ -592,35 +615,18 @@
                 awalHariIni.setHours(0, 0, 0, 0);
                 const startToday = awalHariIni.getTime();
                 const updates = {};
-                const promotorNyangkut = [];
                 Object.keys(data).forEach(key => {
                     const item = data[key];
                     if (!item) return;
                     if (item.waktuStandby && item.waktuStandby < startToday) {
                         updates['antrian/' + key] = null;
-                        promotorNyangkut.push(item.nama);
                     }
                 });
                 if (Object.keys(updates).length > 0) {
                     await window.dbUpdate(window.dbRef(db), updates);
                 }
-
-                // Auto-lock pending hukuman
-                for (const nama of promotorNyangkut) {
-                    const clean = sanitizeNama(nama);
-                    const cekLock = await window.dbGet(window.dbRef(db, 'lockPromotor/' + clean));
-                    if (cekLock.exists() && cekLock.val().locked) continue;
-
-                    await window.dbUpdate(window.dbRef(db, 'pendingHukuman/' + clean), {
-                        nama: nama,
-                        alasan: "Pulang tanpa keluar antrian",
-                        waktuDeteksi: Date.now(),
-                        status: "pending"
-                    });
-                }
             }
 
-            // Unlock promotor expired
             const snapLock = await window.dbGet(window.dbRef(db, 'lockPromotor'));
             if (snapLock.exists()) {
                 const data = snapLock.val();
@@ -641,6 +647,103 @@
 
             localStorage.setItem('ufo_admin_last_cleanup', hariIniKey);
             console.log("✅ Auto-cleanup selesai:", hariIniKey);
+        }
+
+        // ✅ No Sale harian (otomatis cek kemarin)
+        async function catatNoSaleHarian() {
+            const db = window.db;
+            const now = new Date();
+            const bulanKey = getBulanKey(now);
+
+            const kemarin = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            const tanggalKemarin = getTanggalIndo(kemarin);
+            const kemarinKey = getTanggalKey(kemarin);
+
+            // Cek marker reset (kalau admin klik Reset kemarin) → skip
+            const lastReset = localStorage.getItem('ufo_admin_last_nosale_reset');
+            if (lastReset === kemarinKey) {
+                console.log("⛔ No Sale kemarin sudah dihitung via Reset, skip.");
+                localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+                return;
+            }
+
+            // Cek marker auto
+            const lastAuto = localStorage.getItem('ufo_admin_last_nosale_auto');
+            if (lastAuto === kemarinKey) {
+                console.log("⛔ No Sale kemarin sudah dihitung via Auto, skip.");
+                return;
+            }
+
+            // Ambil statistik kemarin
+            const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
+            const dataStat = snapStat.exists() ? snapStat.val() : {};
+            const listKemarin = Object.values(dataStat).filter(a => a && a.tanggal === tanggalKemarin);
+            const promotorBawaCustomer = new Set(
+                listKemarin.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+            );
+
+            // Ambil semua promotor
+            const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
+            let listPromotor = [];
+            if (snapMaster.exists()) {
+                listPromotor = Object.values(snapMaster.val())
+                    .map(item => {
+                        const rec = item && item.record ? item.record : item;
+                        return rec && (rec.nama || rec.NAMA_PROMOTOR || rec.Nama_Sales);
+                    })
+                    .filter(n => n && typeof n === 'string');
+            }
+
+            if (listPromotor.length === 0) {
+                localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+                return;
+            }
+
+            const updates = {};
+            for (const nama of listPromotor) {
+                const clean = sanitizeNama(nama);
+                if (!promotorBawaCustomer.has(clean)) {
+                    const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+                    const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
+                    const existing = snapR.exists() ? snapR.val() : { nama: nama, lihat: 0, deal: 0, noSale: 0 };
+                    if (typeof existing.noSale !== 'number') existing.noSale = 0;
+                    existing.noSale = existing.noSale + 1;
+                    existing.nama = nama;
+                    existing.lastUpdate = Date.now();
+                    existing.bulanKey = bulanKey;
+                    updates[pathRiwayat] = existing;
+                }
+            }
+
+            if (Object.keys(updates).length > 0) {
+                await window.dbUpdate(window.dbRef(db), updates);
+                console.log(`⛔ No Sale dicatat (kemarin: ${tanggalKemarin})`);
+            }
+
+            localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+        }
+
+        // ✅ Reset riwayat bulanan ganti bulan
+        async function jalankanResetBulanan(bulanIniKey) {
+            const db = window.db;
+            console.log("🗓️ Cek reset bulanan:", bulanIniKey);
+
+            const snapRiwayat = await window.dbGet(window.dbRef(db, 'riwayatBulanan'));
+            if (snapRiwayat.exists()) {
+                const dataR = snapRiwayat.val();
+                const updatesR = {};
+                Object.keys(dataR).forEach(bulan => {
+                    if (bulan !== bulanIniKey) {
+                        updatesR['riwayatBulanan/' + bulan] = null;
+                    }
+                });
+                if (Object.keys(updatesR).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updatesR);
+                }
+            }
+
+            localStorage.setItem('ufo_admin_last_bulan_cleanup', bulanIniKey);
+            console.log("✅ Reset bulanan selesai:", bulanIniKey);
         }
 
         function renderStatusSistem() {
@@ -728,36 +831,59 @@
             document.getElementById('list-AV').innerHTML = listAV || empty;
         }
 
-        function renderStatistikAdmin() {
-            const tanggalEl = document.getElementById('tanggal-statistik-admin');
-            const ringkasanEl = document.getElementById('ringkasan-statistik-admin');
-            const listEl = document.getElementById('list-statistik-admin');
-            if (!tanggalEl || !ringkasanEl || !listEl) return;
+        // ===== RENDER RIWAYAT BULANAN =====
+        function renderRiwayatBulanan() {
+            const listEl = document.getElementById('list-riwayat-bulanan');
+            const labelEl = document.getElementById('bulan-riwayat-label');
+            if (!listEl) return;
 
-            const hariIni = getTanggalIndo();
-            tanggalEl.innerText = hariIni;
+            const now = new Date();
+            const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            if (labelEl) labelEl.innerText = `${namaBulan[now.getMonth()]} ${now.getFullYear()}`;
 
-            const listHariIni = statistikGlobal.filter(a => a.tanggal === hariIni);
-            const totalCustomer = listHariIni.filter(a => a.aksi === "BawaCustomer").length;
-            const totalDeal = listHariIni.filter(a => a.aksi === "BawaCustomer" && a.hasil === "Deal").length;
-            const totalLihat = listHariIni.filter(a => a.aksi === "BawaCustomer" && a.hasil === "Lihat").length;
-            const promotorSet = new Set(listHariIni.map(a => sanitizeNama(a.nama)));
-            const totalPromotor = promotorSet.size;
+            const semuaPromotor = masterSalesGlobal.map(s => s.nama);
+            const mapRiwayat = {};
+            riwayatBulananGlobal.forEach(r => {
+                mapRiwayat[sanitizeNama(r.nama)] = r;
+            });
 
-            if (listHariIni.length === 0) {
-                ringkasanEl.innerHTML = `<i>Belum ada aktivitas hari ini.</i>`;
-                listEl.innerHTML = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
+            const listFinal = semuaPromotor.map(nama => {
+                const clean = sanitizeNama(nama);
+                const r = mapRiwayat[clean] || { nama: nama, lihat: 0, deal: 0, noSale: 0 };
+                if (typeof r.lihat !== 'number') r.lihat = 0;
+                if (typeof r.deal !== 'number') r.deal = 0;
+                if (typeof r.noSale !== 'number') r.noSale = 0;
+                return r;
+            }).sort((a, b) => {
+                if ((b.deal || 0) !== (a.deal || 0)) return (b.deal || 0) - (a.deal || 0);
+                return (b.lihat || 0) - (a.lihat || 0);
+            });
+
+            if (listFinal.length === 0) {
+                listEl.innerHTML = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada promotor di Master Sales.</span></li>`;
                 return;
             }
 
-            let ringkasanHtml = `<b>${totalPromotor} promotor</b> • <b>${totalCustomer} customer</b>`;
-            if (totalDeal > 0 || totalLihat > 0) {
-                ringkasanHtml += ` • <span style="color:#059669; font-weight:700;">✓ ${totalDeal} Deal</span>`;
-                ringkasanHtml += ` • <span style="color:#d97706; font-weight:700;">◉ ${totalLihat} Lihat</span>`;
-            }
-            ringkasanEl.innerHTML = ringkasanHtml;
+            listEl.innerHTML = listFinal.map(r => {
+                const adaData = (r.deal > 0 || r.lihat > 0 || r.noSale > 0);
+                return `<li style="${adaData ? '' : 'opacity: 0.6;'}">
+                    <b style="flex: 1; font-weight: 700;">${r.nama}</b>
+                    <span style="display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;">
+                        ${r.lihat > 0 ? `<span class="riwayat-badge lihat">◉ ${r.lihat} Lihat</span>` : ''}
+                        ${r.deal > 0 ? `<span class="riwayat-badge deal">✓ ${r.deal} Deal</span>` : ''}
+                        ${r.noSale > 0 ? `<span class="riwayat-badge nosale">⛔ ${r.noSale} No Sale</span>` : ''}
+                        ${!adaData ? `<span style="font-size: 11px; color: #94a3b8; font-style: italic;">Belum ada aktivitas</span>` : ''}
+                    </span>
+                </li>`;
+            }).join('');
+        }
 
-            const listBawaStatistik = listHariIni.filter(a => a.aksi === "BawaCustomer");
+        // ===== STATISTIK =====
+        function renderStatistikAdmin() {
+            const hariIni = getTanggalIndo();
+            const list = statistikGlobal.filter(a => a.tanggal === hariIni);
+
+            const listBawaStatistik = list.filter(a => a.aksi === "BawaCustomer");
             const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
             const statistikMasihProses = listBawaStatistik.filter(a => !a.waktuSelesai);
             const namaSudahSelesai = new Set(statistikSelesai.map(a => sanitizeNama(a.nama)));
@@ -791,210 +917,98 @@
             });
             semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
 
-            const listIbadah = gabungRentang(listHariIni, "MulaiIbadah", "SelesaiIbadah");
-            const listMakan = gabungRentang(listHariIni, "MulaiMakan", "SelesaiMakan");
-            const listKeluar = listHariIni.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
-            const listAutokick = listHariIni.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
-
-            let html = "";
-
-            if (semuaBawa.length > 0) {
-                html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon green">${ICON.BAWA}</span>
-                        <b>BAWA CUSTOMER</b>
-                        <span class="stat-kategori-count">${semuaBawa.length}</span>
-                    </div>
-                    <div class="stat-kategori-body">`;
-                semuaBawa.forEach(a => {
+            document.getElementById('count-bawa').innerText = semuaBawa.length;
+            document.getElementById('list-bawa').innerHTML = semuaBawa.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
+                : semuaBawa.map(a => {
                     const mulai = a.waktuMulai;
                     const selesai = a.waktuSelesai;
-                    let range, labelHasil, badge;
+                    let rangeLabel, namaLabel;
                     if (a._sedangMelayani) {
-                        range = `${formatJam(mulai)} – ...`;
-                        labelHasil = `<span class="stat-action-label">(melayani)</span>`;
-                        badge = `<span class="stat-badge-info">Melayani</span>`;
+                        rangeLabel = `(${formatJam(mulai)} - ...)`;
+                        namaLabel = `${a.nama} <span class="label-melayani">(MELAYANI)</span>`;
                     } else if (selesai) {
-                        range = `${formatJam(mulai)} – ${formatJam(selesai)}`;
+                        rangeLabel = `(${formatJam(mulai)} - ${formatJam(selesai)})`;
                         if (a.hasil === "Deal") {
-                            labelHasil = "";
-                            badge = `<span class="stat-badge-deal">✓ Deal</span>`;
+                            namaLabel = `${a.nama} <span class="check-deal">${SVG_CHECK_DEAL}</span>`;
                         } else if (a.hasil === "Lihat") {
-                            labelHasil = `<span class="stat-action-label">(lihat)</span>`;
-                            badge = `<span class="stat-badge-lihat">◉ Lihat</span>`;
+                            namaLabel = `${a.nama} <span class="label-lihat">(Lihat-lihat)</span>`;
                         } else {
-                            labelHasil = "";
-                            badge = `<span class="stat-badge-pending">Selesai</span>`;
+                            namaLabel = `${a.nama} <span class="label-lihat">(selesai)</span>`;
                         }
                     } else {
-                        range = `${formatJam(mulai)} – ...`;
-                        labelHasil = `<span class="stat-action-label">(proses)</span>`;
-                        badge = `<span class="stat-badge-pending">Proses</span>`;
+                        rangeLabel = `(${formatJam(mulai)} - ...)`;
+                        namaLabel = `${a.nama} <span class="label-lihat">(proses)</span>`;
                     }
-                    html += `
-                        <div class="stat-detail-row">
-                            <div class="stat-detail-left">
-                                <b class="stat-action-name">${a.nama}</b>
-                                ${labelHasil}
-                                <b class="stat-action-time">${range}</b>
-                            </div>
-                            ${badge}
-                        </div>
-                    `;
-                });
-                html += `</div></li>`;
-            }
+                    return `<li><span class="nama">${namaLabel}</span><span class="waktu">${rangeLabel}</span></li>`;
+                }).join('');
 
-            if (listIbadah.length > 0) {
-                html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon purple">${ICON.IBADAH}</span>
-                        <b>IBADAH</b>
-                        <span class="stat-kategori-count">${listIbadah.length}</span>
-                    </div>
-                    <div class="stat-kategori-body">`;
-                listIbadah.forEach(a => {
-                    const range = a.selesai
-                        ? `${formatJam(a.mulai)} – ${formatJam(a.selesai)}`
-                        : `${formatJam(a.mulai)} – ...`;
-                    html += `
-                        <div class="stat-detail-row">
-                            <div class="stat-detail-left">
-                                <b class="stat-action-name">${a.nama}</b>
-                                <b class="stat-action-time">${range}</b>
-                            </div>
-                            ${a.posisi ? `<span class="stat-badge-info">#${a.posisi}</span>` : ''}
-                        </div>
-                    `;
-                });
-                html += `</div></li>`;
-            }
+            const listIbadah = gabungRentang(list, "MulaiIbadah", "SelesaiIbadah");
+            document.getElementById('count-ibadah').innerText = listIbadah.length;
+            document.getElementById('list-ibadah').innerHTML = listIbadah.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas ibadah</div>'
+                : listIbadah.map(a => `<li><span class="nama">${a.nama} <span style="font-size:10px; color:#7c3aed; font-weight:700;">#${a.posisi||'-'}</span></span><span class="waktu">${a.label}</span></li>`).join('');
 
-            if (listMakan.length > 0) {
-                html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon amber">${ICON.MAKAN}</span>
-                        <b>WAKTU MAKAN</b>
-                        <span class="stat-kategori-count">${listMakan.length}</span>
-                    </div>
-                    <div class="stat-kategori-body">`;
-                listMakan.forEach(a => {
-                    const range = a.selesai
-                        ? `${formatJam(a.mulai)} – ${formatJam(a.selesai)}`
-                        : `${formatJam(a.mulai)} – ...`;
-                    html += `
-                        <div class="stat-detail-row">
-                            <div class="stat-detail-left">
-                                <b class="stat-action-name">${a.nama}</b>
-                                <b class="stat-action-time">${range}</b>
-                            </div>
-                            ${a.posisi ? `<span class="stat-badge-info">#${a.posisi}</span>` : ''}
-                        </div>
-                    `;
-                });
-                html += `</div></li>`;
-            }
+            const listMakan = gabungRentang(list, "MulaiMakan", "SelesaiMakan");
+            document.getElementById('count-makan').innerText = listMakan.length;
+            document.getElementById('list-makan').innerHTML = listMakan.length === 0
+                ? '<div class="aktivitas-empty">Belum ada aktivitas makan</div>'
+                : listMakan.map(a => `<li><span class="nama">${a.nama} <span style="font-size:10px; color:#0d9488; font-weight:700;">#${a.posisi||'-'}</span></span><span class="waktu">${a.label}</span></li>`).join('');
 
-            if (listKeluar.length > 0) {
-                html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon red">${ICON.KELUAR}</span>
-                        <b>KELUAR ANTRIAN</b>
-                        <span class="stat-kategori-count">${listKeluar.length}</span>
-                    </div>
-                    <div class="stat-kategori-body">`;
-                listKeluar.forEach(a => {
-                    html += `
-                        <div class="stat-detail-row">
-                            <div class="stat-detail-left">
-                                <b class="stat-action-name">${a.nama}</b>
-                                <b class="stat-action-time">${formatJam(a.waktu)}</b>
-                            </div>
-                            <span class="stat-badge-info">${a.hasil || "Manual"}</span>
-                        </div>
-                    `;
-                });
-                html += `</div></li>`;
-            }
+            const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-keluar').innerText = listKeluar.length;
+            document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
+                ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
+                : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
 
-            if (listAutokick.length > 0) {
-                html += `<li class="stat-kategori-card">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon maroon">${ICON.AUTOKICK}</span>
-                        <b>AUTOKICK (PELANGGARAN / ADMIN)</b>
-                        <span class="stat-kategori-count">${listAutokick.length}</span>
-                    </div>
-                    <div class="stat-kategori-body">`;
-                listAutokick.forEach(a => {
-                    const teksAlasan = a.alasan ? a.alasan : (a.kategori || a.hasil || "");
-                    html += `
-                        <div class="stat-detail-row">
-                            <div class="stat-detail-left">
-                                <b class="stat-action-name">${a.nama}</b>
-                                <span class="stat-action-label">${teksAlasan}</span>
-                                <b class="stat-action-time">${formatJam(a.waktu)}</b>
-                            </div>
-                            <span class="stat-badge-info">${a.sumber || ""}</span>
-                        </div>
-                    `;
-                });
-                html += `</div></li>`;
-            }
-
-            if (!html) {
-                html = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada aktivitas</span></li>`;
-            }
-
-            const placeholderIbadah = listIbadah.length === 0 ? `
-                <li class="stat-kategori-card" style="opacity:0.5;">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon purple">${ICON.IBADAH}</span>
-                        <b>IBADAH</b>
-                        <span class="stat-kategori-count">0</span>
-                    </div>
-                    <div class="stat-kategori-body">
-                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Belum ada aktivitas ibadah</div>
-                    </div>
-                </li>` : "";
-            const placeholderMakan = listMakan.length === 0 ? `
-                <li class="stat-kategori-card" style="opacity:0.5;">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon amber">${ICON.MAKAN}</span>
-                        <b>WAKTU MAKAN</b>
-                        <span class="stat-kategori-count">0</span>
-                    </div>
-                    <div class="stat-kategori-body">
-                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Belum ada aktivitas makan</div>
-                    </div>
-                </li>` : "";
-            const placeholderAutokick = listAutokick.length === 0 ? `
-                <li class="stat-kategori-card" style="opacity:0.5;">
-                    <div class="stat-kategori-header">
-                        <span class="stat-kategori-icon maroon">${ICON.AUTOKICK}</span>
-                        <b>AUTOKICK (PELANGGARAN / ADMIN)</b>
-                        <span class="stat-kategori-count">0</span>
-                    </div>
-                    <div class="stat-kategori-body">
-                        <div style="text-align:center; font-size:11px; color:#94a3b8; font-style:italic; padding:6px 0;">Tidak ada pelanggaran hari ini 👍</div>
-                    </div>
-                </li>` : "";
-
-            listEl.innerHTML = html + placeholderIbadah + placeholderMakan + placeholderAutokick;
+            const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-autokick').innerText = listAutokick.length;
+            document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
+                ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
+                : listAutokick.map(a => {
+                    const teksAlasan = a.alasan ? a.alasan : (a.kategori || "");
+                    return `<li>
+                        <span class="nama">${a.nama} <span style="font-size:10px; color:#dc2626; font-weight:700;">${teksAlasan}</span></span>
+                        <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
+                    </li>`;
+                }).join('');
         }
 
         function gabungRentang(list, aksiMulai, aksiSelesai) {
             const perNama = {};
             list.forEach(a => {
-                const key = sanitizeNama(a.nama);
                 if (a.aksi === aksiMulai) {
-                    if (!perNama[key]) perNama[key] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: null };
-                    else perNama[key].mulai = a.waktuMulai || a.waktu;
+                    if (!perNama[a.nama]) perNama[a.nama] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: null };
+                    else perNama[a.nama].mulai = a.waktuMulai || a.waktu;
                 } else if (a.aksi === aksiSelesai) {
-                    if (!perNama[key]) perNama[key] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: a.waktuSelesai || a.waktu };
-                    else perNama[key].selesai = a.waktuSelesai || a.waktu;
+                    if (!perNama[a.nama]) perNama[a.nama] = { nama: a.nama, posisi: a.posisi, mulai: a.waktuMulai || a.waktu, selesai: a.waktuSelesai || a.waktu };
+                    else perNama[a.nama].selesai = a.waktuSelesai || a.waktu;
                 }
             });
-            return Object.values(perNama).sort((a,b) => (b.mulai||0) - (a.mulai||0));
+            return Object.values(perNama).sort((a,b) => (b.mulai||0) - (a.mulai||0)).map(a => {
+                const label = a.selesai
+                    ? `(${formatJam(a.mulai)} - ${formatJam(a.selesai)})`
+                    : `(${formatJam(a.mulai)} - ...)`;
+                return { ...a, label };
+            });
+        }
+
+        function toggleAktivitasAdmin() {
+            const content = document.getElementById('content-aktivitas-admin');
+            const arrow = document.getElementById('arrow-aktivitas-admin');
+            if (!content || !arrow) return;
+            const isHidden = content.style.display === 'none' || content.style.display === '';
+            content.style.display = isHidden ? 'block' : 'none';
+            arrow.innerText = isHidden ? '▲' : '▼';
+        }
+
+        function toggleRiwayatAdmin() {
+            const content = document.getElementById('content-riwayat-admin');
+            const arrow = document.getElementById('arrow-riwayat-admin');
+            if (!content || !arrow) return;
+            const isHidden = content.style.display === 'none' || content.style.display === '';
+            content.style.display = isHidden ? 'block' : 'none';
+            arrow.innerText = isHidden ? '▲' : '▼';
         }
 
         function bukaModalToggleSistem(targetStatus) {
@@ -1028,7 +1042,7 @@
         }
         async function eksekusiTambahMasterSales() {
             const namaBaru = document.getElementById('input-nama-baru').value.trim();
-            if (!namaBaru) { alert("Nama tidak boleh kosong!"); return; }
+            if (!namaBaru) { tampilkanModal("Perhatian", "Nama tidak boleh kosong!"); return; }
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Menyimpan...`;
@@ -1064,7 +1078,7 @@
         }
         async function eksekusiHapusMasterSales() {
             const nama = document.getElementById('select-hapus-sales').value;
-            if (!nama) { alert("Pilih promotor terlebih dahulu!"); return; }
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor terlebih dahulu!"); return; }
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Menghapus...`;
@@ -1099,15 +1113,21 @@
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
             masterSalesGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama}</option>`; });
+            
             document.getElementById('modal-title').innerText = "Masukkan Promotor ke Antrian";
             document.getElementById('modal-desc').innerHTML = `
                 Kategori:<br>
-                <select id="admin-select-kategori">
+                <select id="admin-select-kategori" style="margin-bottom:10px;">
                     <option value="HA">HA (Home Appliance)</option>
                     <option value="AV">AV (Audio Video)</option>
-                </select><br><br>
+                </select><br>
+                
                 Promotor:<br>
-                <select id="admin-select-sales">${options}</select>
+                <select id="admin-select-sales" style="margin-bottom:10px;">${options}</select><br>
+                
+                Posisi Urutan:<br>
+                <input type="number" id="admin-input-posisi" value="1" min="1" placeholder="Nomor urut" style="margin-bottom:10px;">
+                <div style="font-size:10px; color:#94a3b8; margin-top:-6px;">Kosongkan / isi 0 untuk masuk paling belakang</div>
             `;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
@@ -1118,11 +1138,16 @@
         async function eksekusiTambahAntriAdmin() {
             const kategori = document.getElementById('admin-select-kategori').value;
             const nama = document.getElementById('admin-select-sales').value;
-            if (!nama) { alert("Pilih promotor!"); return; }
+            const posisiInput = document.getElementById('admin-input-posisi').value;
+            const posisi = parseInt(posisiInput) || 0;
+
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor!"); return; }
             const clean = sanitizeNama(nama);
+
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+
             try {
                 const snap = await window.dbGet(window.dbRef(window.db, 'antrian/' + clean));
                 if (snap.exists()) {
@@ -1130,13 +1155,36 @@
                     tampilkanModal("Gagal", "Promotor sudah ada di antrian.");
                     return;
                 }
+
+                let waktuStandby = Date.now();
+                
+                if (posisi > 0) {
+                    const snapAll = await window.dbGet(window.dbRef(window.db, 'antrian'));
+                    const allData = snapAll.val() || {};
+                    const listKategori = Object.keys(allData)
+                        .map(k => ({ _key: k, ...allData[k] }))
+                        .filter(a => String(a.kategori || '').toUpperCase() === String(kategori).toUpperCase() && a.status === 'Standby')
+                        .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
+
+                    if (posisi <= listKategori.length && listKategori.length > 0) {
+                        const target = listKategori[posisi - 1];
+                        waktuStandby = (target.waktuStandby || Date.now()) - 1;
+                    } else {
+                        const last = listKategori[listKategori.length - 1];
+                        waktuStandby = (last && last.waktuStandby ? last.waktuStandby : Date.now()) + 1;
+                    }
+                }
+
                 await window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
-                    nama: nama, status: "Standby", waktuStandby: Date.now(),
+                    nama: nama, status: "Standby", waktuStandby: waktuStandby,
                     kategori: kategori, subkategori: kategori, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 });
+
                 tutupModal();
-                tampilkanModal("Berhasil", `Promotor ${nama} dimasukkan ke antrian kategori ${kategori}.`);
+                const infoPosisi = posisi > 0 ? `di posisi #${posisi}` : `paling belakang`;
+                tampilkanModal("Berhasil", `Promotor ${nama} dimasukkan ke antrian kategori ${kategori} ${infoPosisi}.`);
             } catch (e) {
+                console.warn("Error tambah antri:", e);
                 tutupModal();
                 tampilkanModal("Gagal", "Tidak bisa menambahkan ke antrian.");
             }
@@ -1156,7 +1204,7 @@
         }
         async function eksekusiKeluarkanAntrian() {
             const nama = document.getElementById('select-keluar-sales').value;
-            if (!nama) { alert("Pilih promotor dulu!"); return; }
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor dulu!"); return; }
             const clean = sanitizeNama(nama);
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
@@ -1189,7 +1237,7 @@
         }
         async function eksekusiPaksaBawaCustomer() {
             const nama = document.getElementById('select-paksa-sales').value;
-            if (!nama) { alert("Pilih promotor dulu!"); return; }
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor dulu!"); return; }
             const clean = sanitizeNama(nama);
             const now = Date.now();
             const btn = document.getElementById('btn-modal-action-ok');
@@ -1211,7 +1259,6 @@
             }
         }
 
-        // ===== LOCK PROMOTOR (dengan opsi terjadwal) =====
         function bukaModalLockPromotorAdmin() {
             if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
             let options = '<option value="">-- Pilih Promotor --</option>';
@@ -1286,7 +1333,7 @@
             const durasi = document.getElementById('admin-input-durasi-menit') ? parseInt(document.getElementById('admin-input-durasi-menit').value) || 60 : 60;
             const waktuMulai = document.getElementById('admin-select-waktu-mulai') ? document.getElementById('admin-select-waktu-mulai').value : "SEKARANG";
 
-            if (!nama) { alert("Pilih promotor!"); return; }
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor!"); return; }
             const clean = sanitizeNama(nama);
 
             const btn = document.getElementById('btn-modal-action-ok');
@@ -1303,7 +1350,7 @@
                         if (!tgl || !jam) {
                             btn.disabled = false;
                             btn.innerHTML = "Proses";
-                            alert("Isi tanggal & jam mulai hukuman!");
+                            tampilkanModal("Perhatian", "Isi tanggal & jam mulai hukuman!");
                             return;
                         }
                         const dateObj = new Date(`${tgl}T${jam}:00`);
@@ -1311,7 +1358,7 @@
                         if (timestampMulai < Date.now()) {
                             btn.disabled = false;
                             btn.innerHTML = "Proses";
-                            alert("Waktu mulai tidak boleh di masa lalu!");
+                            tampilkanModal("Perhatian", "Waktu mulai tidak boleh di masa lalu!");
                             return;
                         }
                     }
@@ -1370,36 +1417,91 @@
 
         function bukaModalResetTotal() {
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
-            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. Lanjutkan?`;
+            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. <b>No Sale akan dicatat otomatis</b> untuk promotor yang belum bawa customer. Lanjutkan?`;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
                 <button type="button" id="btn-modal-action-ok" onclick="eksekusiResetTotal()">Reset Sekarang</button>
             `;
             document.getElementById('custom-modal').classList.add('active');
         }
+
+        // ✅ RESET TOTAL dengan No Sale otomatis
         async function eksekusiResetTotal() {
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses Reset...`;
+
             try {
-                await window.dbRemove(window.dbRef(window.db, 'antrian'));
+                const db = window.db;
                 const hariIni = getTanggalIndo();
-                const snapshot = await window.dbGet(window.dbRef(window.db, 'statistikAktivitas'));
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    const updates = {};
-                    Object.keys(data).forEach(k => {
-                        if (data[k] && data[k].tanggal === hariIni) {
-                            updates['statistikAktivitas/' + k] = null;
-                        }
-                    });
-                    if (Object.keys(updates).length > 0) {
-                        await window.dbUpdate(window.dbRef(window.db), updates);
+                const bulanKey = getBulanKey();
+
+                // ✅ CEK: Promotor yang belum bawa customer hari ini → No Sale +1
+                const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
+                const dataStat = snapStat.exists() ? snapStat.val() : {};
+                const listHariIni = Object.values(dataStat).filter(a => a && a.tanggal === hariIni);
+
+                const promotorBawaCustomer = new Set(
+                    listHariIni.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+                );
+
+                const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
+                let listPromotor = [];
+                if (snapMaster.exists()) {
+                    listPromotor = Object.values(snapMaster.val())
+                        .map(item => {
+                            const rec = item && item.record ? item.record : item;
+                            return rec && (rec.nama || rec.NAMA_PROMOTOR || rec.Nama_Sales);
+                        })
+                        .filter(n => n && typeof n === 'string');
+                }
+
+                const updatesRiwayat = {};
+                for (const nama of listPromotor) {
+                    const clean = sanitizeNama(nama);
+                    if (!promotorBawaCustomer.has(clean)) {
+                        const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+                        const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
+                        const existing = snapR.exists() ? snapR.val() : { nama: nama, lihat: 0, deal: 0, noSale: 0 };
+                        if (typeof existing.noSale !== 'number') existing.noSale = 0;
+                        existing.noSale = existing.noSale + 1;
+                        existing.nama = nama;
+                        existing.lastUpdate = Date.now();
+                        existing.bulanKey = bulanKey;
+                        updatesRiwayat[pathRiwayat] = existing;
                     }
                 }
+
+                if (Object.keys(updatesRiwayat).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updatesRiwayat);
+                    console.log(`⛔ No Sale dicatat untuk ${Object.keys(updatesRiwayat).length} promotor`);
+                }
+
+                // ✅ Hapus antrian
+                await window.dbRemove(window.dbRef(db, 'antrian'));
+
+                // ✅ Hapus statistik hari ini
+                const updates = {};
+                Object.keys(dataStat).forEach(k => {
+                    if (dataStat[k] && dataStat[k].tanggal === hariIni) {
+                        updates['statistikAktivitas/' + k] = null;
+                    }
+                });
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                }
+
+                // ✅ Marker no-sale sudah dihitung hari ini
+                localStorage.setItem('ufo_admin_last_nosale_reset', getTanggalKey());
+
                 tutupModal();
-                tampilkanModal("Reset Total", "Semua antrian dan log hari ini berhasil direset.");
+                let pesan = "Semua antrian dan log hari ini berhasil direset.";
+                if (Object.keys(updatesRiwayat).length > 0) {
+                    pesan += `\n\n⛔ No Sale dicatat untuk ${Object.keys(updatesRiwayat).length} promotor.`;
+                }
+                tampilkanModal("Reset Total", pesan);
             } catch (e) {
+                console.warn("Error reset:", e);
                 tutupModal();
                 tampilkanModal("Gagal", "Tidak bisa reset total.");
             }
@@ -1407,13 +1509,14 @@
 
         function toggleGPSAdmin(aktif) {
             if (!aktif) {
-                if (!confirm("Matikan validasi GPS toko?")) return;
-                window.dbUpdate(window.dbRef(window.db, 'setting'), {
-                    latToko: "", lngToko: "", radiusToko: 50
-                }).then(() => {
-                    tampilkanModal("GPS Dinonaktifkan", "Validasi radius GPS berhasil dimatikan.");
-                }).catch(() => {
-                    tampilkanModal("Gagal", "Tidak bisa mematikan GPS.");
+                tampilkanModalKonfirmasi("Matikan GPS", "Yakin ingin mematikan validasi GPS toko?", () => {
+                    window.dbUpdate(window.dbRef(window.db, 'setting'), {
+                        latToko: "", lngToko: "", radiusToko: 50
+                    }).then(() => {
+                        tampilkanModal("GPS Dinonaktifkan", "Validasi radius GPS berhasil dimatikan.");
+                    }).catch(() => {
+                        tampilkanModal("Gagal", "Tidak bisa mematikan GPS.");
+                    });
                 });
                 return;
             }
@@ -1475,6 +1578,19 @@
             document.getElementById('modal-actions').innerHTML = `<button type="button" onclick="tutupModal()">OK</button>`;
             document.getElementById('custom-modal').classList.add('active');
         }
+
+        function tampilkanModalKonfirmasi(judul, pesan, callbackYa) {
+            document.getElementById('modal-title').innerText = judul;
+            document.getElementById('modal-desc').innerHTML = String(pesan).replace(/\n/g, '<br>');
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" id="btn-modal-batal">Batal</button>
+                <button type="button" id="btn-modal-ya">Ya, Lanjutkan</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+            document.getElementById('btn-modal-batal').onclick = () => tutupModal();
+            document.getElementById('btn-modal-ya').onclick = () => { tutupModal(); callbackYa(); };
+        }
+
         function tutupModal() { document.getElementById('custom-modal').classList.remove('active'); }
 
         window.prosesLoginAdmin = prosesLoginAdmin;
@@ -1500,6 +1616,8 @@
         window.toggleGPSAdmin = toggleGPSAdmin;
         window.toggleDarkMode = toggleDarkMode;
         window.tutupModal = tutupModal;
+        window.toggleAktivitasAdmin = toggleAktivitasAdmin;
+        window.toggleRiwayatAdmin = toggleRiwayatAdmin;
     </script>
 </body>
 </html>
