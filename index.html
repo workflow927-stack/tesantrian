@@ -485,6 +485,11 @@
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         }
 
+        function getBulanKey() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        }
+
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
@@ -1092,7 +1097,36 @@
                     tanggal: hariIni, hasil: hasil, durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
                 });
             }
+
+            // ✅ UPDATE RIWAYAT BULANAN
+            updateRiwayatBulanan(nama, hasil);
+
             window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+        }
+
+        // ✅ Fungsi baru: update riwayat bulanan
+        function updateRiwayatBulanan(nama, hasil) {
+            const now = new Date();
+            const bulanKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const clean = sanitizeNama(nama);
+            const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+
+            window.dbGet(window.dbRef(window.db, pathRiwayat)).then(snap => {
+                const existing = snap.exists() ? snap.val() : { nama: nama, lihat: 0, deal: 0, noSale: 0 };
+                if (typeof existing.noSale !== 'number') existing.noSale = 0;
+                
+                if (hasil === "Deal") {
+                    existing.deal = (existing.deal || 0) + 1;
+                } else if (hasil === "Lihat") {
+                    existing.lihat = (existing.lihat || 0) + 1;
+                }
+                
+                existing.nama = nama;
+                existing.lastUpdate = Date.now();
+                existing.bulanKey = bulanKey;
+
+                window.dbUpdate(window.dbRef(window.db, pathRiwayat), existing);
+            });
         }
 
         function aksiToggleCS() {
@@ -1102,11 +1136,25 @@
             const statusNow = itemSaya ? itemSaya.status : "";
 
             if (statusNow === "Standby") {
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Dipanggil CS" })
-                .then(() => catatAktivitas(nama, "PanggilCS", ""));
+                const kat = String(itemSaya.kategori || "HA").toUpperCase();
+                const listStandby = daftarAntrianGlobal
+                    .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
+                    .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
+                const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
+                const waktuStandbyLama = itemSaya.waktuStandby || Date.now();
+
+                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
+                    status: "Dipanggil CS",
+                    posisiTerkunci: posisi,
+                    waktuStandbySebelumCS: waktuStandbyLama
+                }).then(() => catatAktivitas(nama, "PanggilCS", ""));
             } else if (statusNow === "Dipanggil CS") {
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Standby", waktuStandby: Date.now() })
-                .then(() => catatAktivitas(nama, "KembaliAntriDariCS", ""));
+                const waktuStandbyKembali = itemSaya.waktuStandbySebelumCS || itemSaya.waktuStandby || Date.now();
+                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
+                    status: "Standby",
+                    waktuStandby: waktuStandbyKembali,
+                    posisiTerkunci: 0
+                }).then(() => catatAktivitas(nama, "KembaliAntriDariCS", ""));
             }
         }
 
