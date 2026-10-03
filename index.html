@@ -349,168 +349,169 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="admin-container">
         <div class="top-controls">
-            <button type="button" class="dark-mode-btn" id="btn-toggle-dark" onclick="toggleDarkMode()">🌙 Gelap</button>
+            <button type="button" class="dark-mode-btn" id="btn-toggle-dark" onclick="toggleDarkMode()">🌙 Mode Gelap</button>
         </div>
 
-        <div class="gradient-header">
-            <h2>Antrian Walk-In Promotor</h2>
-            <p>UFO Kebonsari</p>
+        <div class="header-admin">
+            <h2>Dashboard Admin</h2>
+            <span class="header-sub-text">Sistem Antrian Promotor</span>
+            <span class="header-sub-text">UFO Kebonsari</span>
+            <div id="badge-status-sistem" class="status-badge status-open">STATUS: OPEN</div>
         </div>
 
-        <div id="badge-status-sistem" class="status-badge-sistem status-open">STATUS ANTRIAN: OPEN</div>
-
-        <div id="panel-login" style="display: none;">
+        <div id="login-admin-box">
             <div class="input-group">
-                <label>Pilih Nama Anda (Kunci Perangkat)</label>
-                <select id="pilih-sales"><option value="">-- Pilih Nama Anda --</option></select>
+                <label>Masukkan PIN Admin Khusus</label>
+                <input type="password" id="input-pin-admin" placeholder="••••" style="text-align: center; font-size: 18px; letter-spacing: 4px;">
             </div>
-            <button type="button" class="btn-customer" onclick="simpanAkunHP()">Simpan & Kunci di HP Ini</button>
+            <button type="button" id="btn-login-admin" class="btn-black-custom" onclick="prosesLoginAdmin()">Autentikasi & Masuk</button>
         </div>
 
-        <div id="panel-menu-utama" style="display: none;">
-            <div class="user-badge">
-                <span style="color: var(--text-muted);">Promotor:</span> <strong id="label-user-aktif" style="color:var(--primary); font-size: 14px;">-</strong>
-            </div>
-
-            <div id="box-lock-timer" style="display:none; margin-bottom: 16px;">
-                <div class="timer-card-admin">
-                    <span class="timer-badge-title">🔒 AKUN DIKUNCI</span>
-                    <div class="timer-display" id="lock-timer-display">--:--</div>
-                    <div id="lock-reason-display" style="font-size:11px; color:#ffb3bc; margin-top:6px; font-weight:600;">Alasan: -</div>
-                    <div style="font-size:10px; color:#ff8585; margin-top:4px;">Akun akan terbuka otomatis setelah timer habis</div>
-                </div>
-            </div>
+        <div id="controls-admin-box" style="display: none;">
+            <div style="font-size: 10px; color: #059669; font-weight: 700; text-align: center; margin-top: 4px;">🟢 Terhubung Firebase Realtime</div>
 
             <div class="timer-box-wrapper">
                 <div class="timer-card-admin ha">
-                    <div><span class="timer-badge-title">GILIRAN HA SAAT INI</span><div id="promotor-nama-ha" class="promotor-nama-aktif">Memuat...</div></div>
+                    <div><span class="timer-badge-title">Giliran HA</span><div id="admin-nama-ha" class="admin-nama-promotor">Memuat...</div></div>
                 </div>
                 <div class="timer-card-admin av">
-                    <div><span class="timer-badge-title">GILIRAN AV SAAT INI</span><div id="promotor-nama-av" class="promotor-nama-aktif">Memuat...</div></div>
+                    <div><span class="timer-badge-title">Giliran AV</span><div id="admin-nama-av" class="admin-nama-promotor">Memuat...</div></div>
                 </div>
             </div>
 
-            <div id="timer-aktif-box" style="display:none; margin-bottom: 16px;">
-                <div class="timer-card-admin" style="border: 2px solid #d97706;">
-                    <span class="timer-badge-title" id="timer-aktif-label">TIMER</span>
-                    <div class="timer-display" id="timer-aktif-display">15:00</div>
-                    <div style="font-size:10px; color:var(--text-muted); margin-top:4px; font-weight:600;">⚠️ Posisi terkunci. Jika timer habis sebelum selesai → otomatis keluar antrian</div>
-                </div>
+            <div class="list-section-wrapper">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 10px; text-transform: uppercase;">LIVE URUTAN KATEGORI HA</div>
+                <ul id="list-HA" class="list-antrian"><li><span>Memuat...</span></li></ul>
+
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;">LIVE URUTAN KATEGORI AV</div>
+                <ul id="list-AV" class="list-antrian"><li><span>Memuat...</span></li></ul>
             </div>
 
-            <div id="section-checkin-awal" style="display: none;">
-                <div class="gps-box">
-                    <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px; letter-spacing:0.3px; text-align:left;">📍 Peta Posisi Toko & Radius</div>
-                    <div id="map-promotor"></div>
-                    <div id="info-radius" class="info-radius">📡 Mendeteksi lokasi Anda...</div>
+            <!-- ===== AKTIVITAS HARI INI ===== -->
+            <div class="aktivitas-section">
+                <div class="aktivitas-title t-bawa-customer" style="cursor: pointer;" onclick="toggleAktivitasAdmin()">
+                    <span class="judul-kategori">
+                        <span class="aktivitas-icon">
+                            <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                        </span>
+                        Aktivitas Hari Ini
+                    </span>
+                    <span class="count" id="arrow-aktivitas-admin">▼</span>
                 </div>
-                <div class="input-group">
-                    <label>Check-in Kehadiran</label>
-                    <select id="pilih-kategori-hadir">
-                        <option value="HA">HA (Home Appliance)</option>
-                        <option value="AV">AV (Audio Video)</option>
-                    </select>
-                </div>
-                <button type="button" id="btn-hadir" class="btn-success btn-disabled" onclick="aksiHadirKerja()" disabled>Menunggu Lokasi...</button>
-            </div>
 
-            <div id="section-normal" style="display: none;">
-                <div class="input-group" id="group-pilih-kategori-normal">
-                    <label>Pilih Kategori Antrian</label>
-                    <select id="pilih-kategori-normal">
-                        <option value="HA">HA (Home Appliance)</option>
-                        <option value="AV">AV (Audio Video)</option>
-                    </select>
-                </div>
-                <button type="button" id="btn-daftar-antrian" class="btn-success" onclick="aksiDaftarAntrianNormal()" style="display: none;">Daftar Antrian</button>
-                <button type="button" id="btn-utama-customer" class="btn-customer" onclick="aksiUtamaCustomer()" style="display: none; margin-top: 10px;">Sudah Membawa Customer</button>
-                <button type="button" id="btn-waktu-makan" class="btn-amber" onclick="aksiToggleMakan()" style="display: none; margin-top: 10px;">WAKTU MAKAN</button>
-                <button type="button" id="btn-selesai-closing" class="btn-closing" onclick="aksiSelesaiClosing()" style="display: none; margin-top: 10px;">SELESAI MELAYANI</button>
-                <button type="button" id="btn-utama-cs" class="btn-purple" onclick="aksiToggleCS()" style="display: none; margin-top: 10px;">DIPANGGIL CS/GUDANG</button>
-                <button type="button" id="btn-utama-ibadah" class="btn-indigo" onclick="aksiToggleIbadah()" style="display: none; margin-top: 10px;">SEDANG IBADAH</button>
-                <button type="button" id="btn-keluar-istirahat" class="btn-maroon" onclick="bukaModalKeluarIstirahat()" style="display: none; margin-top: 10px;">KELUAR ANTRIAN</button>
-            </div>
-        </div>
-
-        <div style="margin-top: 20px; text-align: left;">
-            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 10px; text-transform: uppercase;">LIVE URUTAN KATEGORI HA</div>
-            <ul id="list-HA" class="list-antrian"><li><span>Memuat...</span></li></ul>
-            <div style="font-size: 13px; font-weight: 800; border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;">LIVE URUTAN KATEGORI AV</div>
-            <ul id="list-AV" class="list-antrian"><li><span>Memuat...</span></li></ul>
-        </div>
-
-        <div class="aktivitas-section">
-            <div class="aktivitas-header-toggle" id="toggle-aktivitas" onclick="toggleAktivitasSection()">
-                <span class="judul">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                    </svg>
-                    Aktivitas Hari Ini
-                </span>
-                <span class="arrow" id="arrow-aktivitas">
-                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-                </span>
-            </div>
-
-            <div class="aktivitas-content" id="content-aktivitas">
-                <div class="aktivitas-title t-bawa-customer">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>Bawa Customer</span>
-                    <span class="count" id="count-bawa">0</span>
-                </div>
-                <ul id="list-bawa" class="aktivitas-list"></ul>
-
-                <div class="aktivitas-title t-ibadah">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg></span>Ibadah</span>
-                    <span class="count" id="count-ibadah">0</span>
-                </div>
-                <ul id="list-ibadah" class="aktivitas-list"></ul>
-
-                <div class="aktivitas-title t-makan">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg></span>Waktu Makan</span>
-                    <span class="count" id="count-makan">0</span>
-                </div>
-                <ul id="list-makan" class="aktivitas-list"></ul>
-
-                <div class="aktivitas-title t-keluar">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Keluar Antrian</span>
-                    <span class="count" id="count-keluar">0</span>
-                </div>
-                <ul id="list-keluar" class="aktivitas-list"></ul>
-
-                <!-- ===== REKAP BAWA CUSTOMER PER PROMOTOR ===== -->
-                <div class="aktivitas-title t-rekap">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>Rekap Bawa Customer per Promotor</span>
-                </div>
-                <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-bottom: 10px;">
-                    <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-align: center; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px;">
-                        Periode: <span id="rekap-periode-label">-</span>
+                <div id="content-aktivitas-admin">
+                    <div class="aktivitas-title t-bawa-customer">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            </span>
+                            Bawa Customer
+                        </span>
+                        <span class="count" id="count-bawa">0</span>
                     </div>
-                    <table class="rekap-tabel">
-                        <thead>
-                            <tr>
-                                <th class="kolom-nama">Nama Promotor</th>
-                                <th>Deal</th>
-                                <th>Lihat</th>
-                                <th>No Sale</th>
-                                <th>Hari</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rekap-tbody">
-                            <tr><td colspan="5" class="aktivitas-empty">Memuat data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- ===== END REKAP ===== -->
+                    <ul id="list-bawa" class="aktivitas-list"></ul>
 
-                <div class="aktivitas-title t-autokick">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span>Autokick (Pelanggaran)</span>
-                    <span class="count" id="count-autokick">0</span>
+                    <div class="aktivitas-title t-ibadah">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg>
+                            </span>
+                            Ibadah
+                        </span>
+                        <span class="count" id="count-ibadah">0</span>
+                    </div>
+                    <ul id="list-ibadah" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-makan">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 4 0V2"/><line x1="9" y1="11" x2="9" y2="22"/><path d="M17 2v6a2 2 0 0 1-2 2h-2v12"/></svg>
+                            </span>
+                            Waktu Makan
+                        </span>
+                        <span class="count" id="count-makan">0</span>
+                    </div>
+                    <ul id="list-makan" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-keluar">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            </span>
+                            Keluar Antrian
+                        </span>
+                        <span class="count" id="count-keluar">0</span>
+                    </div>
+                    <ul id="list-keluar" class="aktivitas-list"></ul>
+
+                    <div class="aktivitas-title t-autokick">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                            </span>
+                            Autokick (Pelanggaran)
+                        </span>
+                        <span class="count" id="count-autokick">0</span>
+                    </div>
+                    <ul id="list-autokick" class="aktivitas-list"></ul>
                 </div>
-                <ul id="list-autokick" class="aktivitas-list"></ul>
             </div>
+
+            <!-- ===== RIWAYAT BULANAN ===== -->
+            <div class="aktivitas-section">
+                <div class="aktivitas-title" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); cursor: pointer;" onclick="toggleRiwayatAdmin()">
+                    <span class="judul-kategori">
+                        <span class="aktivitas-icon">
+                            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </span>
+                        Riwayat Bulanan Promotor
+                    </span>
+                    <span class="count" id="arrow-riwayat-admin">▼</span>
+                </div>
+
+                <div id="content-riwayat-admin" style="display: none; margin-top: 8px;">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; padding: 6px 0 10px 0; text-transform: uppercase;">
+                        📅 <span id="bulan-riwayat-label">-</span>
+                    </div>
+                    <ul id="list-riwayat-bulanan" class="riwayat-list">
+                        <li><span style="color:#94a3b8; font-style:italic;">Memuat...</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-title">Konfigurasi Validasi GPS Toko</div>
+            <div class="admin-grid" style="margin-bottom: 15px;">
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" id="btn-on-gps" style="flex:1;" onclick="toggleGPSAdmin(true)">Aktifkan GPS</button>
+                    <button type="button" id="btn-off-gps" style="flex:1;" onclick="toggleGPSAdmin(false)">Matikan GPS</button>
+                </div>
+                <div id="label-status-gps" style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-align: center; margin-top: 4px;">Status GPS: Memeriksa...</div>
+            </div>
+
+            <div class="section-title">1. Manajemen Operasional Sistem</div>
+            <div class="admin-grid">
+                <button type="button" id="btn-buka-sistem" class="btn-black-custom" onclick="bukaModalToggleSistem('BUKA')">Buka Sistem Antrian</button>
+                <button type="button" id="btn-tutup-sistem" onclick="bukaModalToggleSistem('TUTUP')">Tutup Sistem Antrian</button>
+            </div>
+
+            <div class="section-title">2. Manajemen Urutan Antrian</div>
+            <div class="admin-grid">
+                <button type="button" class="btn-black-custom" onclick="bukaModalTambahAntriAdmin()">+ Masukkan Promotor ke Antrian</button>
+                <button type="button" class="btn-black-custom" onclick="bukaModalTambahMasterSales()">+ Tambah Nama Baru (Master Sales)</button>
+                <button type="button" onclick="bukaModalHapusMasterSales()">- Hapus Nama Permanen (Master Sales)</button>
+                <button type="button" onclick="bukaModalKeluarkanAntrian()">- Keluarkan dari Antrian</button>
+            </div>
+
+            <div class="section-title">3. Tindakan Darurat & Kontrol Khusus</div>
+            <div class="admin-grid">
+                <button type="button" class="btn-black-custom" onclick="bukaModalPaksaBawaCustomer()">Paksa Bawa Customer</button>
+                <button type="button" onclick="bukaModalLockPromotorAdmin()">Kontrol Hukuman / Lock Akun</button>
+                <button type="button" onclick="bukaModalResetTotal()">Reset Seluruh Antrian Aktif</button>
+            </div>
+
+            <button type="button" class="btn-cancel" style="margin-top: 28px; font-weight: 700;" onclick="logoutAdmin()">Keluar (Lock Panel Admin)</button>
         </div>
     </div>
 
@@ -518,145 +519,110 @@
         <div class="modal-box">
             <div id="modal-title" class="modal-title">Pemberitahuan</div>
             <div id="modal-desc" class="modal-desc">Isi pesan...</div>
-            <div id="modal-actions" class="modal-actions"><button type="button" class="btn-customer" onclick="tutupModal()">OK</button></div>
+            <div class="modal-actions" id="modal-actions">
+                <button type="button" onclick="tutupModal()">OK</button>
+            </div>
         </div>
     </div>
         <script>
-        let daftarAntrianGlobal = [];
-        let masterSalesGlobal = [];
-        let statusSistemGlobal = "BUKA";
-        let namaSalesAktifGlobal = "";
-        let timerIntervalGlobal = null;
-        let masterSalesLoaded = false;
-        let aktivitasGlobal = [];
-        let checkinHarianGlobal = {};
+        window.addEventListener('unhandledrejection', e => { e.preventDefault(); console.warn("Handled:", e.reason); });
 
-        let koordinatToko = { lat: null, lng: null, radius: 50 };
-        let mapPromotor = null;
-        let circleTokoPeta = null;
-        let markerTokoPeta = null;
-        let markerSayaPeta = null;
-        let posisiSaya = { lat: null, lng: null, ok: false };
-        let geolocationWatchId = null;
-
-        let lockTimerInterval = null;
-        let lockDataGlobal = null;
-
-        const DURASI_TIMER_MENIT = 15;
+        const PIN_ADMIN_DEFAULT = "123456";
         const SVG_CHECK_DEAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5L10.5 16L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-        function getTanggalIndo() {
-            const now = new Date();
-            return `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-        }
-
-        function getTanggalKey() {
-            const now = new Date();
-            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        }
-
-        function getBulanKey() {
-            const now = new Date();
-            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-        }
-
-        function getBulanLabelIndo() {
-            const bulanNama = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            const now = new Date();
-            return `${bulanNama[now.getMonth()]} ${now.getFullYear()}`;
-        }
+        let masterSalesGlobal = [];
+        let daftarAntrianGlobal = [];
+        let statistikGlobal = [];
+        let lockGlobal = {};
+        let riwayatBulananGlobal = [];
+        let checkinHarianGlobal = {};
+        let statusSistemGlobal = "BUKA";
+        let koordinatTokoAdmin = { lat: "", lng: "", radius: 50 };
+        let savedPinAdmin = "";
+        let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null, unsubRiwayat = null, unsubCheckin = null;
+        let timerCekGantiHari = null;
 
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
-
+        function getTanggalIndo(d) {
+            const now = d || new Date();
+            return `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`;
+        }
+        function getTanggalKey(d) {
+            const now = d || new Date();
+            return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+        }
+        function getBulanKey(d) {
+            const now = d || new Date();
+            return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+        }
         function formatJam(ts) {
             const d = new Date(ts);
             return `${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`;
         }
 
-        function hitungJarak(lat1, lon1, lat2, lon2) {
-            const R = 6371000;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
-
-        // Cek apakah tanggalKey (YYYY-MM-DD) berada di bulan yang sama dengan sekarang
-        function isTanggalBulanIni(tanggalKey) {
-            if (!tanggalKey) return false;
-            return String(tanggalKey).startsWith(getBulanKey());
-        }
-
         window.addEventListener('firebase-ready', () => {
             initDarkMode();
-            resetCheckinHarianJikaPerlu();
-            restoreAktivitasState();
-
-            const cachedNama = localStorage.getItem('ufo_nama_sales_aktif');
-            if (cachedNama) {
-                namaSalesAktifGlobal = cachedNama;
-                document.getElementById('panel-login').style.display = 'none';
-                document.getElementById('panel-menu-utama').style.display = 'block';
-                document.getElementById('label-user-aktif').innerText = cachedNama;
+            savedPinAdmin = localStorage.getItem('ufo_admin_pin') || "";
+            if (savedPinAdmin) {
+                document.getElementById('login-admin-box').style.display = 'none';
+                document.getElementById('controls-admin-box').style.display = 'block';
+                mulaiListenerFirebase();
             } else {
-                document.getElementById('panel-login').style.display = 'block';
-                document.getElementById('panel-menu-utama').style.display = 'none';
+                document.getElementById('login-admin-box').style.display = 'block';
+                document.getElementById('controls-admin-box').style.display = 'none';
             }
-
-            inisialisasiRealtimeFirebase();
         });
 
-        function resetCheckinHarianJikaPerlu() {
-            const tglTersimpan = localStorage.getItem('ufo_checkin_tanggal');
-            const hariIni = getTanggalKey();
-            if (tglTersimpan !== hariIni) {
-                localStorage.removeItem('ufo_checkin_hari_ini');
-                localStorage.removeItem('ufo_checkin_tanggal');
-                Object.keys(localStorage).forEach(key => {
-                    if (key.startsWith('ufo_sudah_makan_')) localStorage.removeItem(key);
-                });
-            }
-        }
+        async function prosesLoginAdmin() {
+            const pin = document.getElementById('input-pin-admin').value.trim();
+            if (!pin) { tampilkanModal("Perhatian", "Masukkan PIN Admin!"); return; }
 
-        function toggleAktivitasSection() {
-            const header = document.getElementById('toggle-aktivitas');
-            const content = document.getElementById('content-aktivitas');
-            if (!header || !content) return;
-            const isOpen = content.classList.contains('open');
-            if (isOpen) {
-                content.classList.remove('open');
-                header.classList.remove('open');
-                localStorage.setItem('ufo_aktivitas_open', 'false');
-            } else {
-                content.classList.add('open');
-                header.classList.add('open');
-                localStorage.setItem('ufo_aktivitas_open', 'true');
-            }
-        }
+            const btn = document.getElementById('btn-login-admin');
+            const asli = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memeriksa...`;
 
-        function restoreAktivitasState() {
-            setTimeout(() => {
-                const saved = localStorage.getItem('ufo_aktivitas_open');
-                if (saved === 'true') {
-                    const header = document.getElementById('toggle-aktivitas');
-                    const content = document.getElementById('content-aktivitas');
-                    if (header && content) {
-                        header.classList.add('open');
-                        content.classList.add('open');
-                    }
+            try {
+                const db = window.db;
+                const snap = await window.dbGet(window.dbRef(db, 'setting/pinAdmin'));
+                const pinDb = snap.exists() ? String(snap.val()).trim() : PIN_ADMIN_DEFAULT;
+
+                if (!snap.exists()) {
+                    await window.dbSet(window.dbRef(db, 'setting/pinAdmin'), PIN_ADMIN_DEFAULT);
                 }
-            }, 150);
+
+                if (pin === pinDb) {
+                    savedPinAdmin = pin;
+                    localStorage.setItem('ufo_admin_pin', pin);
+                    document.getElementById('login-admin-box').style.display = 'none';
+                    document.getElementById('controls-admin-box').style.display = 'block';
+                    mulaiListenerFirebase();
+                } else {
+                    tampilkanModal("Gagal Login", "PIN Admin salah!");
+                }
+            } catch (e) {
+                tampilkanModal("Gagal", "Terjadi gangguan saat verifikasi PIN.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = asli;
+            }
         }
 
-        function inisialisasiRealtimeFirebase() {
+        function logoutAdmin() {
+            matikanListenerFirebase();
+            localStorage.removeItem('ufo_admin_pin');
+            savedPinAdmin = "";
+            document.getElementById('input-pin-admin').value = "";
+            document.getElementById('login-admin-box').style.display = 'block';
+            document.getElementById('controls-admin-box').style.display = 'none';
+        }
+
+        function mulaiListenerFirebase() {
             const db = window.db;
 
-            window.dbOnValue(window.dbRef(db, 'antrian'), (snapshot) => {
+            unsubAntrian = window.dbOnValue(window.dbRef(db, 'antrian'), snapshot => {
                 const dataRaw = snapshot.val();
                 daftarAntrianGlobal = [];
                 if (dataRaw) {
@@ -668,697 +634,476 @@
                         }
                     });
                 }
-                renderUI();
-                renderAktivitas();
+                renderAntrianAdmin();
             });
 
-            const pathUtama = 'mastersales';
-            window.dbOnValue(window.dbRef(db, pathUtama), (snapshot) => {
+            unsubSetting = window.dbOnValue(window.dbRef(db, 'setting'), snapshot => {
+                const s = snapshot.val() || {};
+                statusSistemGlobal = s.statusAntrian || "BUKA";
+                koordinatTokoAdmin.lat = s.latToko || "";
+                koordinatTokoAdmin.lng = s.lngToko || "";
+                koordinatTokoAdmin.radius = Number(s.radiusToko) || 50;
+                renderStatusSistem();
+                renderStatusGPS();
+            });
+
+            unsubStatistik = window.dbOnValue(window.dbRef(db, 'statistikAktivitas'), snapshot => {
                 const dataRaw = snapshot.val();
-                if (dataRaw) {
-                    prosesMasterSales(dataRaw);
-                    masterSalesLoaded = true;
-                } else if (!masterSalesLoaded) {
-                    window.dbOnValue(window.dbRef(db, 'data'), (snap2) => {
-                        const d2 = snap2.val();
-                        if (d2 && !masterSalesLoaded) {
-                            prosesMasterSales(d2);
-                            masterSalesLoaded = true;
-                        }
-                    });
-                }
-            });
-
-            window.dbOnValue(window.dbRef(db, 'setting'), (snapshot) => {
-                const setting = snapshot.val();
-                if (setting) {
-                    statusSistemGlobal = setting.statusAntrian || "BUKA";
-                    koordinatToko.lat = setting.latToko ? Number(setting.latToko) : null;
-                    koordinatToko.lng = setting.lngToko ? Number(setting.lngToko) : null;
-                    koordinatToko.radius = Number(setting.radiusToko) || 50;
-                }
-                renderUI();
-            });
-
-            window.dbOnValue(window.dbRef(db, 'statistikAktivitas'), (snapshot) => {
-                const dataRaw = snapshot.val();
-                aktivitasGlobal = [];
+                statistikGlobal = [];
                 if (dataRaw) {
                     Object.keys(dataRaw).forEach(k => {
                         const item = dataRaw[k];
                         if (item && item.nama) {
                             item._key = k;
-                            aktivitasGlobal.push(item);
+                            statistikGlobal.push(item);
                         }
                     });
                 }
-                renderAktivitas();
-                renderRekapBawaCustomer();
+                renderStatistikAdmin();
             });
 
-            window.dbOnValue(window.dbRef(db, 'checkinHarian'), (snapshot) => {
-                const dataCheckin = snapshot.val() || {};
-                checkinHarianGlobal = dataCheckin;
-                const akunSaya = sanitizeNama(getAkunAktif());
-                if (!akunSaya) { renderRekapBawaCustomer(); return; }
-                const dataSaya = dataCheckin[akunSaya];
-                const hariIni = getTanggalKey();
-                let sudahHariIni = false;
-                if (dataSaya) {
-                    // Struktur baru (per tanggal)
-                    if (dataSaya[hariIni] || (dataSaya.tanggalKey === hariIni)) {
-                        sudahHariIni = true;
-                    }
-                }
-                if (sudahHariIni) {
-                    localStorage.setItem('ufo_checkin_hari_ini', 'true');
-                    localStorage.setItem('ufo_checkin_tanggal', hariIni);
-                } else {
-                    localStorage.removeItem('ufo_checkin_hari_ini');
-                    localStorage.removeItem('ufo_checkin_tanggal');
-                }
-                renderUI();
-                renderRekapBawaCustomer();
+            unsubMaster = window.dbOnValue(window.dbRef(db, 'data'), snapshot => {
+                prosesMasterSales(snapshot.val());
             });
 
-            window.dbOnValue(window.dbRef(db, 'lockPromotor'), (snapshot) => {
-                const dataLock = snapshot.val() || {};
-                const akunSaya = sanitizeNama(getAkunAktif());
-                if (!akunSaya) return;
-
-                const lockSaya = dataLock[akunSaya];
-                
-                if (lockSaya && lockSaya.locked) {
-                    const sekarang = Date.now();
-                    const waktuMulai = Number(lockSaya.waktuMulaiLock) || 0;
-                    const waktuExpired = Number(lockSaya.waktuSelesaiLock) || 0;
-                    
-                    const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
-                    const belumExpired = waktuExpired === 0 || sekarang < waktuExpired;
-                    
-                    if (sudahMulai && belumExpired) {
-                        lockDataGlobal = { waktuExpired, alasan: lockSaya.alasan || "-" };
-                        mulaiLockTimer(waktuExpired, lockSaya.alasan || "-");
-                        
-                        if (daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === akunSaya)) {
-                            window.dbRemove(window.dbRef(window.db, 'antrian/' + akunSaya));
-                        }
-                        
-                        const sudahDitampilkan = sessionStorage.getItem('ufo_lock_notif_' + akunSaya);
-                        if (!sudahDitampilkan) {
-                            let sisaTeks = "tanpa batas waktu";
-                            if (waktuExpired > 0) {
-                                const sisaMenit = Math.ceil((waktuExpired - sekarang) / 60000);
-                                sisaTeks = `${sisaMenit} menit lagi`;
-                            }
-                            tampilkanModal("🔒 Akun Dikunci", 
-                                `Akun Anda sedang DIKUNCI.\n\nAlasan: ${lockSaya.alasan || "-"}\nSisa: ${sisaTeks}`
-                            );
-                            sessionStorage.setItem('ufo_lock_notif_' + akunSaya, 'true');
-                        }
-                    } else if (!sudahMulai) {
-                        lockDataGlobal = null;
-                        sembunyikanLockTimer();
-                        console.log(`⏰ Lock terjadwal untuk ${akunSaya} mulai: ${new Date(waktuMulai).toLocaleString('id-ID')}`);
-                    } else {
-                        lockDataGlobal = null;
-                        sembunyikanLockTimer();
-                    }
-                } else {
-                    lockDataGlobal = null;
-                    sembunyikanLockTimer();
-                }
-                
-                renderUI();
+            unsubLock = window.dbOnValue(window.dbRef(db, 'lockPromotor'), snapshot => {
+                lockGlobal = snapshot.val() || {};
+                applyLockToMaster();
+                renderAntrianAdmin();
+                renderStatistikAdmin();
             });
+
+            // ✅ Listener riwayat bulanan
+            const bulanKeySekarang = getBulanKey();
+            unsubRiwayat = window.dbOnValue(window.dbRef(db, 'riwayatBulanan/' + bulanKeySekarang), snapshot => {
+                const dataRaw = snapshot.val() || {};
+                riwayatBulananGlobal = Object.values(dataRaw).filter(r => r && r.nama);
+                renderRiwayatBulanan();
+            });
+
+            // ✅ Listener checkin harian (struktur baru: per tanggal)
+            unsubCheckin = window.dbOnValue(window.dbRef(db, 'checkinHarian'), snapshot => {
+                checkinHarianGlobal = snapshot.val() || {};
+                renderRiwayatBulanan();
+            });
+
+            cekDanJalankanAutoCleanup();
+            if (timerCekGantiHari) clearInterval(timerCekGantiHari);
+            timerCekGantiHari = setInterval(cekDanJalankanAutoCleanup, 30000);
         }
 
-        function mulaiLockTimer(waktuExpired, alasan) {
-            const box = document.getElementById('box-lock-timer');
-            const display = document.getElementById('lock-timer-display');
-            const reasonEl = document.getElementById('lock-reason-display');
-            
-            if (!box || !display) return;
-            
-            box.style.display = 'block';
-            if (reasonEl) reasonEl.innerText = `Alasan: ${alasan}`;
-            
-            if (waktuExpired === 0) {
-                display.innerText = "∞";
-                display.style.fontSize = "32px";
-                if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
-                return;
-            }
-            
-            display.style.fontSize = "";
-            if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
-            
-            const tick = () => {
-                const sisa = waktuExpired - Date.now();
-                
-                if (sisa <= 0) {
-                    display.innerText = "00:00";
-                    sembunyikanLockTimer();
-                    if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
-                    return;
-                }
-                
-                const jam = Math.floor(sisa / 3600000);
-                const menit = Math.floor((sisa % 3600000) / 60000);
-                const detik = Math.floor((sisa % 60000) / 1000);
-                
-                let teks = "";
-                if (jam > 0) {
-                    teks = `${String(jam).padStart(2, '0')}:${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
-                } else {
-                    teks = `${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
-                }
-                
-                display.innerText = teks;
-                if (sisa <= 60000) display.classList.add('warning');
-                else display.classList.remove('warning');
-            };
-            
-            tick();
-            lockTimerInterval = setInterval(tick, 1000);
-        }
-
-        function sembunyikanLockTimer() {
-            const box = document.getElementById('box-lock-timer');
-            if (box) box.style.display = 'none';
-            if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
+        function matikanListenerFirebase() {
+            if (unsubAntrian) { unsubAntrian(); unsubAntrian = null; }
+            if (unsubSetting) { unsubSetting(); unsubSetting = null; }
+            if (unsubStatistik) { unsubStatistik(); unsubStatistik = null; }
+            if (unsubMaster) { unsubMaster(); unsubMaster = null; }
+            if (unsubLock) { unsubLock(); unsubLock = null; }
+            if (unsubRiwayat) { unsubRiwayat(); unsubRiwayat = null; }
+            if (unsubCheckin) { unsubCheckin(); unsubCheckin = null; }
+            if (timerCekGantiHari) { clearInterval(timerCekGantiHari); timerCekGantiHari = null; }
         }
 
         function prosesMasterSales(dataRaw) {
-            let selectHtml = '<option value="">-- Pilih Nama Anda --</option>';
-            let listSales = Array.isArray(dataRaw) ? dataRaw : Object.values(dataRaw);
-            let names = [];
-            listSales.forEach(item => {
+            masterSalesGlobal = [];
+            if (!dataRaw) return;
+            const arr = Array.isArray(dataRaw) ? dataRaw : Object.values(dataRaw);
+            arr.forEach(item => {
                 let salesObj = item;
                 if (item && item.record) salesObj = item.record;
-                let nama = salesObj && (
-                    salesObj.NAMA_PROMOTOR ||
-                    salesObj.nama_promotor ||
-                    salesObj.nama ||
-                    salesObj.Nama_Sales ||
-                    salesObj.nama_sales ||
-                    salesObj.name ||
-                    salesObj.promotor ||
-                    salesObj.NAMA ||
-                    salesObj.Nama
-                );
-                if (nama && typeof nama === 'string' && nama.trim() !== "") {
-                    names.push(nama.trim());
-                }
-            });
-            names = [...new Set(names)].sort();
-            names.forEach(n => { selectHtml += `<option value="${n}">${n}</option>`; });
-            const selectEl = document.getElementById('pilih-sales');
-            if (selectEl) selectEl.innerHTML = selectHtml;
-        }
-
-        function getAkunAktif() {
-            if (!namaSalesAktifGlobal) namaSalesAktifGlobal = localStorage.getItem('ufo_nama_sales_aktif') || "";
-            return namaSalesAktifGlobal;
-        }
-
-        function simpanAkunHP() {
-            const namaPilih = document.getElementById('pilih-sales').value;
-            if(!namaPilih) { tampilkanModal("Perhatian", "Silakan pilih nama Anda!"); return; }
-
-            const clean = sanitizeNama(namaPilih);
-
-            window.dbGet(window.dbRef(window.db, 'lockPromotor/' + clean)).then(snap => {
-                if (snap.exists()) {
-                    const lockData = snap.val();
-                    if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
-                        const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
-                        const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
-                        const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
-                        const belumExpired = waktuExpired === 0 || sekarang < waktuExpired;
-                        
-                        if (sudahMulai && belumExpired) {
-                            let sisaTeks = "tanpa batas waktu";
-                            if (waktuExpired > 0) {
-                                const sisaMenit = Math.ceil((waktuExpired - sekarang) / 60000);
-                                sisaTeks = `${sisaMenit} menit lagi`;
-                            }
-                            tampilkanModal("🔒 Akun Dikunci", 
-                                `Nama "${namaPilih}" sedang DIKUNCI.\n\nAlasan: ${lockData.alasan || "-"}\nSisa: ${sisaTeks}`
-                            );
-                            return;
-                        }
-                    }
-                }
-
-                namaSalesAktifGlobal = namaPilih;
-                localStorage.setItem('ufo_nama_sales_aktif', namaPilih);
-                document.getElementById('panel-login').style.display = 'none';
-                document.getElementById('panel-menu-utama').style.display = 'block';
-                document.getElementById('label-user-aktif').innerText = namaPilih;
-                renderUI();
-                renderAktivitas();
-                renderRekapBawaCustomer();
-            });
-        }
-
-        function initPetaPromotor() {
-            if (mapPromotor) return;
-            const container = document.getElementById('map-promotor');
-            if (!container) return;
-
-            if (!koordinatToko.lat || !koordinatToko.lng) {
-                container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;color:#64748b;padding:10px;text-align:center;">Koordinat toko belum diatur admin</div>';
-                document.getElementById('info-radius').innerText = "⚠️ Toko belum set GPS di admin";
-                document.getElementById('info-radius').className = "info-radius err";
-                return;
-            }
-
-            mapPromotor = L.map('map-promotor', { zoomControl: false }).setView([koordinatToko.lat, koordinatToko.lng], 16);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(mapPromotor);
-            markerTokoPeta = L.marker([koordinatToko.lat, koordinatToko.lng]).addTo(mapPromotor).bindPopup("Lokasi Toko");
-            circleTokoPeta = L.circle([koordinatToko.lat, koordinatToko.lng], { radius: koordinatToko.radius, color: '#059669', fillColor: '#059669', fillOpacity: 0.15 }).addTo(mapPromotor);
-            setTimeout(() => mapPromotor.invalidateSize(), 200);
-            mulaiDeteksiLokasi();
-        }
-
-        function mulaiDeteksiLokasi() {
-            if (geolocationWatchId !== null) navigator.geolocation.clearWatch(geolocationWatchId);
-            if (!navigator.geolocation) {
-                document.getElementById('info-radius').innerText = "❌ Browser tidak mendukung GPS";
-                document.getElementById('info-radius').className = "info-radius err";
-                return;
-            }
-            geolocationWatchId = navigator.geolocation.watchPosition(
-                (pos) => {
-                    posisiSaya.lat = pos.coords.latitude;
-                    posisiSaya.lng = pos.coords.longitude;
-                    updatePetaLokasiSaya();
-                },
-                (err) => {
-                    document.getElementById('info-radius').innerText = "❌ Izin lokasi ditolak / tidak tersedia";
-                    document.getElementById('info-radius').className = "info-radius err";
-                },
-                { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
-            );
-        }
-
-        function updatePetaLokasiSaya() {
-            if (!mapPromotor || !koordinatToko.lat) return;
-            const lat = posisiSaya.lat, lng = posisiSaya.lng;
-            if (markerSayaPeta) mapPromotor.removeLayer(markerSayaPeta);
-            markerSayaPeta = L.marker([lat, lng], {
-                icon: L.divIcon({ className: '', html: '<div style="background:#dc2626;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>', iconSize: [16,16] })
-            }).addTo(mapPromotor).bindPopup("Posisi Anda");
-
-            const jarak = hitungJarak(lat, lng, koordinatToko.lat, koordinatToko.lng);
-            const infoEl = document.getElementById('info-radius');
-            const btnHadir = document.getElementById('btn-hadir');
-
-            if (jarak <= koordinatToko.radius) {
-                posisiSaya.ok = true;
-                infoEl.innerText = `✅ Anda dalam radius (${Math.round(jarak)}m / max ${koordinatToko.radius}m)`;
-                infoEl.className = "info-radius ok";
-                if (btnHadir) {
-                    btnHadir.classList.remove('btn-disabled');
-                    btnHadir.disabled = false;
-                    btnHadir.innerText = "Konfirmasi Kehadiran & Masuk Antri";
-                }
-            } else {
-                posisiSaya.ok = false;
-                infoEl.innerText = `⚠️ Di luar radius (${Math.round(jarak)}m / max ${koordinatToko.radius}m)`;
-                infoEl.className = "info-radius err";
-                if (btnHadir) {
-                    btnHadir.classList.add('btn-disabled');
-                    btnHadir.disabled = true;
-                    btnHadir.innerText = `Di Luar Radius (${Math.round(jarak)}m)`;
-                }
-            }
-            const bounds = L.latLngBounds([[lat, lng], [koordinatToko.lat, koordinatToko.lng]]);
-            mapPromotor.fitBounds(bounds, { padding: [30, 30], maxZoom: 17 });
-        }
-
-        function aksiHadirKerja() {
-            if (statusSistemGlobal !== "BUKA") { tampilkanModal("Antrian Tutup", "Sistem antrian sedang ditutup."); return; }
-            const akunSaya = sanitizeNama(getAkunAktif());
-
-            window.dbGet(window.dbRef(window.db, 'lockPromotor/' + akunSaya)).then(snap => {
-                if (snap.exists()) {
-                    const lockData = snap.val();
-                    if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
-                        const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
-                        const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
-                        const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
-                        const belumExpired = waktuExpired === 0 || sekarang < waktuExpired;
-                        
-                        if (sudahMulai && belumExpired) {
-                            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                                nama: getAkunAktif(), aksi: "Autokick", waktu: Date.now(),
-                                tanggal: getTanggalIndo(), hasil: "Coba Check-in Saat Lock",
-                                kategori: "Lock Hukuman", sumber: "Promotor"
-                            });
-                            tampilkanModal("🔒 Akun Dikunci", `Akun Anda sedang DIKUNCI.\n\nAlasan: ${lockData.alasan || "-"}`);
-                            return;
-                        }
-                    }
-                }
-
-                if (koordinatToko.lat && koordinatToko.lng) {
-                    if (!posisiSaya.ok) {
-                        tampilkanModal("Di Luar Radius", "Anda harus berada di dalam radius toko untuk check-in.");
-                        return;
-                    }
-                }
-
-                const kat = document.getElementById('pilih-kategori-hadir').value;
-                const nama = getAkunAktif();
-                const clean = sanitizeNama(nama);
-                const tglKey = getTanggalKey();
-
-                window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
-                    nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
-                }).then(() => {
-                    // ✅ SIMPAN CHECK-IN PER TANGGAL (tidak menimpa)
-                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
+                if (typeof salesObj === 'string') {
+                    masterSalesGlobal.push({ nama: salesObj, locked: false, alasan: "", waktuSelesaiLock: 0 });
+                } else if (salesObj && (salesObj.nama || salesObj.NAMA_PROMOTOR || salesObj.Nama_Sales)) {
+                    const nama = salesObj.nama || salesObj.NAMA_PROMOTOR || salesObj.Nama_Sales;
+                    masterSalesGlobal.push({
+                        nama: String(nama).trim(),
+                        locked: false, alasan: "", waktuSelesaiLock: 0
                     });
-                    localStorage.setItem('ufo_checkin_hari_ini', 'true');
-                    localStorage.setItem('ufo_checkin_tanggal', tglKey);
-                    catatAktivitas(nama, "CheckIn", kat);
-                    renderUI();
-                });
+                }
+            });
+            const seen = new Set();
+            masterSalesGlobal = masterSalesGlobal.filter(s => {
+                const key = s.nama.toLowerCase();
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            masterSalesGlobal.sort((a,b) => a.nama.localeCompare(b.nama));
+            applyLockToMaster();
+            renderRiwayatBulanan();
+        }
+
+        function applyLockToMaster() {
+            const now = Date.now();
+            masterSalesGlobal.forEach(s => {
+                const clean = sanitizeNama(s.nama);
+                const lockData = lockGlobal[clean];
+                if (lockData && lockData.locked) {
+                    const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
+                    const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
+                    const sudahMulai = waktuMulai === 0 || now >= waktuMulai;
+                    const belumExpired = waktuExpired === 0 || now < waktuExpired;
+                    if (sudahMulai && belumExpired) {
+                        s.locked = true;
+                        s.alasan = lockData.alasan || "";
+                        s.waktuSelesaiLock = waktuExpired;
+                    } else {
+                        s.locked = false;
+                        s.alasan = "";
+                        s.waktuSelesaiLock = 0;
+                    }
+                } else {
+                    s.locked = false;
+                    s.alasan = "";
+                    s.waktuSelesaiLock = 0;
+                }
             });
         }
 
-        function aksiDaftarAntrianNormal() {
-            if (statusSistemGlobal !== "BUKA") { tampilkanModal("Antrian Tutup", "Sistem antrian sedang ditutup."); return; }
-            const akunSaya = sanitizeNama(getAkunAktif());
+        async function cekDanJalankanAutoCleanup() {
+            try {
+                const now = new Date();
+                const hariIniKey = getTanggalKey();
+                const bulanIniKey = getBulanKey();
 
-            window.dbGet(window.dbRef(window.db, 'lockPromotor/' + akunSaya)).then(snap => {
-                if (snap.exists()) {
-                    const lockData = snap.val();
-                    if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
-                        const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
-                        const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
-                        const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
-                        const belumExpired = waktuExpired === 0 || sekarang < waktuExpired;
-                        
-                        if (sudahMulai && belumExpired) {
-                            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                                nama: getAkunAktif(), aksi: "Autokick", waktu: Date.now(),
-                                tanggal: getTanggalIndo(), hasil: "Coba Daftar Saat Lock",
-                                kategori: "Lock Hukuman", sumber: "Promotor"
-                            });
-                            tampilkanModal("🔒 Akun Dikunci", `Akun Anda sedang DIKUNCI.\n\nAlasan: ${lockData.alasan || "-"}`);
-                            return;
-                        }
+                const lastCleanup = localStorage.getItem('ufo_admin_last_cleanup');
+                if (lastCleanup !== hariIniKey) {
+                    const jam = now.getHours();
+                    const menit = now.getMinutes();
+                    if (jam > 0 || (jam === 0 && menit >= 1)) {
+                        await jalankanAutoCleanup(hariIniKey);
                     }
                 }
 
-                const kat = document.getElementById('pilih-kategori-normal').value;
-                const nama = getAkunAktif();
-                const clean = sanitizeNama(nama);
-                const tglKey = getTanggalKey();
+                await catatNoSaleHarian();
 
-                window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
-                    nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
-                }).then(() => {
-                    window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
-                    });
-                    localStorage.setItem('ufo_checkin_hari_ini', 'true');
-                    localStorage.setItem('ufo_checkin_tanggal', tglKey);
-                    catatAktivitas(nama, "DaftarAntrian", kat);
+                const lastBulanCleanup = localStorage.getItem('ufo_admin_last_bulan_cleanup');
+                if (lastBulanCleanup !== bulanIniKey) {
+                    await jalankanResetBulanan(bulanIniKey);
+                }
+            } catch (e) {
+                console.warn("Auto-cleanup error:", e);
+            }
+        }
+
+        async function jalankanAutoCleanup(hariIniKey) {
+            const db = window.db;
+
+            const snapAntrian = await window.dbGet(window.dbRef(db, 'antrian'));
+            if (snapAntrian.exists()) {
+                const data = snapAntrian.val();
+                const awalHariIni = new Date();
+                awalHariIni.setHours(0, 0, 0, 0);
+                const startToday = awalHariIni.getTime();
+                const updates = {};
+                Object.keys(data).forEach(key => {
+                    const item = data[key];
+                    if (!item) return;
+                    if (item.waktuStandby && item.waktuStandby < startToday) {
+                        updates['antrian/' + key] = null;
+                    }
                 });
-            });
-        }
-
-        function aksiUtamaCustomer() {
-            const nama = getAkunAktif();
-            const clean = sanitizeNama(nama);
-            const now = Date.now();
-            window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { 
-                status: "Melayani", timerMulai: 0, timerAksi: "", posisiTerkunci: 0, waktuMulaiMelayani: now 
-            }).then(() => catatAktivitas(nama, "BawaCustomer", "", { waktuMulai: now }));
-        }
-
-        function aksiToggleMakan() {
-            const akun = getAkunAktif();
-            const clean = sanitizeNama(akun);
-            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
-            const statusNow = itemSaya ? itemSaya.status : "";
-
-            if (localStorage.getItem('ufo_sudah_makan_' + clean) === 'true' && statusNow !== "Waktu Makan") {
-                tampilkanModal("Perhatian", "Anda sudah menggunakan jatah waktu makan hari ini!");
-                return;
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                }
             }
 
-            if (statusNow === "Standby") {
-                const kat = String(itemSaya.kategori || "HA").toUpperCase();
-                const listStandby = daftarAntrianGlobal
-                    .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
-                    .sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
-                const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
-
-                tampilkanModalKonfirmasi("Waktu Makan", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Lanjutkan?`, () => {
-                    localStorage.setItem('ufo_sudah_makan_' + clean, 'true');
-                    const now = Date.now();
-                    window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
-                        status: "Waktu Makan", timerMulai: now, timerAksi: "Makan", posisiTerkunci: posisi
-                    }).then(() => catatAktivitasMakan(akun, "MulaiMakan", now, posisi));
-                });
-            } else if (statusNow === "Waktu Makan") {
-                const posisiLama = itemSaya.posisiTerkunci || 0;
+            const snapLock = await window.dbGet(window.dbRef(db, 'lockPromotor'));
+            if (snapLock.exists()) {
+                const data = snapLock.val();
+                const updates = {};
                 const now = Date.now();
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
-                    status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0
-                }).then(() => catatAktivitasMakan(akun, "SelesaiMakan", now, posisiLama, itemSaya.timerMulai));
-            }
-        }
-
-        function aksiToggleIbadah() {
-            const nama = getAkunAktif();
-            const clean = sanitizeNama(nama);
-            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
-            const statusNow = itemSaya ? itemSaya.status : "";
-
-            if (statusNow === "Standby") {
-                const kat = String(itemSaya.kategori || "HA").toUpperCase();
-                const listStandby = daftarAntrianGlobal
-                    .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
-                    .sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
-                const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
-
-                tampilkanModalKonfirmasi("Sedang Ibadah", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Lanjutkan?`, () => {
-                    const now = Date.now();
-                    window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Ibadah", timerMulai: now, timerAksi: "Ibadah", posisiTerkunci: posisi })
-                    .then(() => catatAktivitasIbadah(nama, "MulaiIbadah", now, posisi));
+                Object.keys(data).forEach(k => {
+                    const item = data[k];
+                    if (item && item.locked && item.waktuSelesaiLock > 0 && now >= item.waktuSelesaiLock) {
+                        updates['lockPromotor/' + k + '/locked'] = false;
+                        updates['lockPromotor/' + k + '/alasan'] = "";
+                        updates['lockPromotor/' + k + '/waktuSelesaiLock'] = 0;
+                    }
                 });
-            } else if (statusNow === "Ibadah") {
-                const posisiLama = itemSaya.posisiTerkunci || 0;
-                const now = Date.now();
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0 })
-                .then(() => catatAktivitasIbadah(nama, "SelesaiIbadah", now, posisiLama, itemSaya.timerMulai));
-            }
-        }
-
-        function aksiSelesaiClosing() {
-            document.getElementById('modal-title').innerText = "Hasil Melayani Customer";
-            document.getElementById('modal-desc').innerHTML = `
-                <div style="text-align:center; margin-bottom: 12px; font-weight: 700;">Customer ini hasilnya apa?</div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <button type="button" id="btn-pilih-deal" style="background: #059669; color: white; padding: 14px; font-weight: 800; border-radius: 10px; border:none; cursor:pointer;">✓ DEAL / CLOSING</button>
-                    <button type="button" id="btn-pilih-lihat" style="background: #d97706; color: white; padding: 14px; font-weight: 800; border-radius: 10px; border:none; cursor:pointer;">◉ LIHAT-LIHAT SAJA</button>
-                </div>`;
-            document.getElementById('modal-actions').innerHTML = ``;
-            document.getElementById('custom-modal').classList.add('active');
-            document.getElementById('btn-pilih-deal').onclick = () => selesaiMelayaniAction("Deal");
-            document.getElementById('btn-pilih-lihat').onclick = () => selesaiMelayaniAction("Lihat");
-        }
-
-        function selesaiMelayaniAction(hasil) {
-            tutupModal();
-            const nama = getAkunAktif();
-            const clean = sanitizeNama(nama);
-            const now = Date.now();
-            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
-            const waktuMulaiMelayani = itemSaya ? (itemSaya.waktuMulaiMelayani || now) : now;
-            const hariIni = getTanggalIndo();
-            const cleanSaya = sanitizeNama(nama);
-            const kandidat = aktivitasGlobal
-                .filter(a => sanitizeNama(a.nama) === cleanSaya && a.tanggal === hariIni && a.aksi === "BawaCustomer" && !a.waktuSelesai)
-                .sort((a,b) => (b.waktu||0) - (a.waktu||0));
-
-            const target = kandidat[0];
-            if (target && target._key) {
-                window.dbUpdate(window.dbRef(window.db, 'statistikAktivitas/' + target._key), {
-                    waktuSelesai: now, hasil: hasil, durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
-                });
-            } else {
-                window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                    nama: nama, aksi: "BawaCustomer", waktu: waktuMulaiMelayani, waktuMulai: waktuMulaiMelayani, waktuSelesai: now,
-                    tanggal: hariIni, hasil: hasil, durasiDetik: Math.floor((now - waktuMulaiMelayani) / 1000)
-                });
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                }
             }
 
-            updateRiwayatBulanan(nama, hasil);
-            window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+            localStorage.setItem('ufo_admin_last_cleanup', hariIniKey);
+            console.log("✅ Auto-cleanup selesai:", hariIniKey);
         }
 
-        function updateRiwayatBulanan(nama, hasil) {
+        // ✅ No Sale harian (otomatis cek kemarin) — versi baru, support struktur check-in per tanggal
+        async function catatNoSaleHarian() {
+            const db = window.db;
             const now = new Date();
-            const bulanKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-            const clean = sanitizeNama(nama);
-            const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+            const bulanKey = getBulanKey(now);
 
-            window.dbGet(window.dbRef(window.db, pathRiwayat)).then(snap => {
-                const existing = snap.exists() ? snap.val() : { nama: nama, lihat: 0, deal: 0, noSale: 0 };
-                if (typeof existing.noSale !== 'number') existing.noSale = 0;
-                
-                if (hasil === "Deal") {
-                    existing.deal = (existing.deal || 0) + 1;
-                } else if (hasil === "Lihat") {
-                    existing.lihat = (existing.lihat || 0) + 1;
+            const kemarin = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            const tanggalKemarin = getTanggalIndo(kemarin);
+            const kemarinKey = getTanggalKey(kemarin);
+
+            const lastReset = localStorage.getItem('ufo_admin_last_nosale_reset');
+            if (lastReset === kemarinKey) {
+                console.log("⛔ No Sale kemarin sudah dihitung via Reset, skip.");
+                localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+                return;
+            }
+
+            const lastAuto = localStorage.getItem('ufo_admin_last_nosale_auto');
+            if (lastAuto === kemarinKey) {
+                console.log("⛔ No Sale kemarin sudah dihitung via Auto, skip.");
+                return;
+            }
+
+            // ✅ Ambil checkin kemarin (struktur baru: checkinHarian/{cleanNama}/{tanggalKey})
+            const snapCheckin = await window.dbGet(window.dbRef(db, 'checkinHarian'));
+            const dataCheckin = snapCheckin.exists() ? snapCheckin.val() : {};
+            
+            // Kumpulkan promotor yang check-in kemarin
+            const promotorCheckinKemarin = new Set();
+            Object.keys(dataCheckin).forEach(clean => {
+                const dataPromotor = dataCheckin[clean];
+                if (!dataPromotor) return;
+                // Struktur baru: punya key 'YYYY-MM-DD'
+                if (dataPromotor[kemarinKey]) {
+                    promotorCheckinKemarin.add(clean);
                 }
-                
-                existing.nama = nama;
+                // Backward compat: struktur lama (single object)
+                else if (dataPromotor.tanggalKey === kemarinKey) {
+                    promotorCheckinKemarin.add(clean);
+                }
+            });
+
+            if (promotorCheckinKemarin.size === 0) {
+                console.log("ℹ️ Tidak ada promotor check-in kemarin, skip No Sale.");
+                localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+                return;
+            }
+
+            // Ambil statistik kemarin
+            const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
+            const dataStat = snapStat.exists() ? snapStat.val() : {};
+            const listKemarin = Object.values(dataStat).filter(a => a && a.tanggal === tanggalKemarin);
+            const promotorBawaCustomer = new Set(
+                listKemarin.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+            );
+
+            // Ambil master sales untuk dapat nama asli
+            const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
+            const mapNamaAsli = {};
+            if (snapMaster.exists()) {
+                Object.values(snapMaster.val()).forEach(item => {
+                    const rec = item && item.record ? item.record : item;
+                    const n = rec && (rec.nama || rec.NAMA_PROMOTOR || rec.Nama_Sales);
+                    if (n) mapNamaAsli[sanitizeNama(n)] = String(n).trim();
+                });
+            }
+
+            const updates = {};
+            promotorCheckinKemarin.forEach(clean => {
+                if (!promotorBawaCustomer.has(clean)) {
+                    const namaAsli = mapNamaAsli[clean] || clean;
+                    const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+                    updates[pathRiwayat] = true; // marker akan di-merge di bawah
+                }
+            });
+
+            // Karena kita butuh merge (bukan replace), kita pakai loop manual
+            for (const clean of Object.keys(updates)) {
+                const namaAsli = mapNamaAsli[clean] || clean;
+                const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+                const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
+                const existing = snapR.exists() ? snapR.val() : { nama: namaAsli, lihat: 0, deal: 0, noSale: 0 };
+                if (typeof existing.noSale !== 'number') existing.noSale = 0;
+                existing.noSale = existing.noSale + 1;
+                existing.nama = namaAsli;
                 existing.lastUpdate = Date.now();
                 existing.bulanKey = bulanKey;
+                await window.dbUpdate(window.dbRef(db, pathRiwayat), existing);
+            }
 
-                window.dbUpdate(window.dbRef(window.db, pathRiwayat), existing);
-            });
+            localStorage.setItem('ufo_admin_last_nosale_auto', kemarinKey);
+            console.log(`✅ No Sale kemarin (${tanggalKemarin}) tercatat.`);
         }
 
-        function aksiToggleCS() {
-            const nama = getAkunAktif();
-            const clean = sanitizeNama(nama);
-            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
-            const statusNow = itemSaya ? itemSaya.status : "";
+        async function jalankanResetBulanan(bulanIniKey) {
+            const db = window.db;
+            console.log("🗓️ Cek reset bulanan:", bulanIniKey);
 
-            if (statusNow === "Standby") {
-                const kat = String(itemSaya.kategori || "HA").toUpperCase();
-                const listStandby = daftarAntrianGlobal
-                    .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
-                    .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
-                const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
-                const waktuStandbyLama = itemSaya.waktuStandby || Date.now();
+            const snapRiwayat = await window.dbGet(window.dbRef(db, 'riwayatBulanan'));
+            if (snapRiwayat.exists()) {
+                const dataR = snapRiwayat.val();
+                const updatesR = {};
+                Object.keys(dataR).forEach(bulan => {
+                    if (bulan !== bulanIniKey) {
+                        updatesR['riwayatBulanan/' + bulan] = null;
+                    }
+                });
+                if (Object.keys(updatesR).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updatesR);
+                }
+            }
 
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
-                    status: "Dipanggil CS",
-                    posisiTerkunci: posisi,
-                    waktuStandbySebelumCS: waktuStandbyLama
-                }).then(() => catatAktivitas(nama, "PanggilCS", ""));
-            } else if (statusNow === "Dipanggil CS") {
-                const waktuStandbyKembali = itemSaya.waktuStandbySebelumCS || itemSaya.waktuStandby || Date.now();
-                window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
-                    status: "Standby",
-                    waktuStandby: waktuStandbyKembali,
-                    posisiTerkunci: 0
-                }).then(() => catatAktivitas(nama, "KembaliAntriDariCS", ""));
+            localStorage.setItem('ufo_admin_last_bulan_cleanup', bulanIniKey);
+            console.log("✅ Reset bulanan selesai:", bulanIniKey);
+        }
+
+        function renderStatusSistem() {
+            const badge = document.getElementById('badge-status-sistem');
+            badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS: OPEN" : "STATUS: CLOSED";
+            badge.className = statusSistemGlobal === "BUKA" ? "status-badge status-open" : "status-badge status-closed";
+            const btnBuka = document.getElementById('btn-buka-sistem');
+            const btnTutup = document.getElementById('btn-tutup-sistem');
+            if (btnBuka && btnTutup) {
+                if (statusSistemGlobal === "BUKA") {
+                    btnBuka.disabled = true; btnBuka.className = "btn-black-custom btn-disabled";
+                    btnTutup.disabled = false; btnTutup.className = "";
+                } else {
+                    btnBuka.disabled = false; btnBuka.className = "btn-black-custom";
+                    btnTutup.disabled = true; btnTutup.className = "btn-disabled";
+                }
             }
         }
 
-        function bukaModalKeluarIstirahat() {
-            tampilkanModalKonfirmasi("Keluar Antrian", "Yakin ingin keluar dari antrian?", () => {
-                const nama = getAkunAktif();
+        function renderStatusGPS() {
+            const label = document.getElementById('label-status-gps');
+            const btnOn = document.getElementById('btn-on-gps');
+            const btnOff = document.getElementById('btn-off-gps');
+            if (!label || !btnOn || !btnOff) return;
+            const aktif = koordinatTokoAdmin.lat && koordinatTokoAdmin.lat !== "";
+            if (aktif) {
+                label.innerHTML = `Status GPS: <b style="color:#059669;">AKTIF</b> (Radius: ${koordinatTokoAdmin.radius}m)`;
+                btnOn.disabled = true; btnOn.className = "btn-disabled";
+                btnOff.disabled = false; btnOff.className = "";
+            } else {
+                label.innerHTML = `Status GPS: <b style="color:#dc2626;">NONAKTIF (OFF)</b>`;
+                btnOn.disabled = false; btnOn.className = "";
+                btnOff.disabled = true; btnOff.className = "btn-disabled";
+            }
+        }
+
+        function isLocked(nama) {
+            const found = masterSalesGlobal.find(s => sanitizeNama(s.nama) === sanitizeNama(nama));
+            if (!found) return { locked: false };
+            if (!found.locked) return { locked: false };
+            if (found.waktuSelesaiLock > 0 && Date.now() >= found.waktuSelesaiLock) {
+                const clean = sanitizeNama(found.nama);
+                window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
+                    locked: false, alasan: "", waktuSelesaiLock: 0
+                });
+                return { locked: false };
+            }
+            return { locked: true, alasan: found.alasan, sampai: found.waktuSelesaiLock };
+        }
+
+        function renderAntrianAdmin() {
+            let listHA = "", listAV = "";
+            let urutHA = 1, urutAV = 1;
+            const sorted = [...daftarAntrianGlobal].sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
+            const dataStandby = sorted.filter(i => i.status === "Standby");
+            document.getElementById('admin-nama-ha').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "HA") || {}).nama || "Belum Ada";
+            document.getElementById('admin-nama-av').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "AV") || {}).nama || "Belum Ada";
+
+            sorted.forEach(item => {
+                const kat = String(item.kategori || "HA").toUpperCase();
+                const lockInfo = isLocked(item.nama);
+                const prefixLock = lockInfo.locked ? "🔒 " : "";
+                let html = "";
+                if (item.status === "Standby") {
+                    const urut = kat === "HA" ? urutHA++ : urutAV++;
+                    const badge = urut === 1
+                        ? `<span class="badge-status-item badge-giliran-anda">Giliran Utama</span>`
+                        : `<span class="badge-status-item badge-standby">Standby #${urut}</span>`;
+                    html = `<li><b>${prefixLock}${urut}. ${item.nama}</b> ${badge}</li>`;
+                } else if (item.status === "Waktu Makan") {
+                    html = `<li><b>${prefixLock}${item.nama}</b> <span class="badge-status-item badge-makan">Makan #${item.posisiTerkunci||'-'}</span></li>`;
+                } else if (item.status === "Melayani") {
+                    html = `<li><b>${prefixLock}${item.nama}</b> <span class="badge-status-item badge-melayani">Melayani</span></li>`;
+                } else if (item.status === "Dipanggil CS") {
+                    html = `<li><b>${prefixLock}${item.nama}</b> <span class="badge-status-item badge-cs">Dipanggil CS</span></li>`;
+                } else if (item.status === "Ibadah") {
+                    html = `<li><b>${prefixLock}${item.nama}</b> <span class="badge-status-item badge-ibadah">Ibadah #${item.posisiTerkunci||'-'}</span></li>`;
+                }
+                if (kat === "HA") listHA += html;
+                else if (kat === "AV") listAV += html;
+            });
+
+            const empty = "<li><span style='color:#94a3b8; font-style:italic;'>Belum ada antrian</span></li>";
+            document.getElementById('list-HA').innerHTML = listHA || empty;
+            document.getElementById('list-AV').innerHTML = listAV || empty;
+        }
+
+        // ===== RENDER RIWAYAT BULANAN (dengan kolom Hari) =====
+        function renderRiwayatBulanan() {
+            const listEl = document.getElementById('list-riwayat-bulanan');
+            const labelEl = document.getElementById('bulan-riwayat-label');
+            if (!listEl) return;
+
+            const now = new Date();
+            const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            if (labelEl) labelEl.innerText = `${namaBulan[now.getMonth()]} ${now.getFullYear()}`;
+
+            const bulanIni = getBulanKey();
+            const semuaPromotor = masterSalesGlobal.map(s => s.nama);
+            const mapRiwayat = {};
+            riwayatBulananGlobal.forEach(r => {
+                mapRiwayat[sanitizeNama(r.nama)] = r;
+            });
+
+            const listFinal = semuaPromotor.map(nama => {
                 const clean = sanitizeNama(nama);
-                window.dbRemove(window.dbRef(window.db, 'antrian/' + clean))
-                .then(() => catatAktivitas(nama, "KeluarAntrian", "Manual"));
+                const r = mapRiwayat[clean] || { nama: nama, lihat: 0, deal: 0, noSale: 0 };
+                if (typeof r.lihat !== 'number') r.lihat = 0;
+                if (typeof r.deal !== 'number') r.deal = 0;
+                if (typeof r.noSale !== 'number') r.noSale = 0;
+
+                // ✅ Hitung jumlah hari check-in bulan ini dari checkinHarianGlobal
+                const dataPromotor = checkinHarianGlobal[clean];
+                let hariCount = 0;
+                if (dataPromotor) {
+                    const hariSet = new Set();
+                    Object.keys(dataPromotor).forEach(k => {
+                        if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k.startsWith(bulanIni)) {
+                            hariSet.add(k);
+                        }
+                    });
+                    // Backward compat: struktur lama
+                    if (dataPromotor.tanggalKey && /^\d{4}-\d{2}-\d{2}$/.test(dataPromotor.tanggalKey)) {
+                        if (dataPromotor.tanggalKey.startsWith(bulanIni)) {
+                            hariSet.add(dataPromotor.tanggalKey);
+                        }
+                    }
+                    hariCount = hariSet.size;
+                }
+                r.hari = hariCount;
+                return r;
+            }).sort((a, b) => {
+                if ((b.deal || 0) !== (a.deal || 0)) return (b.deal || 0) - (a.deal || 0);
+                if ((b.lihat || 0) !== (a.lihat || 0)) return (b.lihat || 0) - (a.lihat || 0);
+                return (a.nama || '').localeCompare(b.nama || '');
             });
-        }
 
-        function catatAktivitas(nama, aksi, hasil, extra) {
-            const payload = { nama: nama, aksi: aksi, waktu: Date.now(), tanggal: getTanggalIndo(), hasil: hasil || "" };
-            if (extra) Object.assign(payload, extra);
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
-        }
-
-        function catatAktivitasMakan(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
-            const payload = { nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "", kategori: "Waktu Makan", posisi: posisi || 0 };
-            if (aksi === "MulaiMakan") payload.waktuMulai = waktuSekarang;
-            if (aksi === "SelesaiMakan") {
-                payload.waktuMulai = waktuMulaiSebelumnya || waktuSekarang;
-                payload.waktuSelesai = waktuSekarang;
-                payload.durasiDetik = Math.floor((waktuSekarang - (waktuMulaiSebelumnya||waktuSekarang)) / 1000);
-            }
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
-        }
-
-        function catatAktivitasIbadah(nama, aksi, waktuSekarang, posisi, waktuMulaiSebelumnya) {
-            const payload = { nama: nama, aksi: aksi, waktu: waktuSekarang, tanggal: getTanggalIndo(), hasil: "", kategori: "Ibadah", posisi: posisi || 0 };
-            if (aksi === "MulaiIbadah") payload.waktuMulai = waktuSekarang;
-            if (aksi === "SelesaiIbadah") {
-                payload.waktuMulai = waktuMulaiSebelumnya || waktuSekarang;
-                payload.waktuSelesai = waktuSekarang;
-                payload.durasiDetik = Math.floor((waktuSekarang - (waktuMulaiSebelumnya||waktuSekarang)) / 1000);
-            }
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
-        }
-
-        function catatAutokickTimer(nama, jenis, posisi, waktuMulai) {
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                nama: nama, aksi: "Autokick", waktu: Date.now(), tanggal: getTanggalIndo(),
-                hasil: `Timer ${jenis} Habis`, kategori: jenis, posisi: posisi || 0,
-                waktuMulai: waktuMulai, sumber: "Timer"
-            });
-        }
-
-        function updateTimerAktif(itemSaya) {
-            const box = document.getElementById('timer-aktif-box');
-            const label = document.getElementById('timer-aktif-label');
-            const display = document.getElementById('timer-aktif-display');
-
-            const isTimerStatus = itemSaya && (itemSaya.status === "Waktu Makan" || itemSaya.status === "Ibadah");
-            if (!isTimerStatus || !itemSaya.timerMulai || itemSaya.timerMulai === 0) {
-                box.style.display = 'none';
-                if (timerIntervalGlobal) { clearInterval(timerIntervalGlobal); timerIntervalGlobal = null; }
+            if (listFinal.length === 0) {
+                listEl.innerHTML = `<li style="list-style:none;"><span style="color:#94a3b8; font-style:italic;">Belum ada promotor di Master Sales.</span></li>`;
                 return;
             }
 
-            box.style.display = 'block';
-            label.innerText = "TIMER " + (itemSaya.timerAksi || "").toUpperCase() + " (15 MENIT) - POSISI #" + (itemSaya.posisiTerkunci || "-");
-
-            const totalDetik = DURASI_TIMER_MENIT * 60;
-            const cleanNama = sanitizeNama(itemSaya.nama);
-            const statusSaatItu = itemSaya.status;
-            const posisiSaatItu = itemSaya.posisiTerkunci || 0;
-            const timerMulaiSaatItu = itemSaya.timerMulai;
-
-            const tick = () => {
-                const elapsed = Math.floor((Date.now() - itemSaya.timerMulai) / 1000);
-                const sisa = totalDetik - elapsed;
-
-                if (sisa <= 0) {
-                    display.innerText = "00:00";
-                    display.classList.add('warning');
-                    if (timerIntervalGlobal) { clearInterval(timerIntervalGlobal); timerIntervalGlobal = null; }
-
-                    window.dbRemove(window.dbRef(window.db, 'antrian/' + cleanNama))
-                    .then(() => {
-                        catatAutokickTimer(itemSaya.nama, statusSaatItu === "Waktu Makan" ? "Waktu Makan" : "Ibadah", posisiSaatItu, timerMulaiSaatItu);
-                        tampilkanModal("Waktu Habis - Auto Keluar", `Waktu ${itemSaya.timerAksi} Anda sudah habis. Anda otomatis DIKELUARKAN dari antrian.`);
-                    });
-                    return;
-                }
-
-                const m = String(Math.floor(sisa / 60)).padStart(2, '0');
-                const s = String(sisa % 60).padStart(2, '0');
-                display.innerText = `${m}:${s}`;
-                if (sisa <= 120) display.classList.add('warning');
-                else display.classList.remove('warning');
-            };
-
-            if (timerIntervalGlobal) clearInterval(timerIntervalGlobal);
-            tick();
-            timerIntervalGlobal = setInterval(tick, 1000);
+            listEl.innerHTML = listFinal.map(r => {
+                const adaData = (r.deal > 0 || r.lihat > 0 || r.noSale > 0 || r.hari > 0);
+                return `<li style="${adaData ? '' : 'opacity: 0.6;'}">
+                    <b style="flex: 1; font-weight: 700;">${r.nama}</b>
+                    <span style="display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;">
+                        ${r.hari > 0 ? `<span class="riwayat-badge hari">📅 ${r.hari} Hari</span>` : ''}
+                        ${r.lihat > 0 ? `<span class="riwayat-badge lihat">◉ ${r.lihat} Lihat</span>` : ''}
+                        ${r.deal > 0 ? `<span class="riwayat-badge deal">✓ ${r.deal} Deal</span>` : ''}
+                        ${r.noSale > 0 ? `<span class="riwayat-badge nosale">⛔ ${r.noSale} No Sale</span>` : ''}
+                        ${!adaData ? `<span style="font-size: 11px; color: #94a3b8; font-style: italic;">Belum ada aktivitas</span>` : ''}
+                    </span>
+                </li>`;
+            }).join('');
         }
 
-        function renderAktivitas() {
+        // ===== STATISTIK =====
+        function renderStatistikAdmin() {
             const hariIni = getTanggalIndo();
-            const list = aktivitasGlobal.filter(a => a.tanggal === hariIni);
+            const list = statistikGlobal.filter(a => a.tanggal === hariIni);
 
             const listBawaStatistik = list.filter(a => a.aksi === "BawaCustomer");
             const statistikSelesai = listBawaStatistik.filter(a => a.waktuSelesai);
@@ -1368,7 +1113,11 @@
             const listSedangMelayani = daftarAntrianGlobal
                 .filter(item => item.status === "Melayani")
                 .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
-                .map(item => ({ nama: item.nama, waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(), waktuSelesai: null, hasil: null, _sedangMelayani: true }));
+                .map(item => ({
+                    nama: item.nama,
+                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
+                    waktuSelesai: null, hasil: null, _sedangMelayani: true
+                }));
 
             const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
             let semuaBawa = [];
@@ -1376,11 +1125,17 @@
             statistikMasihProses.forEach(a => {
                 const clean = sanitizeNama(a.nama);
                 if (!namaSedangMelayani.has(clean)) {
-                    semuaBawa.push({ nama: a.nama, waktuMulai: a.waktuMulai || a.waktu, waktuSelesai: null, hasil: null, _sedangMelayani: false });
+                    semuaBawa.push({
+                        nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+                        waktuSelesai: null, hasil: null, _sedangMelayani: false
+                    });
                 }
             });
             statistikSelesai.forEach(a => {
-                semuaBawa.push({ nama: a.nama, waktuMulai: a.waktuMulai || a.waktu, waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false });
+                semuaBawa.push({
+                    nama: a.nama, waktuMulai: a.waktuMulai || a.waktu,
+                    waktuSelesai: a.waktuSelesai, hasil: a.hasil, _sedangMelayani: false
+                });
             });
             semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
 
@@ -1396,9 +1151,13 @@
                         namaLabel = `${a.nama} <span class="label-melayani">(MELAYANI)</span>`;
                     } else if (selesai) {
                         rangeLabel = `(${formatJam(mulai)} - ${formatJam(selesai)})`;
-                        if (a.hasil === "Deal") namaLabel = `${a.nama} <span class="check-deal">${SVG_CHECK_DEAL}</span>`;
-                        else if (a.hasil === "Lihat") namaLabel = `${a.nama} <span class="label-lihat">(Lihat-lihat)</span>`;
-                        else namaLabel = `${a.nama} <span class="label-lihat">(selesai)</span>`;
+                        if (a.hasil === "Deal") {
+                            namaLabel = `${a.nama} <span class="check-deal">${SVG_CHECK_DEAL}</span>`;
+                        } else if (a.hasil === "Lihat") {
+                            namaLabel = `${a.nama} <span class="label-lihat">(Lihat-lihat)</span>`;
+                        } else {
+                            namaLabel = `${a.nama} <span class="label-lihat">(selesai)</span>`;
+                        }
                     } else {
                         rangeLabel = `(${formatJam(mulai)} - ...)`;
                         namaLabel = `${a.nama} <span class="label-lihat">(proses)</span>`;
@@ -1437,138 +1196,6 @@
                 }).join('');
         }
 
-        // ============ RENDER REKAP BAWA CUSTOMER PER PROMOTOR ============
-        function renderRekapBawaCustomer() {
-            const tbody = document.getElementById('rekap-tbody');
-            const labelPeriode = document.getElementById('rekap-periode-label');
-            if (!tbody) return;
-
-            const bulanIni = getBulanKey();
-            const tglHariIni = new Date().getDate();
-            const labelBulan = getBulanLabelIndo();
-            if (labelPeriode) labelPeriode.innerText = `1 - ${tglHariIni} ${labelBulan}`;
-
-            // 1) Ambil semua promotor dari mastersales
-            const promotorMap = {};
-            masterSalesGlobal.forEach(item => {
-                const clean = sanitizeNama(item.nama);
-                if (clean) {
-                    promotorMap[clean] = { nama: item.nama, clean: clean };
-                }
-            });
-
-            // 2) Hitung Deal & Lihat dari statistikAktivitas (bulan ini)
-            const perPromotor = {};
-            // Inisialisasi dari master
-            Object.keys(promotorMap).forEach(clean => {
-                perPromotor[clean] = { nama: promotorMap[clean].nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
-            });
-
-            aktivitasGlobal.forEach(a => {
-                const tgl = a.tanggal; // DD-MM-YYYY
-                if (!tgl) return;
-                // Konversi DD-MM-YYYY -> YYYY-MM-DD untuk cek bulan
-                const parts = String(tgl).split('-');
-                if (parts.length !== 3) return;
-                const tglKey = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                if (!tglKey.startsWith(bulanIni)) return; // bukan bulan ini
-
-                const clean = sanitizeNama(a.nama);
-                if (!clean) return;
-                if (!perPromotor[clean]) {
-                    perPromotor[clean] = { nama: a.nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
-                }
-                if (a.aksi === "BawaCustomer" && a.waktuSelesai) {
-                    if (a.hasil === "Deal") perPromotor[clean].deal++;
-                    else if (a.hasil === "Lihat") perPromotor[clean].lihat++;
-                }
-            });
-
-            // 3) Hitung Hari (dari checkinHarian bulan ini) & No Sale
-            // Struktur checkinHarian: { cleanNama: { 'YYYY-MM-DD': {...}, ... } }
-            Object.keys(perPromotor).forEach(clean => {
-                const dataCheckinPromotor = checkinHarianGlobal[clean];
-                if (!dataCheckinPromotor) return;
-
-                const hariSet = new Set();
-                Object.keys(dataCheckinPromotor).forEach(k => {
-                    // k bisa berupa tanggalKey (YYYY-MM-DD) ATAU field lama (nama, tanggal, tanggalKey, waktu)
-                    if (/^\d{4}-\d{2}-\d{2}$/.test(k)) {
-                        if (k.startsWith(bulanIni)) hariSet.add(k);
-                    }
-                });
-                // Handle format lama (single object) — hanya tanggalKey saat ini
-                if (dataCheckinPromotor.tanggalKey && /^\d{4}-\d{2}-\d{2}$/.test(dataCheckinPromotor.tanggalKey)) {
-                    if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) {
-                        hariSet.add(dataCheckinPromotor.tanggalKey);
-                    }
-                }
-
-                const jumlahHari = hariSet.size;
-                perPromotor[clean].hari = jumlahHari;
-
-                // Hitung No Sale: cek per hari check-in, ada BawaCustomer?
-                let noSaleCount = 0;
-                hariSet.forEach(tglKeyHari => {
-                    // Konversi tglKeyHari (YYYY-MM-DD) ke format DD-MM-YYYY untuk cocokkan dengan a.tanggal
-                    const p = tglKeyHari.split('-');
-                    const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
-                    const adaBawa = aktivitasGlobal.some(a =>
-                        sanitizeNama(a.nama) === clean &&
-                        a.tanggal === tglIndoHari &&
-                        a.aksi === "BawaCustomer"
-                    );
-                    if (!adaBawa) noSaleCount++;
-                });
-                perPromotor[clean].noSale = noSaleCount;
-            });
-
-            // 4) Susun array, urut Deal terbanyak
-            const arr = Object.values(perPromotor)
-                .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0) // tampilkan yang aktif saja
-                .sort((a, b) => {
-                    if (b.deal !== a.deal) return b.deal - a.deal;
-                    if (b.lihat !== a.lihat) return b.lihat - a.lihat;
-                    return a.nama.localeCompare(b.nama);
-                });
-
-            if (arr.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="aktivitas-empty">Belum ada data bulan ini</td></tr>';
-                return;
-            }
-
-            // 5) Hitung total
-            let totalDeal = 0, totalLihat = 0, totalNoSale = 0;
-            arr.forEach(p => {
-                totalDeal += p.deal;
-                totalLihat += p.lihat;
-                totalNoSale += p.noSale;
-            });
-
-            // 6) Render
-            let html = arr.map(p => `
-                <tr>
-                    <td class="kolom-nama">${p.nama}</td>
-                    <td class="angka-deal">${p.deal}</td>
-                    <td class="angka-lihat">${p.lihat}</td>
-                    <td class="angka-nosale">${p.noSale}</td>
-                    <td class="angka-hari">${p.hari}</td>
-                </tr>
-            `).join('');
-
-            html += `
-                <tr class="total-row">
-                    <td class="kolom-nama">TOTAL</td>
-                    <td class="angka-deal">${totalDeal}</td>
-                    <td class="angka-lihat">${totalLihat}</td>
-                    <td class="angka-nosale">${totalNoSale}</td>
-                    <td></td>
-                </tr>
-            `;
-
-            tbody.innerHTML = html;
-        }
-
         function gabungRentang(list, aksiMulai, aksiSelesai) {
             const perNama = {};
             list.forEach(a => {
@@ -1581,171 +1208,645 @@
                 }
             });
             return Object.values(perNama).sort((a,b) => (b.mulai||0) - (a.mulai||0)).map(a => {
-                const label = a.selesai ? `(${formatJam(a.mulai)} - ${formatJam(a.selesai)})` : `(${formatJam(a.mulai)} - ...)`;
+                const label = a.selesai
+                    ? `(${formatJam(a.mulai)} - ${formatJam(a.selesai)})`
+                    : `(${formatJam(a.mulai)} - ...)`;
                 return { ...a, label };
             });
         }
 
-        function renderUI() {
-            const badge = document.getElementById('badge-status-sistem');
-            badge.innerText = statusSistemGlobal === "BUKA" ? "STATUS ANTRIAN: OPEN" : "STATUS ANTRIAN: CLOSED";
-            badge.className = statusSistemGlobal === "BUKA" ? "status-badge-sistem status-open" : "status-badge-sistem status-closed";
+        function toggleAktivitasAdmin() {
+            const content = document.getElementById('content-aktivitas-admin');
+            const arrow = document.getElementById('arrow-aktivitas-admin');
+            if (!content || !arrow) return;
+            const isHidden = content.style.display === 'none' || content.style.display === '';
+            content.style.display = isHidden ? 'block' : 'none';
+            arrow.innerText = isHidden ? '▲' : '▼';
+        }
 
-            let listHA = "", listAV = "";
-            let urutHA = 1, urutAV = 1;
-            const akunSaya = sanitizeNama(getAkunAktif());
-            const sorted = [...daftarAntrianGlobal].sort((a,b) => (a.waktuStandby||0) - (b.waktuStandby||0));
-            const dataStandby = sorted.filter(item => item.status === "Standby");
-            document.getElementById('promotor-nama-ha').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "HA") || {}).nama || "Belum Ada";
-            document.getElementById('promotor-nama-av').textContent = (dataStandby.find(i => String(i.kategori).toUpperCase() === "AV") || {}).nama || "Belum Ada";
+        function toggleRiwayatAdmin() {
+            const content = document.getElementById('content-riwayat-admin');
+            const arrow = document.getElementById('arrow-riwayat-admin');
+            if (!content || !arrow) return;
+            const isHidden = content.style.display === 'none' || content.style.display === '';
+            content.style.display = isHidden ? 'block' : 'none';
+            arrow.innerText = isHidden ? '▲' : '▼';
+        }
 
-            sorted.forEach(item => {
-                let kat = String(item.kategori || "HA").toUpperCase();
-                let itemHtml = "";
-                const isSaya = sanitizeNama(item.nama) === akunSaya;
-                const clsSaya = isSaya ? ' class="saya-sendiri"' : '';
-                if (item.status === "Standby") {
-                    let urut = kat === "HA" ? urutHA++ : urutAV++;
-                    let badgeHtml = (urut === 1) ? `<span class="badge-status-item badge-giliran-anda">Giliran Utama</span>` : `<span class="badge-status-item badge-standby">Standby #${urut}</span>`;
-                    itemHtml = `<li${clsSaya}><b>${urut}. ${item.nama}${isSaya?' (Anda)':''}</b> ${badgeHtml}</li>`;
-                } else if (item.status === "Waktu Makan") {
-                    itemHtml = `<li${clsSaya}><b>${item.nama}${isSaya?' (Anda)':''}</b> <span class="badge-status-item badge-makan">Makan #${item.posisiTerkunci||"-"}</span></li>`;
-                } else if (item.status === "Melayani") {
-                    itemHtml = `<li${clsSaya}><b>${item.nama}${isSaya?' (Anda)':''}</b> <span class="badge-status-item badge-melayani">Melayani</span></li>`;
-                } else if (item.status === "Dipanggil CS") {
-                    itemHtml = `<li${clsSaya}><b>${item.nama}${isSaya?' (Anda)':''}</b> <span class="badge-status-item badge-cs">Dipanggil CS/Gudang</span></li>`;
-                } else if (item.status === "Ibadah") {
-                    itemHtml = `<li${clsSaya}><b>${item.nama}${isSaya?' (Anda)':''}</b> <span class="badge-status-item badge-ibadah">Ibadah #${item.posisiTerkunci||"-"}</span></li>`;
+        function bukaModalToggleSistem(targetStatus) {
+            document.getElementById('modal-title').innerText = targetStatus === 'BUKA' ? 'Mulai Antrian' : 'Hentikan Antrian';
+            document.getElementById('modal-desc').innerHTML = `Ubah status sistem menjadi: <b>${targetStatus}</b>?`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiToggleSistem('${targetStatus}')">Proses</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiToggleSistem(targetStatus) {
+            try {
+                await window.dbUpdate(window.dbRef(window.db, 'setting'), { statusAntrian: targetStatus });
+                tutupModal();
+                tampilkanModal("Berhasil", `Sistem antrian sekarang: ${targetStatus}`);
+            } catch (e) {
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa mengubah status sistem.");
+            }
+        }
+
+        function bukaModalTambahMasterSales() {
+            document.getElementById('modal-title').innerText = "Tambah Nama Promotor Baru";
+            document.getElementById('modal-desc').innerHTML = `Masukkan Nama Promotor Baru:<br><input type="text" id="input-nama-baru" placeholder="Nama Lengkap Promotor">`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiTambahMasterSales()">Simpan</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiTambahMasterSales() {
+            const namaBaru = document.getElementById('input-nama-baru').value.trim();
+            if (!namaBaru) { tampilkanModal("Perhatian", "Nama tidak boleh kosong!"); return; }
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Menyimpan...`;
+            try {
+                const cek = masterSalesGlobal.find(s => s.nama.toLowerCase() === namaBaru.toLowerCase());
+                if (cek) {
+                    tutupModal();
+                    tampilkanModal("Gagal", "Nama promotor tersebut sudah terdaftar!");
+                    return;
                 }
-                if (kat === "HA") listHA += itemHtml;
-                else if (kat === "AV") listAV += itemHtml;
+                await window.dbPush(window.dbRef(window.db, 'data'), {
+                    record: { NAMA_PROMOTOR: namaBaru }
+                });
+                tutupModal();
+                tampilkanModal("Berhasil", `Promotor ${namaBaru} berhasil ditambahkan.`);
+            } catch (e) {
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa menambahkan promotor.");
+            }
+        }
+
+        function bukaModalHapusMasterSales() {
+            if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
+            let options = '<option value="">-- Pilih Promotor --</option>';
+            masterSalesGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama}</option>`; });
+            document.getElementById('modal-title').innerText = "Hapus Nama Permanen";
+            document.getElementById('modal-desc').innerHTML = `Pilih promotor yang akan dihapus:<br><select id="select-hapus-sales">${options}</select>`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiHapusMasterSales()">Hapus Permanen</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiHapusMasterSales() {
+            const nama = document.getElementById('select-hapus-sales').value;
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor terlebih dahulu!"); return; }
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Menghapus...`;
+            try {
+                const snap = await window.dbGet(window.dbRef(window.db, 'data'));
+                if (!snap.exists()) { tutupModal(); tampilkanModal("Gagal", "Data kosong"); return; }
+                const allData = snap.val();
+                let keyTarget = null;
+                Object.keys(allData).forEach(k => {
+                    const item = allData[k];
+                    const rec = item && item.record ? item.record : item;
+                    const n = rec && (rec.NAMA_PROMOTOR || rec.nama) || "";
+                    if (String(n).trim().toLowerCase() === String(nama).trim().toLowerCase()) {
+                        keyTarget = k;
+                    }
+                });
+                if (!keyTarget) {
+                    tutupModal();
+                    tampilkanModal("Gagal", "Promotor tidak ditemukan.");
+                    return;
+                }
+                await window.dbRemove(window.dbRef(window.db, 'data/' + keyTarget));
+                tutupModal();
+                tampilkanModal("Berhasil", `Promotor ${nama} dihapus permanen.`);
+            } catch (e) {
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa menghapus promotor.");
+            }
+        }
+
+        function bukaModalTambahAntriAdmin() {
+            if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
+            let options = '<option value="">-- Pilih Promotor --</option>';
+            masterSalesGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama}</option>`; });
+            
+            document.getElementById('modal-title').innerText = "Masukkan Promotor ke Antrian";
+            document.getElementById('modal-desc').innerHTML = `
+                Kategori:<br>
+                <select id="admin-select-kategori" style="margin-bottom:10px;">
+                    <option value="HA">HA (Home Appliance)</option>
+                    <option value="AV">AV (Audio Video)</option>
+                </select><br>
+                
+                Promotor:<br>
+                <select id="admin-select-sales" style="margin-bottom:10px;">${options}</select><br>
+                
+                Posisi Urutan:<br>
+                <input type="number" id="admin-input-posisi" value="1" min="1" placeholder="Nomor urut" style="margin-bottom:10px;">
+                <div style="font-size:10px; color:#94a3b8; margin-top:-6px;">Kosongkan / isi 0 untuk masuk paling belakang</div>
+            `;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiTambahAntriAdmin()">Proses</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiTambahAntriAdmin() {
+            const kategori = document.getElementById('admin-select-kategori').value;
+            const nama = document.getElementById('admin-select-sales').value;
+            const posisiInput = document.getElementById('admin-input-posisi').value;
+            const posisi = parseInt(posisiInput) || 0;
+
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor!"); return; }
+            const clean = sanitizeNama(nama);
+
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+            try {
+                const snap = await window.dbGet(window.dbRef(window.db, 'antrian/' + clean));
+                if (snap.exists()) {
+                    tutupModal();
+                    tampilkanModal("Gagal", "Promotor sudah ada di antrian.");
+                    return;
+                }
+
+                let waktuStandby = Date.now();
+                
+                if (posisi > 0) {
+                    const snapAll = await window.dbGet(window.dbRef(window.db, 'antrian'));
+                    const allData = snapAll.val() || {};
+                    const listKategori = Object.keys(allData)
+                        .map(k => ({ _key: k, ...allData[k] }))
+                        .filter(a => String(a.kategori || '').toUpperCase() === String(kategori).toUpperCase() && a.status === 'Standby')
+                        .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
+
+                    if (posisi <= listKategori.length && listKategori.length > 0) {
+                        const target = listKategori[posisi - 1];
+                        waktuStandby = (target.waktuStandby || Date.now()) - 1;
+                    } else {
+                        const last = listKategori[listKategori.length - 1];
+                        waktuStandby = (last && last.waktuStandby ? last.waktuStandby : Date.now()) + 1;
+                    }
+                }
+
+                await window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
+                    nama: nama, status: "Standby", waktuStandby: waktuStandby,
+                    kategori: kategori, subkategori: kategori, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
+                });
+
+                tutupModal();
+                const infoPosisi = posisi > 0 ? `di posisi #${posisi}` : `paling belakang`;
+                tampilkanModal("Berhasil", `Promotor ${nama} dimasukkan ke antrian kategori ${kategori} ${infoPosisi}.`);
+            } catch (e) {
+                console.warn("Error tambah antri:", e);
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa menambahkan ke antrian.");
+            }
+        }
+
+        function bukaModalKeluarkanAntrian() {
+            if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
+            let options = '<option value="">-- Pilih Promotor --</option>';
+            daftarAntrianGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama} (${n.status})</option>`; });
+            document.getElementById('modal-title').innerText = "Keluarkan dari Antrian";
+            document.getElementById('modal-desc').innerHTML = `Pilih promotor yang akan dikeluarkan:<br><select id="select-keluar-sales">${options}</select>`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiKeluarkanAntrian()">Keluarkan</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiKeluarkanAntrian() {
+            const nama = document.getElementById('select-keluar-sales').value;
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor dulu!"); return; }
+            const clean = sanitizeNama(nama);
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+            try {
+                await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+                await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                    nama: nama, aksi: "KeluarAntrian", waktu: Date.now(),
+                    tanggal: getTanggalIndo(), hasil: "Admin"
+                });
+                tutupModal();
+                tampilkanModal("Berhasil", `${nama} dikeluarkan dari antrian.`);
+            } catch (e) {
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa mengeluarkan dari antrian.");
+            }
+        }
+
+        function bukaModalPaksaBawaCustomer() {
+            if (daftarAntrianGlobal.length === 0) { tampilkanModal("Info", "Antrian kosong."); return; }
+            let options = '<option value="">-- Pilih Promotor --</option>';
+            daftarAntrianGlobal.forEach(n => { options += `<option value="${n.nama}">${n.nama} (${n.status})</option>`; });
+            document.getElementById('modal-title').innerText = "Paksa Bawa Customer";
+            document.getElementById('modal-desc').innerHTML = `Pilih promotor yang dipaksa melayani:<br><select id="select-paksa-sales">${options}</select>`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiPaksaBawaCustomer()">Proses</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+        async function eksekusiPaksaBawaCustomer() {
+            const nama = document.getElementById('select-paksa-sales').value;
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor dulu!"); return; }
+            const clean = sanitizeNama(nama);
+            const now = Date.now();
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+            try {
+                await window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
+                    status: "Melayani", waktuMulaiMelayani: now, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
+                });
+                await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                    nama: nama, aksi: "BawaCustomer", waktu: now, tanggal: getTanggalIndo(),
+                    hasil: "", waktuMulai: now, keterangan: "Dipaksa Admin"
+                });
+                tutupModal();
+                tampilkanModal("Berhasil", `${nama} diset melayani.`);
+            } catch (e) {
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa memproses.");
+            }
+        }
+
+        function bukaModalLockPromotorAdmin() {
+            if (masterSalesGlobal.length === 0) { tampilkanModal("Info", "Belum ada promotor di Master Sales."); return; }
+            let options = '<option value="">-- Pilih Promotor --</option>';
+            masterSalesGlobal.forEach(n => {
+                const lockIcon = n.locked ? " 🔒" : "";
+                options += `<option value="${n.nama}">${n.nama}${lockIcon}</option>`;
             });
 
-            document.getElementById('list-HA').innerHTML = listHA || "<li><i>Belum ada antrian</i></li>";
-            document.getElementById('list-AV').innerHTML = listAV || "<li><i>Belum ada antrian</i></li>";
+            const now = new Date();
+            const tglDefault = now.toISOString().split('T')[0];
+            const jamDefault = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
-            const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === akunSaya);
-            const statusSaya = itemSaya ? itemSaya.status : "belum_ada";
-            const sudahMakan = localStorage.getItem('ufo_sudah_makan_' + akunSaya) === 'true';
+            document.getElementById('modal-title').innerText = "Kontrol Hukuman / Lock Akun";
+            document.getElementById('modal-desc').innerHTML = `
+                Pilih Promotor:<br>
+                <select id="admin-select-sales-lock" style="margin-bottom:12px;">${options}</select>
 
-            const sedangDiLock = lockDataGlobal && (lockDataGlobal.waktuExpired === 0 || Date.now() < lockDataGlobal.waktuExpired);
-            if (sedangDiLock) {
-                document.getElementById('section-checkin-awal').style.display = 'none';
-                document.getElementById('section-normal').style.display = 'none';
+                Aksi:<br>
+                <select id="admin-select-status-lock" style="margin-bottom:12px;" onchange="toggleAlasanLockField(this.value)">
+                    <option value="LOCK">🔒 Kunci Akun (Beri Hukuman)</option>
+                    <option value="UNLOCK">🔓 Buka Akun (Lepas Hukuman)</option>
+                </select>
+
+                <div id="wrapper-alasan-hukuman">
+                    Alasan:<br>
+                    <select id="admin-select-alasan" style="margin-bottom:12px;">
+                        <option value="Pulang tanpa keluar antrian">Pulang tanpa keluar antrian</option>
+                        <option value="Istirahat tanpa keluar antrian">Istirahat tanpa keluar antrian</option>
+                        <option value="Melayani tapi tidak menekan tombol">Tidak Tekan Tombol SMC</option>
+                        <option value="Pelanggaran lain">Pelanggaran lain</option>
+                    </select>
+
+                    <label style="font-size:11px; font-weight:700;">Waktu Mulai Hukuman:</label><br>
+                    <select id="admin-select-waktu-mulai" style="margin-bottom:10px;" onchange="toggleJadwalField(this.value)">
+                        <option value="SEKARANG">🔒 Lock Sekarang</option>
+                        <option value="TERJADWAL">⏰ Lock Terjadwal</option>
+                    </select>
+
+                    <div id="wrapper-jadwal" style="display:none;">
+                        Tanggal Mulai:<br>
+                        <input type="date" id="admin-input-tgl-mulai" value="${tglDefault}" style="margin-bottom:8px;">
+                        Jam Mulai:<br>
+                        <input type="time" id="admin-input-jam-mulai" value="${jamDefault}" style="margin-bottom:8px;">
+                    </div>
+
+                    Durasi Hukuman (Menit):<br>
+                    <input type="number" id="admin-input-durasi-menit" value="60" min="1" max="10080">
+                    <div style="font-size:10px; color:#94a3b8; margin-top:4px;">Contoh: 60 = 1 jam, 1440 = 24 jam, 10080 = 7 hari</div>
+                </div>
+            `;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiLockPromotorAdmin()">Proses</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+
+        function toggleAlasanLockField(nilai) {
+            const wrapper = document.getElementById('wrapper-alasan-hukuman');
+            if (wrapper) wrapper.style.display = (nilai === "UNLOCK") ? "none" : "block";
+        }
+
+        function toggleJadwalField(nilai) {
+            const wrapper = document.getElementById('wrapper-jadwal');
+            if (wrapper) wrapper.style.display = (nilai === "TERJADWAL") ? "block" : "none";
+        }
+
+        async function eksekusiLockPromotorAdmin() {
+            const nama = document.getElementById('admin-select-sales-lock').value;
+            const aksi = document.getElementById('admin-select-status-lock').value;
+            const alasan = document.getElementById('admin-select-alasan') ? document.getElementById('admin-select-alasan').value : "";
+            const durasi = document.getElementById('admin-input-durasi-menit') ? parseInt(document.getElementById('admin-input-durasi-menit').value) || 60 : 60;
+            const waktuMulai = document.getElementById('admin-select-waktu-mulai') ? document.getElementById('admin-select-waktu-mulai').value : "SEKARANG";
+
+            if (!nama) { tampilkanModal("Perhatian", "Pilih promotor!"); return; }
+            const clean = sanitizeNama(nama);
+
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+            try {
+                if (aksi === "LOCK") {
+                    let timestampMulai = Date.now();
+
+                    if (waktuMulai === "TERJADWAL") {
+                        const tgl = document.getElementById('admin-input-tgl-mulai').value;
+                        const jam = document.getElementById('admin-input-jam-mulai').value;
+                        if (!tgl || !jam) {
+                            btn.disabled = false;
+                            btn.innerHTML = "Proses";
+                            tampilkanModal("Perhatian", "Isi tanggal & jam mulai hukuman!");
+                            return;
+                        }
+                        const dateObj = new Date(`${tgl}T${jam}:00`);
+                        timestampMulai = dateObj.getTime();
+                        if (timestampMulai < Date.now()) {
+                            btn.disabled = false;
+                            btn.innerHTML = "Proses";
+                            tampilkanModal("Perhatian", "Waktu mulai tidak boleh di masa lalu!");
+                            return;
+                        }
+                    }
+
+                    const waktuSelesai = timestampMulai + (durasi * 60 * 1000);
+
+                    await window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
+                        nama: nama,
+                        locked: true,
+                        alasan: alasan,
+                        waktuMulaiLock: timestampMulai,
+                        waktuSelesaiLock: waktuSelesai,
+                        waktuDibuat: Date.now(),
+                        modeTerjadwal: waktuMulai === "TERJADWAL"
+                    });
+
+                    if (waktuMulai === "SEKARANG") {
+                        await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
+                    }
+
+                    const teksWaktu = waktuMulai === "SEKARANG"
+                        ? `Dikunci Sekarang (${durasi} menit)`
+                        : `Dikunci Terjadwal: ${new Date(timestampMulai).toLocaleString('id-ID')} (${durasi} menit)`;
+
+                    await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                        nama: nama,
+                        aksi: "Autokick",
+                        waktu: Date.now(),
+                        tanggal: getTanggalIndo(),
+                        hasil: teksWaktu,
+                        kategori: "Lock Hukuman",
+                        sumber: "Admin",
+                        alasan: alasan,
+                        durasi: durasi
+                    });
+
+                    tutupModal();
+                    tampilkanModal("Berhasil",
+                        waktuMulai === "SEKARANG"
+                            ? `${nama} dikunci SEKARANG (${durasi} menit).`
+                            : `${nama} akan dikunci pada ${new Date(timestampMulai).toLocaleString('id-ID')} selama ${durasi} menit.`
+                    );
+                } else {
+                    await window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
+                        locked: false, alasan: "", waktuSelesaiLock: 0, waktuMulaiLock: 0
+                    });
+                    tutupModal();
+                    tampilkanModal("Berhasil", `${nama} dibuka.`);
+                }
+            } catch (e) {
+                console.warn("Error lock:", e);
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa memproses.");
+            }
+        }
+
+        function bukaModalResetTotal() {
+            document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
+            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. <b>No Sale akan dicatat otomatis</b> untuk promotor yang check-in hari ini tapi belum bawa customer. Lanjutkan?`;
+            document.getElementById('modal-actions').innerHTML = `
+                <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
+                <button type="button" id="btn-modal-action-ok" onclick="eksekusiResetTotal()">Reset Sekarang</button>
+            `;
+            document.getElementById('custom-modal').classList.add('active');
+        }
+
+        // ✅ RESET TOTAL — versi baru: No Sale dari checkinHarian hari ini
+        async function eksekusiResetTotal() {
+            const btn = document.getElementById('btn-modal-action-ok');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Memproses Reset...`;
+
+            try {
+                const db = window.db;
+                const hariIni = getTanggalIndo();
+                const hariIniKey = getTanggalKey();
+                const bulanKey = getBulanKey();
+
+                // ✅ Ambil promotor yang check-in HARI INI
+                const snapCheckin = await window.dbGet(window.dbRef(db, 'checkinHarian'));
+                const dataCheckin = snapCheckin.exists() ? snapCheckin.val() : {};
+                const promotorCheckinHariIni = new Set();
+                Object.keys(dataCheckin).forEach(clean => {
+                    const dataPromotor = dataCheckin[clean];
+                    if (!dataPromotor) return;
+                    if (dataPromotor[hariIniKey]) promotorCheckinHariIni.add(clean);
+                    else if (dataPromotor.tanggalKey === hariIniKey) promotorCheckinHariIni.add(clean);
+                });
+
+                // ✅ Cek siapa yang sudah bawa customer hari ini
+                const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
+                const dataStat = snapStat.exists() ? snapStat.val() : {};
+                const listHariIni = Object.values(dataStat).filter(a => a && a.tanggal === hariIni);
+                const promotorBawaCustomer = new Set(
+                    listHariIni.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+                );
+
+                // ✅ Ambil master sales untuk nama asli
+                const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
+                const mapNamaAsli = {};
+                if (snapMaster.exists()) {
+                    Object.values(snapMaster.val()).forEach(item => {
+                        const rec = item && item.record ? item.record : item;
+                        const n = rec && (rec.nama || rec.NAMA_PROMOTOR || rec.Nama_Sales);
+                        if (n) mapNamaAsli[sanitizeNama(n)] = String(n).trim();
+                    });
+                }
+
+                // ✅ Catat No Sale untuk promotor yang check-in tapi belum bawa customer
+                let noSaleCount = 0;
+                for (const clean of promotorCheckinHariIni) {
+                    if (!promotorBawaCustomer.has(clean)) {
+                        const namaAsli = mapNamaAsli[clean] || clean;
+                        const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
+                        const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
+                        const existing = snapR.exists() ? snapR.val() : { nama: namaAsli, lihat: 0, deal: 0, noSale: 0 };
+                        if (typeof existing.noSale !== 'number') existing.noSale = 0;
+                        existing.noSale = existing.noSale + 1;
+                        existing.nama = namaAsli;
+                        existing.lastUpdate = Date.now();
+                        existing.bulanKey = bulanKey;
+                        await window.dbUpdate(window.dbRef(db, pathRiwayat), existing);
+                        noSaleCount++;
+                    }
+                }
+
+                // ✅ Hapus antrian
+                await window.dbRemove(window.dbRef(db, 'antrian'));
+
+                // ✅ Hapus statistik hari ini
+                const updates = {};
+                Object.keys(dataStat).forEach(k => {
+                    if (dataStat[k] && dataStat[k].tanggal === hariIni) {
+                        updates['statistikAktivitas/' + k] = null;
+                    }
+                });
+                if (Object.keys(updates).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updates);
+                }
+
+                localStorage.setItem('ufo_admin_last_nosale_reset', hariIniKey);
+
+                tutupModal();
+                let pesan = "Semua antrian dan log hari ini berhasil direset.";
+                if (noSaleCount > 0) {
+                    pesan += `\n\n⛔ No Sale dicatat untuk ${noSaleCount} promotor yang check-in tapi belum bawa customer.`;
+                }
+                tampilkanModal("Reset Total", pesan);
+            } catch (e) {
+                console.warn("Error reset:", e);
+                tutupModal();
+                tampilkanModal("Gagal", "Tidak bisa reset total.");
+            }
+        }
+
+        function toggleGPSAdmin(aktif) {
+            if (!aktif) {
+                tampilkanModalKonfirmasi("Matikan GPS", "Yakin ingin mematikan validasi GPS toko?", () => {
+                    window.dbUpdate(window.dbRef(window.db, 'setting'), {
+                        latToko: "", lngToko: "", radiusToko: 50
+                    }).then(() => {
+                        tampilkanModal("GPS Dinonaktifkan", "Validasi radius GPS berhasil dimatikan.");
+                    }).catch(() => {
+                        tampilkanModal("Gagal", "Tidak bisa mematikan GPS.");
+                    });
+                });
                 return;
             }
 
-            const secCheckin = document.getElementById('section-checkin-awal');
-            const secNormal = document.getElementById('section-normal');
-            let sudahCheckinToday = localStorage.getItem('ufo_checkin_hari_ini') === 'true' 
-                && localStorage.getItem('ufo_checkin_tanggal') === getTanggalKey();
-
-            if (statusSaya !== "belum_ada") {
-                secCheckin.style.display = 'none';
-                secNormal.style.display = 'block';
-            } else if (!sudahCheckinToday) {
-                secCheckin.style.display = 'block';
-                secNormal.style.display = 'none';
-                setTimeout(initPetaPromotor, 150);
-            } else {
-                secCheckin.style.display = 'none';
-                secNormal.style.display = 'block';
+            if (!navigator.geolocation) {
+                tampilkanModal("Gagal", "Browser tidak mendukung GPS.");
+                return;
             }
 
-            document.getElementById('group-pilih-kategori-normal').style.display = statusSaya === "belum_ada" ? "block" : "none";
-            document.getElementById('btn-daftar-antrian').style.display = statusSaya === "belum_ada" ? "block" : "none";
-            document.getElementById('btn-utama-customer').style.display = statusSaya === "Standby" ? "block" : "none";
-            document.getElementById('btn-selesai-closing').style.display = statusSaya === "Melayani" ? "block" : "none";
-            document.getElementById('btn-utama-ibadah').style.display = (statusSaya === "Standby" || statusSaya === "Ibadah") ? "block" : "none";
-            document.getElementById('btn-keluar-istirahat').style.display = (statusSaya === "Standby" || statusSaya === "Dipanggil CS" || statusSaya === "Ibadah") ? "block" : "none";
+            const btnOn = document.getElementById('btn-on-gps');
+            const asli = btnOn.innerHTML;
+            btnOn.disabled = true;
+            btnOn.innerHTML = `<span class="spinner"></span> Mendeteksi...`;
 
-            const btnCS = document.getElementById('btn-utama-cs');
-            if (statusSaya === "Standby") {
-                btnCS.style.display = "block";
-                btnCS.className = "btn-purple";
-                btnCS.innerText = "DIPANGGIL CS/GUDANG";
-            } else if (statusSaya === "Dipanggil CS") {
-                btnCS.style.display = "block";
-                btnCS.className = "btn-success";
-                btnCS.innerText = "KEMBALI ANTRI DARI CS/GUDANG";
-            } else {
-                btnCS.style.display = "none";
-            }
-
-            const btnMakan = document.getElementById('btn-waktu-makan');
-            if (statusSaya === "Standby" || statusSaya === "Waktu Makan") {
-                btnMakan.style.display = "block";
-                if (statusSaya === "Waktu Makan") {
-                    btnMakan.className = "btn-amber btn-gold-pulse";
-                    btnMakan.innerText = "SELESAI MAKAN (Lebih Awal)";
-                } else if (sudahMakan) {
-                    btnMakan.className = "btn-disabled";
-                    btnMakan.innerText = "SUDAH MAKAN HARI INI";
-                } else {
-                    btnMakan.className = "btn-amber";
-                    btnMakan.innerText = "WAKTU MAKAN (15 MENIT)";
-                }
-            } else {
-                btnMakan.style.display = "none";
-            }
-
-            const btnIbadah = document.getElementById('btn-utama-ibadah');
-            if (statusSaya === "Ibadah") {
-                btnIbadah.className = "btn-indigo btn-gold-pulse";
-                btnIbadah.innerText = "SELESAI IBADAH (Lebih Awal)";
-            } else {
-                btnIbadah.className = "btn-indigo";
-                btnIbadah.innerText = "SEDANG IBADAH (15 MENIT)";
-            }
-
-            updateTimerAktif(itemSaya);
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    window.dbUpdate(window.dbRef(window.db, 'setting'), {
+                        latToko: lat, lngToko: lng, radiusToko: 50
+                    }).then(() => {
+                        btnOn.disabled = false;
+                        btnOn.innerHTML = asli;
+                        tampilkanModal("GPS Diaktifkan", "Titik GPS toko berhasil disimpan (radius 50m).");
+                    }).catch(() => {
+                        btnOn.disabled = false;
+                        btnOn.innerHTML = asli;
+                        tampilkanModal("Gagal", "Tidak bisa menyimpan lokasi.");
+                    });
+                },
+                function() {
+                    btnOn.disabled = false;
+                    btnOn.innerHTML = asli;
+                    tampilkanModal("Gagal", "Gagal mendeteksi lokasi. Izinkan akses GPS.");
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
         }
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            localStorage.setItem('ufo_dark_mode', document.body.classList.contains('dark-mode'));
-            document.getElementById('btn-toggle-dark').innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Terang' : '🌙 Gelap';
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('ufo_admin_dark_mode', isDark ? 'true' : 'false');
+            updateDarkButtonText(isDark);
         }
-
         function initDarkMode() {
-            if (localStorage.getItem('ufo_dark_mode') === 'true') {
-                document.body.classList.add('dark-mode');
-                document.getElementById('btn-toggle-dark').innerHTML = '☀️ Terang';
-            }
+            const isDark = localStorage.getItem('ufo_admin_dark_mode') === 'true';
+            if (isDark) document.body.classList.add('dark-mode');
+            updateDarkButtonText(isDark);
+        }
+        function updateDarkButtonText(isDark) {
+            const btn = document.getElementById('btn-toggle-dark');
+            if (btn) btn.innerHTML = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
         }
 
-        function tampilkanModal(j, d) {
-            document.getElementById('modal-title').innerText = j;
-            document.getElementById('modal-desc').innerText = d;
-            document.getElementById('modal-actions').innerHTML = `<button type="button" class="btn-customer" onclick="tutupModal()">OK</button>`;
+        function tampilkanModal(judul, pesan) {
+            document.getElementById('modal-title').innerText = judul;
+            document.getElementById('modal-desc').innerHTML = String(pesan).replace(/\n/g, '<br>');
+            document.getElementById('modal-actions').innerHTML = `<button type="button" onclick="tutupModal()">OK</button>`;
             document.getElementById('custom-modal').classList.add('active');
         }
 
-        function tampilkanModalKonfirmasi(j, d, cb) {
-            document.getElementById('modal-title').innerText = j;
-            document.getElementById('modal-desc').innerText = d;
+        function tampilkanModalKonfirmasi(judul, pesan, callbackYa) {
+            document.getElementById('modal-title').innerText = judul;
+            document.getElementById('modal-desc').innerHTML = String(pesan).replace(/\n/g, '<br>');
             document.getElementById('modal-actions').innerHTML = `
-                <button type="button" class="btn-customer" onclick="tutupModal()">Batal</button>
-                <button type="button" class="btn-customer" id="btn-modal-ya">Ya</button>
+                <button type="button" class="btn-cancel" id="btn-modal-batal">Batal</button>
+                <button type="button" id="btn-modal-ya">Ya, Lanjutkan</button>
             `;
             document.getElementById('custom-modal').classList.add('active');
-            document.getElementById('btn-modal-ya').onclick = () => { tutupModal(); cb(); };
+            document.getElementById('btn-modal-batal').onclick = () => tutupModal();
+            document.getElementById('btn-modal-ya').onclick = () => { tutupModal(); callbackYa(); };
         }
 
         function tutupModal() { document.getElementById('custom-modal').classList.remove('active'); }
 
-        window.simpanAkunHP = simpanAkunHP;
-        window.aksiHadirKerja = aksiHadirKerja;
-        window.aksiDaftarAntrianNormal = aksiDaftarAntrianNormal;
-        window.aksiUtamaCustomer = aksiUtamaCustomer;
-        window.aksiToggleMakan = aksiToggleMakan;
-        window.aksiSelesaiClosing = aksiSelesaiClosing;
-        window.aksiToggleCS = aksiToggleCS;
-        window.aksiToggleIbadah = aksiToggleIbadah;
-        window.bukaModalKeluarIstirahat = bukaModalKeluarIstirahat;
+        window.prosesLoginAdmin = prosesLoginAdmin;
+        window.logoutAdmin = logoutAdmin;
+        window.bukaModalToggleSistem = bukaModalToggleSistem;
+        window.eksekusiToggleSistem = eksekusiToggleSistem;
+        window.bukaModalTambahMasterSales = bukaModalTambahMasterSales;
+        window.eksekusiTambahMasterSales = eksekusiTambahMasterSales;
+        window.bukaModalHapusMasterSales = bukaModalHapusMasterSales;
+        window.eksekusiHapusMasterSales = eksekusiHapusMasterSales;
+        window.bukaModalTambahAntriAdmin = bukaModalTambahAntriAdmin;
+        window.eksekusiTambahAntriAdmin = eksekusiTambahAntriAdmin;
+        window.bukaModalKeluarkanAntrian = bukaModalKeluarkanAntrian;
+        window.eksekusiKeluarkanAntrian = eksekusiKeluarkanAntrian;
+        window.bukaModalPaksaBawaCustomer = bukaModalPaksaBawaCustomer;
+        window.eksekusiPaksaBawaCustomer = eksekusiPaksaBawaCustomer;
+        window.bukaModalLockPromotorAdmin = bukaModalLockPromotorAdmin;
+        window.toggleAlasanLockField = toggleAlasanLockField;
+        window.toggleJadwalField = toggleJadwalField;
+        window.eksekusiLockPromotorAdmin = eksekusiLockPromotorAdmin;
+        window.bukaModalResetTotal = bukaModalResetTotal;
+        window.eksekusiResetTotal = eksekusiResetTotal;
+        window.toggleGPSAdmin = toggleGPSAdmin;
         window.toggleDarkMode = toggleDarkMode;
         window.tutupModal = tutupModal;
-        window.toggleAktivitasSection = toggleAktivitasSection;
+        window.toggleAktivitasAdmin = toggleAktivitasAdmin;
+        window.toggleRiwayatAdmin = toggleRiwayatAdmin;
     </script>
 </body>
 </html>
