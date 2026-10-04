@@ -34,6 +34,11 @@
       window.dbOnValue = onValue;
       window.dbPush = push;
 
+      window.serverTimeOffset = 0;
+      window.dbOnValue(window.dbRef(db, '.info/serverTimeOffset'), (snap) => {
+          window.serverTimeOffset = snap.val() || 0;
+      });
+
       window.dispatchEvent(new Event('firebase-ready'));
     </script>
 
@@ -346,8 +351,7 @@
             </div>
         </div>
     </div>
-
-    <script>
+        <script>
         window.addEventListener('unhandledrejection', e => { e.preventDefault(); console.warn("Handled:", e.reason); });
 
         const PIN_ADMIN_DEFAULT = "123456";
@@ -365,19 +369,22 @@
         let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null, unsubRiwayat = null, unsubCheckin = null;
         let timerCekGantiHari = null;
 
+        function waktuServer() {
+            return Date.now() + (window.serverTimeOffset || 0);
+        }
         function sanitizeNama(nama) {
             return String(nama || "").trim().toLowerCase().replace(/\s+/g, '_');
         }
         function getTanggalIndo(d) {
-            const now = d || new Date();
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`;
         }
         function getTanggalKey(d) {
-            const now = d || new Date();
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
         }
         function getBulanKey(d) {
-            const now = d || new Date();
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
         }
         function formatJam(ts) {
@@ -453,6 +460,7 @@
                         }
                     });
                 }
+                cekSemuaExpiredAdmin();
                 renderAntrianAdmin();
             });
 
@@ -488,6 +496,7 @@
             unsubLock = window.dbOnValue(window.dbRef(db, 'lockPromotor'), snapshot => {
                 lockGlobal = snapshot.val() || {};
                 applyLockToMaster();
+                cekLockExpiredAdmin();
                 renderAntrianAdmin();
                 renderStatistikAdmin();
             });
@@ -506,7 +515,11 @@
 
             cekDanJalankanAutoCleanup();
             if (timerCekGantiHari) clearInterval(timerCekGantiHari);
-            timerCekGantiHari = setInterval(cekDanJalankanAutoCleanup, 30000);
+            timerCekGantiHari = setInterval(() => {
+                cekDanJalankanAutoCleanup();
+                cekSemuaExpiredAdmin();
+                cekLockExpiredAdmin();
+            }, 30000);
         }
 
         function matikanListenerFirebase() {
@@ -550,7 +563,7 @@
         }
 
         function applyLockToMaster() {
-            const now = Date.now();
+            const now = waktuServer();
             masterSalesGlobal.forEach(s => {
                 const clean = sanitizeNama(s.nama);
                 const lockData = lockGlobal[clean];
@@ -576,9 +589,51 @@
             });
         }
 
+        // ✅ Auto-kick promotor expired (dari sisi admin)
+        function cekSemuaExpiredAdmin() {
+            const sekarang = waktuServer();
+            const totalDetik = 15 * 60;
+            daftarAntrianGlobal.forEach(item => {
+                if (!item) return;
+                const isTimerStatus = (item.status === "Waktu Makan" || item.status === "Ibadah");
+                if (!isTimerStatus) return;
+                if (!item.timerMulai || item.timerMulai === 0) return;
+                const elapsed = Math.floor((sekarang - item.timerMulai) / 1000);
+                const sisa = totalDetik - elapsed;
+                if (sisa <= 0) {
+                    const cleanNama = sanitizeNama(item.nama);
+                    const jenis = item.status === "Waktu Makan" ? "Waktu Makan" : "Ibadah";
+                    window.dbRemove(window.dbRef(window.db, 'antrian/' + cleanNama)).then(() => {
+                        window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                            nama: item.nama, aksi: "Autokick", waktu: sekarang,
+                            tanggal: getTanggalIndo(), hasil: `Timer ${jenis} Habis`,
+                            kategori: jenis, posisi: item.posisiTerkunci || 0,
+                            waktuMulai: item.timerMulai, sumber: "Auto-Kick-Admin"
+                        });
+                    });
+                }
+            });
+        }
+
+        // ✅ Auto-unlock lock expired (dari sisi admin)
+        function cekLockExpiredAdmin() {
+            const sekarang = waktuServer();
+            Object.keys(lockGlobal).forEach(clean => {
+                const lockData = lockGlobal[clean];
+                if (lockData && lockData.locked) {
+                    const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
+                    if (waktuExpired > 0 && sekarang >= waktuExpired) {
+                        window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
+                            locked: false, alasan: "", waktuSelesaiLock: 0, waktuMulaiLock: 0
+                        }).catch(() => {});
+                    }
+                }
+            });
+        }
+
         async function cekDanJalankanAutoCleanup() {
             try {
-                const now = new Date();
+                const now = new Date(waktuServer());
                 const hariIniKey = getTanggalKey();
                 const bulanIniKey = getBulanKey();
 
@@ -607,7 +662,7 @@
             const snapAntrian = await window.dbGet(window.dbRef(db, 'antrian'));
             if (snapAntrian.exists()) {
                 const data = snapAntrian.val();
-                const awalHariIni = new Date();
+                const awalHariIni = new Date(waktuServer());
                 awalHariIni.setHours(0, 0, 0, 0);
                 const startToday = awalHariIni.getTime();
                 const updates = {};
@@ -622,30 +677,12 @@
                     await window.dbUpdate(window.dbRef(db), updates);
                 }
             }
-            const snapLock = await window.dbGet(window.dbRef(db, 'lockPromotor'));
-            if (snapLock.exists()) {
-                const data = snapLock.val();
-                const updates = {};
-                const now = Date.now();
-                Object.keys(data).forEach(k => {
-                    const item = data[k];
-                    if (item && item.locked && item.waktuSelesaiLock > 0 && now >= item.waktuSelesaiLock) {
-                        updates['lockPromotor/' + k + '/locked'] = false;
-                        updates['lockPromotor/' + k + '/alasan'] = "";
-                        updates['lockPromotor/' + k + '/waktuSelesaiLock'] = 0;
-                    }
-                });
-                if (Object.keys(updates).length > 0) {
-                    await window.dbUpdate(window.dbRef(db), updates);
-                }
-            }
             localStorage.setItem('ufo_admin_last_cleanup', hariIniKey);
-            console.log("✅ Auto-cleanup selesai:", hariIniKey);
         }
 
         async function catatNoSaleHarian() {
             const db = window.db;
-            const now = new Date();
+            const now = new Date(waktuServer());
             const bulanKey = getBulanKey(now);
             const kemarin = new Date(now.getTime() - 24 * 60 * 60 * 1000);
             const tanggalKemarin = getTanggalIndo(kemarin);
@@ -699,7 +736,7 @@
                     if (typeof existing.noSale !== 'number') existing.noSale = 0;
                     existing.noSale = existing.noSale + 1;
                     existing.nama = namaAsli;
-                    existing.lastUpdate = Date.now();
+                    existing.lastUpdate = waktuServer();
                     existing.bulanKey = bulanKey;
                     await window.dbUpdate(window.dbRef(db, pathRiwayat), existing);
                 }
@@ -763,7 +800,7 @@
             const found = masterSalesGlobal.find(s => sanitizeNama(s.nama) === sanitizeNama(nama));
             if (!found) return { locked: false };
             if (!found.locked) return { locked: false };
-            if (found.waktuSelesaiLock > 0 && Date.now() >= found.waktuSelesaiLock) {
+            if (found.waktuSelesaiLock > 0 && waktuServer() >= found.waktuSelesaiLock) {
                 const clean = sanitizeNama(found.nama);
                 window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + clean), {
                     locked: false, alasan: "", waktuSelesaiLock: 0
@@ -815,7 +852,7 @@
             const labelEl = document.getElementById('bulan-riwayat-label');
             if (!listEl) return;
 
-            const now = new Date();
+            const now = new Date(waktuServer());
             const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
             if (labelEl) labelEl.innerText = `${namaBulan[now.getMonth()]} ${now.getFullYear()}`;
 
@@ -891,7 +928,7 @@
                 .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
                 .map(item => ({
                     nama: item.nama,
-                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(),
+                    waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || waktuServer(),
                     waktuSelesai: null, hasil: null, _sedangMelayani: true
                 }));
 
@@ -1147,7 +1184,7 @@
                     tampilkanModal("Gagal", "Promotor sudah ada di antrian.");
                     return;
                 }
-                let waktuStandby = Date.now();
+                let waktuStandby = waktuServer();
                 if (posisi > 0) {
                     const snapAll = await window.dbGet(window.dbRef(window.db, 'antrian'));
                     const allData = snapAll.val() || {};
@@ -1157,10 +1194,10 @@
                         .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
                     if (posisi <= listKategori.length && listKategori.length > 0) {
                         const target = listKategori[posisi - 1];
-                        waktuStandby = (target.waktuStandby || Date.now()) - 1;
+                        waktuStandby = (target.waktuStandby || waktuServer()) - 1;
                     } else {
                         const last = listKategori[listKategori.length - 1];
-                        waktuStandby = (last && last.waktuStandby ? last.waktuStandby : Date.now()) + 1;
+                        waktuStandby = (last && last.waktuStandby ? last.waktuStandby : waktuServer()) + 1;
                     }
                 }
                 await window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
@@ -1199,7 +1236,7 @@
             try {
                 await window.dbRemove(window.dbRef(window.db, 'antrian/' + clean));
                 await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                    nama: nama, aksi: "KeluarAntrian", waktu: Date.now(),
+                    nama: nama, aksi: "KeluarAntrian", waktu: waktuServer(),
                     tanggal: getTanggalIndo(), hasil: "Admin"
                 });
                 tutupModal();
@@ -1226,7 +1263,7 @@
             const nama = document.getElementById('select-paksa-sales').value;
             if (!nama) { tampilkanModal("Perhatian", "Pilih promotor dulu!"); return; }
             const clean = sanitizeNama(nama);
-            const now = Date.now();
+            const now = waktuServer();
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
@@ -1253,7 +1290,7 @@
                 const lockIcon = n.locked ? " 🔒" : "";
                 options += `<option value="${n.nama}">${n.nama}${lockIcon}</option>`;
             });
-            const now = new Date();
+            const now = new Date(waktuServer());
             const tglDefault = now.toISOString().split('T')[0];
             const jamDefault = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
@@ -1320,7 +1357,7 @@
             btn.innerHTML = `<span class="spinner"></span> Memproses...`;
             try {
                 if (aksi === "LOCK") {
-                    let timestampMulai = Date.now();
+                    let timestampMulai = waktuServer();
                     if (waktuMulai === "TERJADWAL") {
                         const tgl = document.getElementById('admin-input-tgl-mulai').value;
                         const jam = document.getElementById('admin-input-jam-mulai').value;
@@ -1331,7 +1368,7 @@
                         }
                         const dateObj = new Date(`${tgl}T${jam}:00`);
                         timestampMulai = dateObj.getTime();
-                        if (timestampMulai < Date.now()) {
+                        if (timestampMulai < waktuServer()) {
                             btn.disabled = false; btn.innerHTML = "Proses";
                             tampilkanModal("Perhatian", "Waktu mulai tidak boleh di masa lalu!");
                             return;
@@ -1342,7 +1379,7 @@
                         nama: nama, locked: true, alasan: alasan,
                         waktuMulaiLock: timestampMulai,
                         waktuSelesaiLock: waktuSelesai,
-                        waktuDibuat: Date.now(),
+                        waktuDibuat: waktuServer(),
                         modeTerjadwal: waktuMulai === "TERJADWAL"
                     });
                     if (waktuMulai === "SEKARANG") {
@@ -1352,7 +1389,7 @@
                         ? `Dikunci Sekarang (${durasi} menit)`
                         : `Dikunci Terjadwal: ${new Date(timestampMulai).toLocaleString('id-ID')} (${durasi} menit)`;
                     await window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                        nama: nama, aksi: "Autokick", waktu: Date.now(),
+                        nama: nama, aksi: "Autokick", waktu: waktuServer(),
                         tanggal: getTanggalIndo(), hasil: teksWaktu,
                         kategori: "Lock Hukuman", sumber: "Admin",
                         alasan: alasan, durasi: durasi
@@ -1378,8 +1415,8 @@
         }
 
         function bukaModalResetTotal() {
-            document.getElementById('modal-title').innerText = 'Reset Semua Antrian & Log';
-            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif beserta log riwayat melayani hari ini akan dihapus total. <b>No Sale akan dicatat otomatis</b> untuk promotor yang check-in hari ini tapi belum bawa customer. Lanjutkan?`;
+            document.getElementById('modal-title').innerText = 'Reset Semua Antrian Aktif';
+            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif akan dihapus. <b>No Sale akan dicatat otomatis</b> untuk promotor yang check-in hari ini tapi belum bawa customer.<br><br>✅ <b>Data Deal, Lihat, dan No Sale TIDAK akan terhapus.</b> Lanjutkan?`;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
                 <button type="button" id="btn-modal-action-ok" onclick="eksekusiResetTotal()">Reset Sekarang</button>
@@ -1387,16 +1424,19 @@
             document.getElementById('custom-modal').classList.add('active');
         }
 
+        // ✅ RESET TOTAL — versi FIX: TIDAK hapus statistikAktivitas
         async function eksekusiResetTotal() {
             const btn = document.getElementById('btn-modal-action-ok');
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner"></span> Memproses Reset...`;
+
             try {
                 const db = window.db;
                 const hariIni = getTanggalIndo();
                 const hariIniKey = getTanggalKey();
                 const bulanKey = getBulanKey();
 
+                // ✅ Ambil promotor yang check-in HARI INI
                 const snapCheckin = await window.dbGet(window.dbRef(db, 'checkinHarian'));
                 const dataCheckin = snapCheckin.exists() ? snapCheckin.val() : {};
                 const promotorCheckinHariIni = new Set();
@@ -1407,6 +1447,7 @@
                     else if (dataPromotor.tanggalKey === hariIniKey) promotorCheckinHariIni.add(clean);
                 });
 
+                // ✅ Cek siapa yang sudah bawa customer hari ini
                 const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
                 const dataStat = snapStat.exists() ? snapStat.val() : {};
                 const listHariIni = Object.values(dataStat).filter(a => a && a.tanggal === hariIni);
@@ -1414,6 +1455,7 @@
                     listHariIni.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
                 );
 
+                // ✅ Ambil master sales untuk nama asli
                 const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
                 const mapNamaAsli = {};
                 if (snapMaster.exists()) {
@@ -1424,6 +1466,7 @@
                     });
                 }
 
+                // ✅ Catat No Sale untuk promotor yang check-in tapi belum bawa customer
                 let noSaleCount = 0;
                 for (const clean of promotorCheckinHariIni) {
                     if (!promotorBawaCustomer.has(clean)) {
@@ -1434,33 +1477,41 @@
                         if (typeof existing.noSale !== 'number') existing.noSale = 0;
                         existing.noSale = existing.noSale + 1;
                         existing.nama = namaAsli;
-                        existing.lastUpdate = Date.now();
+                        existing.lastUpdate = waktuServer();
                         existing.bulanKey = bulanKey;
                         await window.dbUpdate(window.dbRef(db, pathRiwayat), existing);
                         noSaleCount++;
                     }
                 }
 
+                // ✅ HAPUS ANTRIAN (ini tujuan reset)
                 await window.dbRemove(window.dbRef(db, 'antrian'));
 
-                const updates = {};
+                // ✅ TUTUP semua BawaCustomer yang masih "proses" hari ini (hasil: "Reset")
+                const updatesStat = {};
                 Object.keys(dataStat).forEach(k => {
-                    if (dataStat[k] && dataStat[k].tanggal === hariIni) {
-                        updates['statistikAktivitas/' + k] = null;
+                    const a = dataStat[k];
+                    if (a && a.tanggal === hariIni && a.aksi === "BawaCustomer" && !a.waktuSelesai) {
+                        updatesStat['statistikAktivitas/' + k + '/waktuSelesai'] = waktuServer();
+                        updatesStat['statistikAktivitas/' + k + '/hasil'] = "Reset";
+                        updatesStat['statistikAktivitas/' + k + '/keterangan'] = "Ditutup otomatis saat reset admin";
                     }
                 });
-                if (Object.keys(updates).length > 0) {
-                    await window.dbUpdate(window.dbRef(db), updates);
+                if (Object.keys(updatesStat).length > 0) {
+                    await window.dbUpdate(window.dbRef(db), updatesStat);
                 }
+
+                // ❌ TIDAK menghapus statistikAktivitas — Deal/Lihat tetap aman
+                console.log("✅ Reset selesai. Deal/Lihat tetap tersimpan di statistikAktivitas.");
 
                 localStorage.setItem('ufo_admin_last_nosale_reset', hariIniKey);
 
                 tutupModal();
-                let pesan = "Semua antrian dan log hari ini berhasil direset.";
+                let pesan = "Semua antrian berhasil direset.\n\n✅ Data Deal, Lihat, dan No Sale tetap aman.";
                 if (noSaleCount > 0) {
                     pesan += `\n\n⛔ No Sale dicatat untuk ${noSaleCount} promotor yang check-in tapi belum bawa customer.`;
                 }
-                tampilkanModal("Reset Total", pesan);
+                tampilkanModal("Reset Berhasil", pesan);
             } catch (e) {
                 console.warn("Error reset:", e);
                 tutupModal();
