@@ -205,7 +205,6 @@ body.dark-mode .rekap-tabel td.angka-lihat { color: #fbbf24; text-shadow: 0 0 6p
 body.dark-mode .rekap-tabel td.angka-nosale { color: #ff667a; text-shadow: 0 0 6px rgba(255, 102, 122, 0.6); }
 body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
     </style>
-    </style>
 </head>
 <body>
 
@@ -625,7 +624,7 @@ body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
             const totalDetik = 15 * 60;
             daftarAntrianGlobal.forEach(item => {
                 if (!item) return;
-                const isTconst isTimerStatus = (item.status === "Ibadah");
+                const isTimerStatus = (item.status === "Ibadah");
                 if (!isTimerStatus) return;
                 if (!item.timerMulai || item.timerMulai === 0) return;
                 const elapsed = Math.floor((sekarang - item.timerMulai) / 1000);
