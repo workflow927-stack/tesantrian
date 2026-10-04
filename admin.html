@@ -531,15 +531,15 @@ body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
             });
 
             const bulanKeySekarang = getBulanKey();
-            unsubRiwayat = window.dbOnValue(window.dbRef(db, 'riwayatBulanan/' + bulanKeySekarang), snapshot => {
+                      unsubRiwayat = window.dbOnValue(window.dbRef(db, 'riwayatBulanan/' + bulanKeySekarang), snapshot => {
                 const dataRaw = snapshot.val() || {};
                 riwayatBulananGlobal = Object.values(dataRaw).filter(r => r && r.nama);
-                renderRiwayatBulanan();
+                renderRekapBawaCustomer();
             });
 
-            unsubCheckin = window.dbOnValue(window.dbRef(db, 'checkinHarian'), snapshot => {
+                       unsubCheckin = window.dbOnValue(window.dbRef(db, 'checkinHarian'), snapshot => {
                 checkinHarianGlobal = snapshot.val() || {};
-                renderRiwayatBulanan();
+                renderRekapBawaCustomer();
             });
 
             cekDanJalankanAutoCleanup();
@@ -1020,7 +1020,7 @@ body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
                 ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
                 : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
 
-            const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+                      const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-autokick').innerText = listAutokick.length;
             document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
                 ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
@@ -1031,6 +1031,125 @@ body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
                         <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
                     </li>`;
                 }).join('');
+
+            // ✅ TAMBAH INI — Hitung Total Lihat/Deal
+            let totalLihatHariIni = 0, totalDealHariIni = 0;
+            semuaBawa.forEach(a => {
+                if (a.hasil === "Lihat") totalLihatHariIni++;
+                else if (a.hasil === "Deal") totalDealHariIni++;
+            });
+            const totalBox = document.getElementById('total-bawa-box');
+            if (totalBox) {
+                if (semuaBawa.length === 0) {
+                    totalBox.style.display = 'none';
+                    totalBox.innerHTML = '';
+                } else {
+                    totalBox.style.display = 'block';
+                    totalBox.innerHTML = `TOTAL: <span class="total-lihat">◉ ${totalLihatHariIni} Lihat</span> &nbsp;│&nbsp; <span class="total-deal">✓ ${totalDealHariIni} Deal</span>`;
+                }
+            }
+
+            // ✅ TAMBAH INI — Panggil render rekap
+            renderRekapBawaCustomer();
+        }
+
+        // ✅ FUNGSI BARU — Rekap Bawa Customer per Promotor
+        function renderRekapBawaCustomer() {
+            const tbody = document.getElementById('rekap-tbody');
+            const labelPeriode = document.getElementById('rekap-periode-label');
+            if (!tbody) return;
+
+            const bulanIni = getBulanKey();
+            const tglHariIni = new Date(waktuServer()).getDate();
+            const now = new Date(waktuServer());
+            const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            if (labelPeriode) labelPeriode.innerText = `1 - ${tglHariIni} ${namaBulan[now.getMonth()]} ${now.getFullYear()}`;
+
+            const promotorMap = {};
+            masterSalesGlobal.forEach(item => {
+                const clean = sanitizeNama(item.nama);
+                if (clean) promotorMap[clean] = { nama: item.nama };
+            });
+
+            const perPromotor = {};
+            Object.keys(promotorMap).forEach(clean => {
+                perPromotor[clean] = { nama: promotorMap[clean].nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
+            });
+
+            statistikGlobal.forEach(a => {
+                const tgl = a.tanggal;
+                if (!tgl) return;
+                const parts = String(tgl).split('-');
+                if (parts.length !== 3) return;
+                const tglKey = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                if (!tglKey.startsWith(bulanIni)) return;
+                const clean = sanitizeNama(a.nama);
+                if (!clean) return;
+                if (!perPromotor[clean]) perPromotor[clean] = { nama: a.nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
+                if (a.aksi === "BawaCustomer" && a.waktuSelesai) {
+                    if (a.hasil === "Deal") perPromotor[clean].deal++;
+                    else if (a.hasil === "Lihat") perPromotor[clean].lihat++;
+                }
+            });
+
+            Object.keys(perPromotor).forEach(clean => {
+                const dataCheckinPromotor = checkinHarianGlobal[clean];
+                if (!dataCheckinPromotor) return;
+                const hariSet = new Set();
+                Object.keys(dataCheckinPromotor).forEach(k => {
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k.startsWith(bulanIni)) hariSet.add(k);
+                });
+                if (dataCheckinPromotor.tanggalKey && /^\d{4}-\d{2}-\d{2}$/.test(dataCheckinPromotor.tanggalKey)) {
+                    if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) hariSet.add(dataCheckinPromotor.tanggalKey);
+                }
+                perPromotor[clean].hari = hariSet.size;
+                let noSaleCount = 0;
+                hariSet.forEach(tglKeyHari => {
+                    const p = tglKeyHari.split('-');
+                    const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
+                    const adaBawa = statistikGlobal.some(a =>
+                        sanitizeNama(a.nama) === clean && a.tanggal === tglIndoHari && a.aksi === "BawaCustomer"
+                    );
+                    if (!adaBawa) noSaleCount++;
+                });
+                perPromotor[clean].noSale = noSaleCount;
+            });
+
+            const arr = Object.values(perPromotor)
+                .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0)
+                .sort((a, b) => {
+                    if (b.deal !== a.deal) return b.deal - a.deal;
+                    if (b.lihat !== a.lihat) return b.lihat - a.lihat;
+                    return a.nama.localeCompare(b.nama);
+                });
+
+            if (arr.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="aktivitas-empty">Belum ada data bulan ini</td></tr>';
+                return;
+            }
+
+            let totalDeal = 0, totalLihat = 0, totalNoSale = 0;
+            arr.forEach(p => { totalDeal += p.deal; totalLihat += p.lihat; totalNoSale += p.noSale; });
+
+            let html = arr.map(p => `
+                <tr>
+                    <td class="kolom-nama">${p.nama}</td>
+                    <td class="angka-deal">${p.deal}</td>
+                    <td class="angka-lihat">${p.lihat}</td>
+                    <td class="angka-nosale">${p.noSale}</td>
+                    <td class="angka-hari">${p.hari}</td>
+                </tr>`).join('');
+
+            html += `
+                <tr class="total-row">
+                    <td class="kolom-nama">TOTAL</td>
+                    <td class="angka-deal">${totalDeal}</td>
+                    <td class="angka-lihat">${totalLihat}</td>
+                    <td class="angka-nosale">${totalNoSale}</td>
+                    <td></td>
+                </tr>`;
+
+            tbody.innerHTML = html;
         }
 
         function gabungRentang(list, aksiMulai, aksiSelesai) {
