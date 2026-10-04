@@ -1347,20 +1347,21 @@
                     if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) hariSet.add(dataCheckinPromotor.tanggalKey);
                 }
                 const jumlahHari = hariSet.size;
-                perPromotor[clean].hari = jumlahHari;
+                                perPromotor[clean].hari = hariSet.size;
                 let noSaleCount = 0;
                 hariSet.forEach(tglKeyHari => {
                     const p = tglKeyHari.split('-');
                     const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
-                    const adaBawa = aktivitasGlobal.some(a =>
+                    // ✅ No Sale = TIDAK ADA Deal di hari itu
+                    const adaDeal = aktivitasGlobal.some(a =>
                         sanitizeNama(a.nama) === clean &&
                         a.tanggal === tglIndoHari &&
-                        a.aksi === "BawaCustomer"
+                        a.aksi === "BawaCustomer" &&
+                        a.hasil === "Deal"
                     );
-                    if (!adaBawa) noSaleCount++;
+                    if (!adaDeal) noSaleCount++;
                 });
                 perPromotor[clean].noSale = noSaleCount;
-            });
 
             const arr = Object.values(perPromotor)
                 .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0)
