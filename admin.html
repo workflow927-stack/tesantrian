@@ -839,8 +839,7 @@
 
             const listSedangMelayani = daftarAntrianGlobal
                 .filter(item => item.status === "Melayani")
-                .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
-                .map(item => ({
+                            .map(item => ({
                     nama: item.nama,
                     waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || waktuServer(),
                     waktuSelesai: null, hasil: null, _sedangMelayani: true
