@@ -1213,9 +1213,8 @@
             const namaSudahSelesai = new Set(statistikSelesai.map(a => sanitizeNama(a.nama)));
 
             const listSedangMelayani = daftarAntrianGlobal
-                .filter(item => item.status === "Melayani")
-                .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
-                .map(item => ({ nama: item.nama, waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || waktuServer(), waktuSelesai: null, hasil: null, _sedangMelayani: true }));
+    .filter(item => item.status === "Melayani")
+    .map(item => ({ nama: item.nama, waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || waktuServer(), waktuSelesai: null, hasil: null, _sedangMelayani: true }));
 
             const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
             let semuaBawa = [];
