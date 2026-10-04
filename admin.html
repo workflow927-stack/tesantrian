@@ -352,18 +352,17 @@
 
         const PIN_ADMIN_DEFAULT = "123456";
         const SVG_CHECK_DEAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5L10.5 16L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-      const SVG_ICON_LIHAT = `👀`;
+        const SVG_ICON_LIHAT = `👀`;
 
         let masterSalesGlobal = [];
         let daftarAntrianGlobal = [];
         let statistikGlobal = [];
         let lockGlobal = {};
-        let riwayatBulananGlobal = [];
         let checkinHarianGlobal = {};
         let statusSistemGlobal = "BUKA";
         let koordinatTokoAdmin = { lat: "", lng: "", radius: 50 };
         let savedPinAdmin = "";
-        let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null, unsubRiwayat = null, unsubCheckin = null;
+        let unsubAntrian = null, unsubSetting = null, unsubStatistik = null, unsubMaster = null, unsubLock = null, unsubCheckin = null;
         let timerCekGantiHari = null;
 
         function waktuServer() { return Date.now() + (window.serverTimeOffset || 0); }
@@ -494,13 +493,6 @@
                 renderStatistikAdmin();
             });
 
-            const bulanKeySekarang = getBulanKey();
-            unsubRiwayat = window.dbOnValue(window.dbRef(db, 'riwayatBulanan/' + bulanKeySekarang), snapshot => {
-                const dataRaw = snapshot.val() || {};
-                riwayatBulananGlobal = Object.values(dataRaw).filter(r => r && r.nama);
-                renderRekapBawaCustomer();
-            });
-
             unsubCheckin = window.dbOnValue(window.dbRef(db, 'checkinHarian'), snapshot => {
                 checkinHarianGlobal = snapshot.val() || {};
                 renderRekapBawaCustomer();
@@ -521,7 +513,6 @@
             if (unsubStatistik) { unsubStatistik(); unsubStatistik = null; }
             if (unsubMaster) { unsubMaster(); unsubMaster = null; }
             if (unsubLock) { unsubLock(); unsubLock = null; }
-            if (unsubRiwayat) { unsubRiwayat(); unsubRiwayat = null; }
             if (unsubCheckin) { unsubCheckin(); unsubCheckin = null; }
             if (timerCekGantiHari) { clearInterval(timerCekGantiHari); timerCekGantiHari = null; }
         }
@@ -704,8 +695,8 @@
             const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
             const dataStat = snapStat.exists() ? snapStat.val() : {};
             const listKemarin = Object.values(dataStat).filter(a => a && a.tanggal === tanggalKemarin);
-            const promotorBawaCustomer = new Set(
-                listKemarin.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+            const promotorDeal = new Set(
+                listKemarin.filter(a => a.aksi === "BawaCustomer" && a.hasil === "Deal").map(a => sanitizeNama(a.nama))
             );
 
             const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
@@ -719,7 +710,8 @@
             }
 
             for (const clean of promotorCheckinKemarin) {
-                if (!promotorBawaCustomer.has(clean)) {
+                // ✅ No Sale = tidak ada DEAL hari itu (bukan hanya tidak bawa)
+                if (!promotorDeal.has(clean)) {
                     const namaAsli = mapNamaAsli[clean] || clean;
                     const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
                     const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
@@ -997,10 +989,14 @@
                 hariSet.forEach(tglKeyHari => {
                     const p = tglKeyHari.split('-');
                     const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
-                    const adaBawa = statistikGlobal.some(a =>
-                        sanitizeNama(a.nama) === clean && a.tanggal === tglIndoHari && a.aksi === "BawaCustomer"
+                    // ✅ No Sale = TIDAK ADA Deal di hari itu
+                    const adaDeal = statistikGlobal.some(a =>
+                        sanitizeNama(a.nama) === clean &&
+                        a.tanggal === tglIndoHari &&
+                        a.aksi === "BawaCustomer" &&
+                        a.hasil === "Deal"
                     );
-                    if (!adaBawa) noSaleCount++;
+                    if (!adaDeal) noSaleCount++;
                 });
                 perPromotor[clean].noSale = noSaleCount;
             });
@@ -1440,7 +1436,7 @@
 
         function bukaModalResetTotal() {
             document.getElementById('modal-title').innerText = 'Reset Semua Antrian Aktif';
-            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif akan dihapus. <b>No Sale akan dicatat otomatis</b> untuk promotor yang check-in hari ini tapi belum bawa customer.<br><br>✅ <b>Data Deal, Lihat, dan No Sale TIDAK akan terhapus.</b> Lanjutkan?`;
+            document.getElementById('modal-desc').innerHTML = `⚠️ <b>PERINGATAN:</b><br>Seluruh data antrian aktif akan dihapus. <b>No Sale akan dicatat otomatis</b> untuk promotor yang check-in hari ini tapi belum dapat Deal.<br><br>✅ <b>Data Deal, Lihat, dan No Sale TIDAK akan terhapus.</b> Lanjutkan?`;
             document.getElementById('modal-actions').innerHTML = `
                 <button type="button" class="btn-cancel" onclick="tutupModal()">Batal</button>
                 <button type="button" id="btn-modal-action-ok" onclick="eksekusiResetTotal()">Reset Sekarang</button>
@@ -1472,8 +1468,9 @@
                 const snapStat = await window.dbGet(window.dbRef(db, 'statistikAktivitas'));
                 const dataStat = snapStat.exists() ? snapStat.val() : {};
                 const listHariIni = Object.values(dataStat).filter(a => a && a.tanggal === hariIni);
-                const promotorBawaCustomer = new Set(
-                    listHariIni.filter(a => a.aksi === "BawaCustomer").map(a => sanitizeNama(a.nama))
+                // ✅ No Sale = TIDAK ADA DEAL (bukan tidak bawa)
+                const promotorDealHariIni = new Set(
+                    listHariIni.filter(a => a.aksi === "BawaCustomer" && a.hasil === "Deal").map(a => sanitizeNama(a.nama))
                 );
 
                 const snapMaster = await window.dbGet(window.dbRef(db, 'data'));
@@ -1488,7 +1485,7 @@
 
                 let noSaleCount = 0;
                 for (const clean of promotorCheckinHariIni) {
-                    if (!promotorBawaCustomer.has(clean)) {
+                    if (!promotorDealHariIni.has(clean)) {
                         const namaAsli = mapNamaAsli[clean] || clean;
                         const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
                         const snapR = await window.dbGet(window.dbRef(db, pathRiwayat));
@@ -1524,7 +1521,7 @@
                 tutupModal();
                 let pesan = "Semua antrian berhasil direset.\n\n✅ Data Deal, Lihat, dan No Sale tetap aman.";
                 if (noSaleCount > 0) {
-                    pesan += `\n\n⛔ No Sale dicatat untuk ${noSaleCount} promotor yang check-in tapi belum bawa customer.`;
+                    pesan += `\n\n⛔ No Sale dicatat untuk ${noSaleCount} promotor yang check-in tapi belum dapat Deal.`;
                 }
                 tampilkanModal("Reset Berhasil", pesan);
             } catch (e) {
