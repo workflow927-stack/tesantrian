@@ -329,6 +329,11 @@
         body.dark-mode .rekap-tabel td.angka-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
         body.dark-mode .rekap-tabel td.angka-nosale { color: #ff667a; text-shadow: 0 0 6px rgba(255, 102, 122, 0.6); }
         body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
+        #total-bawa-box .total-lihat { color: #d97706; }
+#total-bawa-box .total-deal { color: #059669; }
+body.dark-mode #total-bawa-box { background: #50000e !important; color: #ffb3bc !important; border: 1px solid #ff1f3d; }
+body.dark-mode #total-bawa-box .total-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+body.dark-mode #total-bawa-box .total-deal { color: #34d399; text-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
     </style>
 </head>
 <body>
@@ -444,7 +449,8 @@
                     <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>Bawa Customer</span>
                     <span class="count" id="count-bawa">0</span>
                 </div>
-                <ul id="list-bawa" class="aktivitas-list"></ul>
+              <ul id="list-bawa" class="aktivitas-list"></ul>
+<div id="total-bawa-box" style="font-size: 11px; font-weight: 800; text-align: center; padding: 6px 8px; margin-bottom: 6px; border-radius: 8px; background: rgba(100, 116, 139, 0.1); color: var(--text-muted);"></div>
 
                 <div class="aktivitas-title t-ibadah">
                     <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-4 7 4"/><path d="M5 16l7-4 7 4"/></svg></span>Ibadah</span>
@@ -1416,6 +1422,22 @@
             semuaBawa.sort((a, b) => (b.waktuMulai || 0) - (a.waktuMulai || 0));
 
             document.getElementById('count-bawa').innerText = semuaBawa.length;
+            // ✅ Hitung total Lihat & Deal
+let totalLihat = 0, totalDeal = 0;
+semuaBawa.forEach(a => {
+    if (a.hasil === "Lihat") totalLihat++;
+    else if (a.hasil === "Deal") totalDeal++;
+});
+const totalBox = document.getElementById('total-bawa-box');
+if (totalBox) {
+    if (semuaBawa.length === 0) {
+        totalBox.innerHTML = '';
+        totalBox.style.display = 'none';
+    } else {
+        totalBox.style.display = 'block';
+        totalBox.innerHTML = `TOTAL: <span class="total-lihat">◉ ${totalLihat} Lihat</span> &nbsp;│&nbsp; <span class="total-deal">✓ ${totalDeal} Deal</span>`;
+    }
+}
             document.getElementById('list-bawa').innerHTML = semuaBawa.length === 0
                 ? '<div class="aktivitas-empty">Belum ada yang membawa customer</div>'
                 : semuaBawa.map(a => {
