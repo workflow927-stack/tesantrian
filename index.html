@@ -36,6 +36,11 @@
       window.dbOnValue = onValue;
       window.dbPush = push;
 
+      window.serverTimeOffset = 0;
+      window.dbOnValue(window.dbRef(db, '.info/serverTimeOffset'), (snap) => {
+          window.serverTimeOffset = snap.val() || 0;
+      });
+
       window.dispatchEvent(new Event('firebase-ready'));
     </script>
 
@@ -302,45 +307,24 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s ease-in-out infinite; vertical-align: middle; margin-right: 6px; }
 
-        /* ===== TABEL REKAP BAWA CUSTOMER ===== */
         .rekap-tabel { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-        .rekap-tabel th {
-            background: #f1f5f9; color: var(--text-muted); font-weight: 800;
-            text-transform: uppercase; font-size: 10px; letter-spacing: 0.3px;
-            padding: 8px 6px; text-align: center; border-bottom: 2px solid var(--border);
-        }
+        .rekap-tabel th { background: #f1f5f9; color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 10px; letter-spacing: 0.3px; padding: 8px 6px; text-align: center; border-bottom: 2px solid var(--border); }
         .rekap-tabel th.kolom-nama { text-align: left; padding-left: 12px; }
-        .rekap-tabel td {
-            padding: 10px 6px; text-align: center; font-weight: 700;
-            border-bottom: 1px solid var(--border); color: var(--text-main);
-            font-variant-numeric: tabular-nums;
-        }
-        .rekap-tabel td.kolom-nama {
-            text-align: left; padding-left: 12px; font-weight: 800;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;
-        }
+        .rekap-tabel td { padding: 10px 6px; text-align: center; font-weight: 700; border-bottom: 1px solid var(--border); color: var(--text-main); font-variant-numeric: tabular-nums; }
+        .rekap-tabel td.kolom-nama { text-align: left; padding-left: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
         .rekap-tabel td.angka-deal { color: #059669; }
         .rekap-tabel td.angka-lihat { color: #d97706; }
         .rekap-tabel td.angka-nosale { color: #dc2626; }
         .rekap-tabel td.angka-hari { color: #64748b; font-size: 11px; }
-        .rekap-tabel tr.total-row td {
-            background: #f8fafc; border-top: 2px solid var(--border);
-            border-bottom: none; font-weight: 800; padding-top: 10px; padding-bottom: 10px;
-        }
+        .rekap-tabel tr.total-row td { background: #f8fafc; border-top: 2px solid var(--border); border-bottom: none; font-weight: 800; padding-top: 10px; padding-bottom: 10px; }
         .rekap-tabel tr.total-row td.angka-deal { color: #047857; }
         .rekap-tabel tr.total-row td.angka-lihat { color: #b45309; }
         .rekap-tabel tr.total-row td.angka-nosale { color: #b91c1c; }
 
-        body.dark-mode .rekap-tabel th {
-            background: #2b0007; color: #ff99a8; border-bottom-color: #ff1f3d;
-        }
-        body.dark-mode .rekap-tabel td {
-            border-bottom-color: #5a0011; color: #ffffff;
-        }
+        body.dark-mode .rekap-tabel th { background: #2b0007; color: #ff99a8; border-bottom-color: #ff1f3d; }
+        body.dark-mode .rekap-tabel td { border-bottom-color: #5a0011; color: #ffffff; }
         body.dark-mode .rekap-tabel td.kolom-nama { color: #ffffff; }
-        body.dark-mode .rekap-tabel tr.total-row td {
-            background: #2b0007; border-top-color: #ff1f3d;
-        }
+        body.dark-mode .rekap-tabel tr.total-row td { background: #2b0007; border-top-color: #ff1f3d; }
         body.dark-mode .rekap-tabel td.angka-deal { color: #34d399; text-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
         body.dark-mode .rekap-tabel td.angka-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
         body.dark-mode .rekap-tabel td.angka-nosale { color: #ff667a; text-shadow: 0 0 6px rgba(255, 102, 122, 0.6); }
@@ -480,9 +464,8 @@
                 </div>
                 <ul id="list-keluar" class="aktivitas-list"></ul>
 
-                <!-- ===== REKAP BAWA CUSTOMER PER PROMOTOR ===== -->
                 <div class="aktivitas-title t-rekap">
-                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>List Bawa Customer per Promotor</span>
+                    <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>Rekap Bawa Customer per Promotor</span>
                 </div>
                 <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-bottom: 10px;">
                     <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-align: center; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px;">
@@ -503,7 +486,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- ===== END REKAP ===== -->
 
                 <div class="aktivitas-title t-autokick">
                     <span class="judul-kategori"><span class="aktivitas-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span>Autokick (Pelanggaran)</span>
@@ -518,7 +500,7 @@
         <div class="modal-box">
             <div id="modal-title" class="modal-title">Pemberitahuan</div>
             <div id="modal-desc" class="modal-desc">Isi pesan...</div>
-            <div id="modal-actions" class="modal-actions"><button type="button" class="btn-customer" onclick="tutupModal()">OK</button></div>
+            <div class="modal-actions" id="modal-actions"><button type="button" onclick="tutupModal()">OK</button></div>
         </div>
     </div>
         <script>
@@ -530,6 +512,7 @@
         let masterSalesLoaded = false;
         let aktivitasGlobal = [];
         let checkinHarianGlobal = {};
+        let lockGlobal = {};
 
         let koordinatToko = { lat: null, lng: null, radius: 50 };
         let mapPromotor = null;
@@ -541,28 +524,33 @@
 
         let lockTimerInterval = null;
         let lockDataGlobal = null;
+        let autoCleanupInterval = null;
 
         const DURASI_TIMER_MENIT = 15;
         const SVG_CHECK_DEAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5L10.5 16L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-        function getTanggalIndo() {
-            const now = new Date();
+        function waktuServer() {
+            return Date.now() + (window.serverTimeOffset || 0);
+        }
+
+        function getTanggalIndo(d) {
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
         }
 
-        function getTanggalKey() {
-            const now = new Date();
+        function getTanggalKey(d) {
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         }
 
-        function getBulanKey() {
-            const now = new Date();
+        function getBulanKey(d) {
+            const now = d ? new Date(d) : new Date(waktuServer());
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         }
 
         function getBulanLabelIndo() {
             const bulanNama = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            const now = new Date();
+            const now = new Date(waktuServer());
             return `${bulanNama[now.getMonth()]} ${now.getFullYear()}`;
         }
 
@@ -584,12 +572,6 @@
                       Math.sin(dLon/2) * Math.sin(dLon/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             return R * c;
-        }
-
-        // Cek apakah tanggalKey (YYYY-MM-DD) berada di bulan yang sama dengan sekarang
-        function isTanggalBulanIni(tanggalKey) {
-            if (!tanggalKey) return false;
-            return String(tanggalKey).startsWith(getBulanKey());
         }
 
         window.addEventListener('firebase-ready', () => {
@@ -668,6 +650,7 @@
                         }
                     });
                 }
+                cekSemuaExpired();
                 renderUI();
                 renderAktivitas();
             });
@@ -725,7 +708,6 @@
                 const hariIni = getTanggalKey();
                 let sudahHariIni = false;
                 if (dataSaya) {
-                    // Struktur baru (per tanggal)
                     if (dataSaya[hariIni] || (dataSaya.tanggalKey === hariIni)) {
                         sudahHariIni = true;
                     }
@@ -742,14 +724,13 @@
             });
 
             window.dbOnValue(window.dbRef(db, 'lockPromotor'), (snapshot) => {
-                const dataLock = snapshot.val() || {};
+                lockGlobal = snapshot.val() || {};
                 const akunSaya = sanitizeNama(getAkunAktif());
                 if (!akunSaya) return;
-
-                const lockSaya = dataLock[akunSaya];
+                const lockSaya = lockGlobal[akunSaya];
                 
                 if (lockSaya && lockSaya.locked) {
-                    const sekarang = Date.now();
+                    const sekarang = waktuServer();
                     const waktuMulai = Number(lockSaya.waktuMulaiLock) || 0;
                     const waktuExpired = Number(lockSaya.waktuSelesaiLock) || 0;
                     
@@ -763,33 +744,83 @@
                         if (daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === akunSaya)) {
                             window.dbRemove(window.dbRef(window.db, 'antrian/' + akunSaya));
                         }
-                        
-                        const sudahDitampilkan = sessionStorage.getItem('ufo_lock_notif_' + akunSaya);
-                        if (!sudahDitampilkan) {
-                            let sisaTeks = "tanpa batas waktu";
-                            if (waktuExpired > 0) {
-                                const sisaMenit = Math.ceil((waktuExpired - sekarang) / 60000);
-                                sisaTeks = `${sisaMenit} menit lagi`;
-                            }
-                            tampilkanModal("🔒 Akun Dikunci", 
-                                `Akun Anda sedang DIKUNCI.\n\nAlasan: ${lockSaya.alasan || "-"}\nSisa: ${sisaTeks}`
-                            );
-                            sessionStorage.setItem('ufo_lock_notif_' + akunSaya, 'true');
-                        }
                     } else if (!sudahMulai) {
                         lockDataGlobal = null;
                         sembunyikanLockTimer();
-                        console.log(`⏰ Lock terjadwal untuk ${akunSaya} mulai: ${new Date(waktuMulai).toLocaleString('id-ID')}`);
                     } else {
                         lockDataGlobal = null;
                         sembunyikanLockTimer();
+                        autoUnlockSendiri(akunSaya, lockSaya);
                     }
                 } else {
                     lockDataGlobal = null;
                     sembunyikanLockTimer();
                 }
-                
                 renderUI();
+            });
+
+            if (autoCleanupInterval) clearInterval(autoCleanupInterval);
+            autoCleanupInterval = setInterval(() => {
+                cekSemuaExpired();
+                cekLockExpired();
+            }, 15000);
+
+            setTimeout(() => {
+                cekSemuaExpired();
+                cekLockExpired();
+            }, 2000);
+        }
+
+        function autoUnlockSendiri(cleanNama, lockData) {
+            if (!lockData || !lockData.locked) return;
+            window.dbUpdate(window.dbRef(window.db, 'lockPromotor/' + cleanNama), {
+                locked: false, alasan: "", waktuSelesaiLock: 0, waktuMulaiLock: 0
+            }).then(() => {
+                console.log(`🔓 Auto-unlock ${cleanNama} (expired)`);
+            }).catch(() => {});
+        }
+
+        function cekLockExpired() {
+            const sekarang = waktuServer();
+            Object.keys(lockGlobal).forEach(clean => {
+                const lockData = lockGlobal[clean];
+                if (lockData && lockData.locked) {
+                    const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
+                    if (waktuExpired > 0 && sekarang >= waktuExpired) {
+                        autoUnlockSendiri(clean, lockData);
+                    }
+                }
+            });
+        }
+
+        function cekSemuaExpired() {
+            const sekarang = waktuServer();
+            const totalDetik = DURASI_TIMER_MENIT * 60;
+            daftarAntrianGlobal.forEach(item => {
+                if (!item) return;
+                const isTimerStatus = (item.status === "Waktu Makan" || item.status === "Ibadah");
+                if (!isTimerStatus) return;
+                if (!item.timerMulai || item.timerMulai === 0) return;
+
+                const elapsed = Math.floor((sekarang - item.timerMulai) / 1000);
+                const sisa = totalDetik - elapsed;
+
+                if (sisa <= 0) {
+                    const cleanNama = sanitizeNama(item.nama);
+                    const jenis = item.status === "Waktu Makan" ? "Waktu Makan" : "Ibadah";
+                    const posisi = item.posisiTerkunci || 0;
+                    const timerMulai = item.timerMulai;
+
+                    window.dbRemove(window.dbRef(window.db, 'antrian/' + cleanNama)).then(() => {
+                        window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                            nama: item.nama, aksi: "Autokick", waktu: sekarang,
+                            tanggal: getTanggalIndo(), hasil: `Timer ${jenis} Habis`,
+                            kategori: jenis, posisi: posisi, waktuMulai: timerMulai,
+                            sumber: "Auto-Kick"
+                        });
+                        console.log(`⛔ Auto-kick ${item.nama} (${jenis} expired)`);
+                    });
+                }
             });
         }
 
@@ -814,12 +845,14 @@
             if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
             
             const tick = () => {
-                const sisa = waktuExpired - Date.now();
+                const sisa = waktuExpired - waktuServer();
                 
                 if (sisa <= 0) {
                     display.innerText = "00:00";
                     sembunyikanLockTimer();
                     if (lockTimerInterval) { clearInterval(lockTimerInterval); lockTimerInterval = null; }
+                    const akunSaya = sanitizeNama(getAkunAktif());
+                    if (akunSaya) autoUnlockSendiri(akunSaya, lockGlobal[akunSaya]);
                     return;
                 }
                 
@@ -892,7 +925,7 @@
                 if (snap.exists()) {
                     const lockData = snap.val();
                     if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
+                        const sekarang = waktuServer();
                         const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
                         const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
                         const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
@@ -1007,7 +1040,7 @@
                 if (snap.exists()) {
                     const lockData = snap.val();
                     if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
+                        const sekarang = waktuServer();
                         const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
                         const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
                         const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
@@ -1015,7 +1048,7 @@
                         
                         if (sudahMulai && belumExpired) {
                             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                                nama: getAkunAktif(), aksi: "Autokick", waktu: Date.now(),
+                                nama: getAkunAktif(), aksi: "Autokick", waktu: sekarang,
                                 tanggal: getTanggalIndo(), hasil: "Coba Check-in Saat Lock",
                                 kategori: "Lock Hukuman", sumber: "Promotor"
                             });
@@ -1036,13 +1069,13 @@
                 const nama = getAkunAktif();
                 const clean = sanitizeNama(nama);
                 const tglKey = getTanggalKey();
+                const waktuSekarang = waktuServer();
 
                 window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
-                    nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
+                    nama: nama, status: "Standby", waktuStandby: waktuSekarang, kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 }).then(() => {
-                    // ✅ SIMPAN CHECK-IN PER TANGGAL (tidak menimpa)
                     window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
+                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: waktuSekarang
                     });
                     localStorage.setItem('ufo_checkin_hari_ini', 'true');
                     localStorage.setItem('ufo_checkin_tanggal', tglKey);
@@ -1060,7 +1093,7 @@
                 if (snap.exists()) {
                     const lockData = snap.val();
                     if (lockData && lockData.locked) {
-                        const sekarang = Date.now();
+                        const sekarang = waktuServer();
                         const waktuMulai = Number(lockData.waktuMulaiLock) || 0;
                         const waktuExpired = Number(lockData.waktuSelesaiLock) || 0;
                         const sudahMulai = waktuMulai === 0 || sekarang >= waktuMulai;
@@ -1068,7 +1101,7 @@
                         
                         if (sudahMulai && belumExpired) {
                             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                                nama: getAkunAktif(), aksi: "Autokick", waktu: Date.now(),
+                                nama: getAkunAktif(), aksi: "Autokick", waktu: sekarang,
                                 tanggal: getTanggalIndo(), hasil: "Coba Daftar Saat Lock",
                                 kategori: "Lock Hukuman", sumber: "Promotor"
                             });
@@ -1082,12 +1115,13 @@
                 const nama = getAkunAktif();
                 const clean = sanitizeNama(nama);
                 const tglKey = getTanggalKey();
+                const waktuSekarang = waktuServer();
 
                 window.dbSet(window.dbRef(window.db, 'antrian/' + clean), {
-                    nama: nama, status: "Standby", waktuStandby: Date.now(), kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
+                    nama: nama, status: "Standby", waktuStandby: waktuSekarang, kategori: kat, subkategori: kat, timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 }).then(() => {
                     window.dbSet(window.dbRef(window.db, 'checkinHarian/' + clean + '/' + tglKey), {
-                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: Date.now()
+                        nama: nama, tanggal: getTanggalIndo(), tanggalKey: tglKey, waktu: waktuSekarang
                     });
                     localStorage.setItem('ufo_checkin_hari_ini', 'true');
                     localStorage.setItem('ufo_checkin_tanggal', tglKey);
@@ -1099,7 +1133,7 @@
         function aksiUtamaCustomer() {
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
-            const now = Date.now();
+            const now = waktuServer();
             window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { 
                 status: "Melayani", timerMulai: 0, timerAksi: "", posisiTerkunci: 0, waktuMulaiMelayani: now 
             }).then(() => catatAktivitas(nama, "BawaCustomer", "", { waktuMulai: now }));
@@ -1125,14 +1159,14 @@
 
                 tampilkanModalKonfirmasi("Waktu Makan", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Lanjutkan?`, () => {
                     localStorage.setItem('ufo_sudah_makan_' + clean, 'true');
-                    const now = Date.now();
+                    const now = waktuServer();
                     window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                         status: "Waktu Makan", timerMulai: now, timerAksi: "Makan", posisiTerkunci: posisi
                     }).then(() => catatAktivitasMakan(akun, "MulaiMakan", now, posisi));
                 });
             } else if (statusNow === "Waktu Makan") {
                 const posisiLama = itemSaya.posisiTerkunci || 0;
-                const now = Date.now();
+                const now = waktuServer();
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0
                 }).then(() => catatAktivitasMakan(akun, "SelesaiMakan", now, posisiLama, itemSaya.timerMulai));
@@ -1153,13 +1187,13 @@
                 const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
 
                 tampilkanModalKonfirmasi("Sedang Ibadah", `Posisi antrian Anda (#${posisi}) akan DIKUNCI selama 15 menit. Lanjutkan?`, () => {
-                    const now = Date.now();
+                    const now = waktuServer();
                     window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Ibadah", timerMulai: now, timerAksi: "Ibadah", posisiTerkunci: posisi })
                     .then(() => catatAktivitasIbadah(nama, "MulaiIbadah", now, posisi));
                 });
             } else if (statusNow === "Ibadah") {
                 const posisiLama = itemSaya.posisiTerkunci || 0;
-                const now = Date.now();
+                const now = waktuServer();
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), { status: "Standby", timerMulai: 0, timerAksi: "", posisiTerkunci: 0 })
                 .then(() => catatAktivitasIbadah(nama, "SelesaiIbadah", now, posisiLama, itemSaya.timerMulai));
             }
@@ -1183,7 +1217,7 @@
             tutupModal();
             const nama = getAkunAktif();
             const clean = sanitizeNama(nama);
-            const now = Date.now();
+            const now = waktuServer();
             const itemSaya = daftarAntrianGlobal.find(it => sanitizeNama(it.nama) === clean);
             const waktuMulaiMelayani = itemSaya ? (itemSaya.waktuMulaiMelayani || now) : now;
             const hariIni = getTanggalIndo();
@@ -1209,7 +1243,7 @@
         }
 
         function updateRiwayatBulanan(nama, hasil) {
-            const now = new Date();
+            const now = new Date(waktuServer());
             const bulanKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             const clean = sanitizeNama(nama);
             const pathRiwayat = `riwayatBulanan/${bulanKey}/${clean}`;
@@ -1225,7 +1259,7 @@
                 }
                 
                 existing.nama = nama;
-                existing.lastUpdate = Date.now();
+                existing.lastUpdate = waktuServer();
                 existing.bulanKey = bulanKey;
 
                 window.dbUpdate(window.dbRef(window.db, pathRiwayat), existing);
@@ -1244,7 +1278,7 @@
                     .filter(i => i.status === "Standby" && String(i.kategori).toUpperCase() === kat)
                     .sort((a, b) => (a.waktuStandby || 0) - (b.waktuStandby || 0));
                 const posisi = listStandby.findIndex(i => sanitizeNama(i.nama) === clean) + 1;
-                const waktuStandbyLama = itemSaya.waktuStandby || Date.now();
+                const waktuStandbyLama = itemSaya.waktuStandby || waktuServer();
 
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Dipanggil CS",
@@ -1252,7 +1286,7 @@
                     waktuStandbySebelumCS: waktuStandbyLama
                 }).then(() => catatAktivitas(nama, "PanggilCS", ""));
             } else if (statusNow === "Dipanggil CS") {
-                const waktuStandbyKembali = itemSaya.waktuStandbySebelumCS || itemSaya.waktuStandby || Date.now();
+                const waktuStandbyKembali = itemSaya.waktuStandbySebelumCS || itemSaya.waktuStandby || waktuServer();
                 window.dbUpdate(window.dbRef(window.db, 'antrian/' + clean), {
                     status: "Standby",
                     waktuStandby: waktuStandbyKembali,
@@ -1271,7 +1305,7 @@
         }
 
         function catatAktivitas(nama, aksi, hasil, extra) {
-            const payload = { nama: nama, aksi: aksi, waktu: Date.now(), tanggal: getTanggalIndo(), hasil: hasil || "" };
+            const payload = { nama: nama, aksi: aksi, waktu: waktuServer(), tanggal: getTanggalIndo(), hasil: hasil || "" };
             if (extra) Object.assign(payload, extra);
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
         }
@@ -1298,14 +1332,6 @@
             window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), payload);
         }
 
-        function catatAutokickTimer(nama, jenis, posisi, waktuMulai) {
-            window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
-                nama: nama, aksi: "Autokick", waktu: Date.now(), tanggal: getTanggalIndo(),
-                hasil: `Timer ${jenis} Habis`, kategori: jenis, posisi: posisi || 0,
-                waktuMulai: waktuMulai, sumber: "Timer"
-            });
-        }
-
         function updateTimerAktif(itemSaya) {
             const box = document.getElementById('timer-aktif-box');
             const label = document.getElementById('timer-aktif-label');
@@ -1328,7 +1354,7 @@
             const timerMulaiSaatItu = itemSaya.timerMulai;
 
             const tick = () => {
-                const elapsed = Math.floor((Date.now() - itemSaya.timerMulai) / 1000);
+                const elapsed = Math.floor((waktuServer() - itemSaya.timerMulai) / 1000);
                 const sisa = totalDetik - elapsed;
 
                 if (sisa <= 0) {
@@ -1338,7 +1364,12 @@
 
                     window.dbRemove(window.dbRef(window.db, 'antrian/' + cleanNama))
                     .then(() => {
-                        catatAutokickTimer(itemSaya.nama, statusSaatItu === "Waktu Makan" ? "Waktu Makan" : "Ibadah", posisiSaatItu, timerMulaiSaatItu);
+                        window.dbPush(window.dbRef(window.db, 'statistikAktivitas'), {
+                            nama: itemSaya.nama, aksi: "Autokick", waktu: waktuServer(),
+                            tanggal: getTanggalIndo(), hasil: `Timer ${statusSaatItu === "Waktu Makan" ? "Waktu Makan" : "Ibadah"} Habis`,
+                            kategori: statusSaatItu === "Waktu Makan" ? "Waktu Makan" : "Ibadah",
+                            posisi: posisiSaatItu, waktuMulai: timerMulaiSaatItu, sumber: "Timer"
+                        });
                         tampilkanModal("Waktu Habis - Auto Keluar", `Waktu ${itemSaya.timerAksi} Anda sudah habis. Anda otomatis DIKELUARKAN dari antrian.`);
                     });
                     return;
@@ -1368,7 +1399,7 @@
             const listSedangMelayani = daftarAntrianGlobal
                 .filter(item => item.status === "Melayani")
                 .filter(item => !namaSudahSelesai.has(sanitizeNama(item.nama)))
-                .map(item => ({ nama: item.nama, waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || Date.now(), waktuSelesai: null, hasil: null, _sedangMelayani: true }));
+                .map(item => ({ nama: item.nama, waktuMulai: item.waktuMulaiMelayani || item.waktuStandby || waktuServer(), waktuSelesai: null, hasil: null, _sedangMelayani: true }));
 
             const namaSedangMelayani = new Set(listSedangMelayani.map(i => sanitizeNama(i.nama)));
             let semuaBawa = [];
@@ -1437,41 +1468,34 @@
                 }).join('');
         }
 
-        // ============ RENDER REKAP BAWA CUSTOMER PER PROMOTOR ============
         function renderRekapBawaCustomer() {
             const tbody = document.getElementById('rekap-tbody');
             const labelPeriode = document.getElementById('rekap-periode-label');
             if (!tbody) return;
 
             const bulanIni = getBulanKey();
-            const tglHariIni = new Date().getDate();
+            const tglHariIni = new Date(waktuServer()).getDate();
             const labelBulan = getBulanLabelIndo();
             if (labelPeriode) labelPeriode.innerText = `1 - ${tglHariIni} ${labelBulan}`;
 
-            // 1) Ambil semua promotor dari mastersales
             const promotorMap = {};
             masterSalesGlobal.forEach(item => {
                 const clean = sanitizeNama(item.nama);
-                if (clean) {
-                    promotorMap[clean] = { nama: item.nama, clean: clean };
-                }
+                if (clean) promotorMap[clean] = { nama: item.nama, clean: clean };
             });
 
-            // 2) Hitung Deal & Lihat dari statistikAktivitas (bulan ini)
             const perPromotor = {};
-            // Inisialisasi dari master
             Object.keys(promotorMap).forEach(clean => {
                 perPromotor[clean] = { nama: promotorMap[clean].nama, deal: 0, lihat: 0, noSale: 0, hari: 0 };
             });
 
             aktivitasGlobal.forEach(a => {
-                const tgl = a.tanggal; // DD-MM-YYYY
+                const tgl = a.tanggal;
                 if (!tgl) return;
-                // Konversi DD-MM-YYYY -> YYYY-MM-DD untuk cek bulan
                 const parts = String(tgl).split('-');
                 if (parts.length !== 3) return;
                 const tglKey = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                if (!tglKey.startsWith(bulanIni)) return; // bukan bulan ini
+                if (!tglKey.startsWith(bulanIni)) return;
 
                 const clean = sanitizeNama(a.nama);
                 if (!clean) return;
@@ -1484,33 +1508,22 @@
                 }
             });
 
-            // 3) Hitung Hari (dari checkinHarian bulan ini) & No Sale
-            // Struktur checkinHarian: { cleanNama: { 'YYYY-MM-DD': {...}, ... } }
             Object.keys(perPromotor).forEach(clean => {
                 const dataCheckinPromotor = checkinHarianGlobal[clean];
                 if (!dataCheckinPromotor) return;
-
                 const hariSet = new Set();
                 Object.keys(dataCheckinPromotor).forEach(k => {
-                    // k bisa berupa tanggalKey (YYYY-MM-DD) ATAU field lama (nama, tanggal, tanggalKey, waktu)
                     if (/^\d{4}-\d{2}-\d{2}$/.test(k)) {
                         if (k.startsWith(bulanIni)) hariSet.add(k);
                     }
                 });
-                // Handle format lama (single object) — hanya tanggalKey saat ini
                 if (dataCheckinPromotor.tanggalKey && /^\d{4}-\d{2}-\d{2}$/.test(dataCheckinPromotor.tanggalKey)) {
-                    if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) {
-                        hariSet.add(dataCheckinPromotor.tanggalKey);
-                    }
+                    if (dataCheckinPromotor.tanggalKey.startsWith(bulanIni)) hariSet.add(dataCheckinPromotor.tanggalKey);
                 }
-
                 const jumlahHari = hariSet.size;
                 perPromotor[clean].hari = jumlahHari;
-
-                // Hitung No Sale: cek per hari check-in, ada BawaCustomer?
                 let noSaleCount = 0;
                 hariSet.forEach(tglKeyHari => {
-                    // Konversi tglKeyHari (YYYY-MM-DD) ke format DD-MM-YYYY untuk cocokkan dengan a.tanggal
                     const p = tglKeyHari.split('-');
                     const tglIndoHari = `${p[2]}-${p[1]}-${p[0]}`;
                     const adaBawa = aktivitasGlobal.some(a =>
@@ -1523,9 +1536,8 @@
                 perPromotor[clean].noSale = noSaleCount;
             });
 
-            // 4) Susun array, urut Deal terbanyak
             const arr = Object.values(perPromotor)
-                .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0) // tampilkan yang aktif saja
+                .filter(p => p.hari > 0 || p.deal > 0 || p.lihat > 0)
                 .sort((a, b) => {
                     if (b.deal !== a.deal) return b.deal - a.deal;
                     if (b.lihat !== a.lihat) return b.lihat - a.lihat;
@@ -1537,7 +1549,6 @@
                 return;
             }
 
-            // 5) Hitung total
             let totalDeal = 0, totalLihat = 0, totalNoSale = 0;
             arr.forEach(p => {
                 totalDeal += p.deal;
@@ -1545,7 +1556,6 @@
                 totalNoSale += p.noSale;
             });
 
-            // 6) Render
             let html = arr.map(p => `
                 <tr>
                     <td class="kolom-nama">${p.nama}</td>
@@ -1628,7 +1638,7 @@
             const statusSaya = itemSaya ? itemSaya.status : "belum_ada";
             const sudahMakan = localStorage.getItem('ufo_sudah_makan_' + akunSaya) === 'true';
 
-            const sedangDiLock = lockDataGlobal && (lockDataGlobal.waktuExpired === 0 || Date.now() < lockDataGlobal.waktuExpired);
+            const sedangDiLock = lockDataGlobal && (lockDataGlobal.waktuExpired === 0 || waktuServer() < lockDataGlobal.waktuExpired);
             if (sedangDiLock) {
                 document.getElementById('section-checkin-awal').style.display = 'none';
                 document.getElementById('section-normal').style.display = 'none';
