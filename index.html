@@ -1471,11 +1471,25 @@ if (totalBox) {
                 ? '<div class="aktivitas-empty">Belum ada aktivitas makan</div>'
                 : listMakan.map(a => `<li><span class="nama">${a.nama} <span style="font-size:10px; color:#0d9488; font-weight:700;">#${a.posisi||'-'}</span></span><span class="waktu">${a.label}</span></li>`).join('');
 
-            const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+                       const listKeluar = list.filter(a => a.aksi === "KeluarAntrian").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-keluar').innerText = listKeluar.length;
             document.getElementById('list-keluar').innerHTML = listKeluar.length === 0
                 ? '<div class="aktivitas-empty">Belum ada yang keluar antrian</div>'
                 : listKeluar.map(a => `<li><span class="nama">${a.nama}</span><span class="waktu">${formatJam(a.waktu)}</span></li>`).join('');
+
+            // ✅ AUTOKICK
+            const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
+            document.getElementById('count-autokick').innerText = listAutokick.length;
+            document.getElementById('list-autokick').innerHTML = listAutokick.length === 0
+                ? '<div class="aktivitas-empty">Tidak ada pelanggaran hari ini 👍</div>'
+                : listAutokick.map(a => {
+                    const teksAlasan = a.alasan ? a.alasan : (a.kategori || "");
+                    return `<li>
+                        <span class="nama">${a.nama} <span style="font-size:10px; color:#dc2626; font-weight:700;">${teksAlasan}</span></span>
+                        <span class="waktu">${formatJam(a.waktu)} <span style="font-size:9px; color:#991b1b;">${a.sumber||''}</span></span>
+                    </li>`;
+                }).join('');
+        }
 
             const listAutokick = list.filter(a => a.aksi === "Autokick").sort((a,b) => (b.waktu||0) - (a.waktu||0));
             document.getElementById('count-autokick').innerText = listAutokick.length;
