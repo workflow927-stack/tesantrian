@@ -173,7 +173,38 @@
         .label-lihat { font-size: 10px; color: #64748b; font-weight: 700; }
         body.dark-mode .label-lihat { color: #ff99a8; }
         .label-melayani { font-size: 10px; color: #059669; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
-        body.dark-mode .label-melayani { color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); }
+       body.dark-mode .label-melayani { color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); }
+
+/* ✅ Total Bawa Customer */
+#total-bawa-box .total-lihat { color: #d97706; }
+#total-bawa-box .total-deal { color: #059669; }
+body.dark-mode #total-bawa-box { background: #50000e !important; color: #ffb3bc !important; border: 1px solid #ff1f3d !important; }
+body.dark-mode #total-bawa-box .total-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+body.dark-mode #total-bawa-box .total-deal { color: #34d399; text-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+
+/* ✅ Rekap Bawa Customer */
+.rekap-tabel { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+.rekap-tabel th { background: #f1f5f9; color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 10px; letter-spacing: 0.3px; padding: 8px 6px; text-align: center; border-bottom: 2px solid var(--border); }
+.rekap-tabel th.kolom-nama { text-align: left; padding-left: 12px; }
+.rekap-tabel td { padding: 10px 6px; text-align: center; font-weight: 700; border-bottom: 1px solid var(--border); color: var(--text-main); font-variant-numeric: tabular-nums; }
+.rekap-tabel td.kolom-nama { text-align: left; padding-left: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+.rekap-tabel td.angka-deal { color: #059669; }
+.rekap-tabel td.angka-lihat { color: #d97706; }
+.rekap-tabel td.angka-nosale { color: #dc2626; }
+.rekap-tabel td.angka-hari { color: #64748b; font-size: 11px; }
+.rekap-tabel tr.total-row td { background: #f8fafc; border-top: 2px solid var(--border); border-bottom: none; font-weight: 800; padding-top: 10px; padding-bottom: 10px; }
+.rekap-tabel tr.total-row td.angka-deal { color: #047857; }
+.rekap-tabel tr.total-row td.angka-lihat { color: #b45309; }
+.rekap-tabel tr.total-row td.angka-nosale { color: #b91c1c; }
+body.dark-mode .rekap-tabel th { background: #2b0007; color: #ff99a8; border-bottom-color: #ff1f3d; }
+body.dark-mode .rekap-tabel td { border-bottom-color: #5a0011; color: #ffffff; }
+body.dark-mode .rekap-tabel td.kolom-nama { color: #ffffff; }
+body.dark-mode .rekap-tabel tr.total-row td { background: #2b0007; border-top-color: #ff1f3d; }
+body.dark-mode .rekap-tabel td.angka-deal { color: #34d399; text-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+body.dark-mode .rekap-tabel td.angka-lihat { color: #fbbf24; text-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+body.dark-mode .rekap-tabel td.angka-nosale { color: #ff667a; text-shadow: 0 0 6px rgba(255, 102, 122, 0.6); }
+body.dark-mode .rekap-tabel td.angka-hari { color: #ffb3bc; }
+    </style>
     </style>
 </head>
 <body>
@@ -239,7 +270,8 @@
                         </span>
                         <span class="count" id="count-bawa">0</span>
                     </div>
-                    <ul id="list-bawa" class="aktivitas-list"></ul>
+                                     <ul id="list-bawa" class="aktivitas-list"></ul>
+                    <div id="total-bawa-box" style="font-size: 11px; font-weight: 800; text-align: center; padding: 6px 8px; margin-bottom: 6px; border-radius: 8px; background: rgba(100, 116, 139, 0.1); color: var(--text-muted); display: none;"></div>
 
                     <div class="aktivitas-title">
                         <span class="judul-kategori">
@@ -272,7 +304,36 @@
                         </span>
                         <span class="count" id="count-keluar">0</span>
                     </div>
-                    <ul id="list-keluar" class="aktivitas-list"></ul>
+                                        <ul id="list-keluar" class="aktivitas-list"></ul>
+
+                    <!-- ✅ REKAP BAWA CUSTOMER PER PROMOTOR -->
+                    <div class="aktivitas-title" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                        <span class="judul-kategori">
+                            <span class="aktivitas-icon">
+                                <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                            </span>
+                            Rekap Bawa Customer per Promotor
+                        </span>
+                    </div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-align: center; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px;">
+                            Periode: <span id="rekap-periode-label">-</span>
+                        </div>
+                        <table class="rekap-tabel">
+                            <thead>
+                                <tr>
+                                    <th class="kolom-nama">Nama Promotor</th>
+                                    <th>Deal</th>
+                                    <th>Lihat</th>
+                                    <th>No Sale</th>
+                                    <th>Hari</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rekap-tbody">
+                                <tr><td colspan="5" class="aktivitas-empty">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="aktivitas-title">
                         <span class="judul-kategori">
@@ -284,27 +345,6 @@
                         <span class="count" id="count-autokick">0</span>
                     </div>
                     <ul id="list-autokick" class="aktivitas-list"></ul>
-                </div>
-            </div>
-
-            <div class="aktivitas-section">
-                <div class="aktivitas-title" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); cursor: pointer;" onclick="toggleRiwayatAdmin()">
-                    <span class="judul-kategori">
-                        <span class="aktivitas-icon">
-                            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-                        </span>
-                        Riwayat Bulanan Promotor
-                    </span>
-                    <span class="count" id="arrow-riwayat-admin">▼</span>
-                </div>
-
-                <div id="content-riwayat-admin" style="display: none; margin-top: 8px;">
-                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; padding: 6px 0 10px 0; text-transform: uppercase;">
-                        📅 <span id="bulan-riwayat-label">-</span>
-                    </div>
-                    <ul id="list-riwayat-bulanan" class="riwayat-list">
-                        <li><span style="color:#94a3b8; font-style:italic;">Memuat...</span></li>
-                    </ul>
                 </div>
             </div>
 
